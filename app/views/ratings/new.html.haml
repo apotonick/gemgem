@@ -1,6 +1,6 @@
 %h1 Rating#new
 %p Find me in app/views/rating/new.html.haml
 
-= simple_form_for @form, url: '/rating' do |f|
+= simple_form_for @form do |f|
   = f.input :comment
   = f.button :submit

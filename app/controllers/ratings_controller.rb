@@ -7,8 +7,12 @@ module Rating
 
   # require "disposable/facade"
   class Entity
-    def initialize
-      @facaded = Persistance.new
+    def self.find(*args)
+      new(Persistance.find(*args))
+    end
+
+    def initialize(facaded=Persistance.new)
+      @facaded = facaded
     end
 
     attr_accessor :comment
@@ -38,8 +42,6 @@ module Rating
 end
 
 
-
-
 class RatingsController < ApplicationController
   def new
     rating  = Rating::Entity.new
@@ -58,6 +60,13 @@ class RatingsController < ApplicationController
 
       return
     end
+
+    render :action => :new
+  end
+
+  def edit
+    rating  = Rating::Entity.find(params[:id])
+    @form   = Rating::Form.new(rating)
 
     render :action => :new
   end
