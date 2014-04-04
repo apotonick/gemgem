@@ -5,19 +5,22 @@ module Rating
     validates :comment, length: { in: 6..160 }
   end
 
-  Entity = Struct.new(:comment)
-
-  Entity.class_eval do
-    def persisted?
-      false
+  require "disposable/facade"
+  class Entity < Disposable::Facade
+    # accessors need to be defined public
+    # everything else: delegate, but private (to_key, persisted, ?).
+    def initialize
+      super Persistance.new
     end
 
-    def to_key
-      [:entity]
+    alias_method :persistance, :facaded
+
+    def comment=(*)
+      raise
     end
 
     def save
-      Persistance.new(comment: comment)
+      persistance.update_attributes(comment: comment)
     end
   end
 
