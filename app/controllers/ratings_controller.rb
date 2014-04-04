@@ -5,23 +5,30 @@ module Rating
     validates :comment, length: { in: 6..160 }
   end
 
-  require "disposable/facade"
-  class Entity < Disposable::Facade
-    # accessors need to be defined public
-    # everything else: delegate, but private (to_key, persisted, ?).
+  # require "disposable/facade"
+  class Entity
     def initialize
-      super Persistance.new
+      @facaded = Persistance.new
     end
 
-    alias_method :persistance, :facaded
-
-    def comment=(*)
-      raise
-    end
+    attr_accessor :comment
 
     def save
-      persistance.update_attributes(comment: comment)
+      facaded.update_attributes(comment: comment)
     end
+
+    def persisted?
+      facaded.persisted?
+    end
+
+    def to_key
+      facaded.to_key
+    end
+
+  private
+    attr_reader :facaded
+
+    alias_method :persistance, :facaded
   end
 
   # TODO: one example with clean Persistance approach, one with facade for a legacy monolith.
