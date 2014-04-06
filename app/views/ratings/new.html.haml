@@ -1,6 +1,7 @@
 %h1 Rating#new
 %p Find me in app/views/rating/new.html.haml
 
-= simple_form_for @form do |f|
+-# form_for calls rateable_entity_rating_path now, which is stupid.
+= simple_form_for [Rateable::Entity.new, @form] do |f|
   = f.input :comment
   = f.button :submit
