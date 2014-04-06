@@ -52,8 +52,12 @@ class RatingsController < ApplicationController
 
   # DISCUSS: controller may only work with @form, not with @entity.
   def create
-    rating  = Rating::Entity.new
+    rating  = Rating::Entity.new # DISCUSS: we could also add Rateable here.
     @form   = Rating::Form.new(rating)
+
+    form_params = params[:rating]
+    # id: params[:rateable_id]
+    form_params.merge!(rateable: Rateable::Entity.new())
 
     if @form.validate(params[:rating]) # TODO: make that "rating".
       @form.save
@@ -62,6 +66,7 @@ class RatingsController < ApplicationController
       return
     end
 
+    # raise @form.errors.inspect
     render :action => :new
   end
 
