@@ -6,18 +6,21 @@ module Rating
   end
 
   # require "disposable/facade"
-  class Entity
+  class Entity < Reform::Form # TODO: this is because I want the mapper functionality.
+    property :comment # TODO: use concept representer.
+
     def self.find(*args)
       new(Persistance.find(*args))
     end
 
     def initialize(facaded=Persistance.new)
       @facaded = facaded
+      super
     end
 
-    attr_accessor :comment
+    #attr_accessor :comment
 
-    def save
+    def save # implement that in Reform::AR.
       facaded.update_attributes(comment: comment)
     end
 
@@ -48,13 +51,12 @@ class RatingsController < ApplicationController
     @form   = Rating::Form.new(rating)
   end
 
-  # DISCUSS: controller can only work with @form, not with @entity.
+  # DISCUSS: controller may only work with @form, not with @entity.
   def create
     rating  = Rating::Entity.new
     @form   = Rating::Form.new(rating)
 
-
-    if @form.validate(params[:rating_]) # TODO: make that "rating".
+    if @form.validate(params[:rating]) # TODO: make that "rating".
       @form.save
       @form.model.save
 

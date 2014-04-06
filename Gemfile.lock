@@ -1,3 +1,11 @@
+PATH
+  remote: ../reform
+  specs:
+    reform (0.2.6)
+      activemodel
+      representable (>= 1.7.5)
+      uber (~> 0.0.4)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -107,10 +115,6 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rake (10.1.1)
     ref (1.0.5)
-    reform (0.2.6)
-      activemodel
-      representable (>= 1.7.5)
-      uber (~> 0.0.4)
     representable (1.7.7)
       multi_json
       nokogiri
@@ -179,7 +183,7 @@ DEPENDENCIES
   quiet_assets
   rails (= 4.0.3)
   rails_layout
-  reform
+  reform!
   sass-rails (~> 4.0.0)
   simple_form
   sqlite3
