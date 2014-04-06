@@ -40,7 +40,9 @@ module Rateable
     alias_method :persistance, :facaded
   end
 
-
+  class Persistance < ActiveRecord::Base
+    self.table_name = :rateables
+  end
 end
 
 
@@ -57,9 +59,12 @@ class RatingsController < ApplicationController
 
     form_params = params[:rating]
     # id: params[:rateable_id]
-    form_params.merge!(rateable: Rateable::Entity.new())
+    form_params.merge!(
+      # rateable: Rateable::Entity.find(params[:rateable_id])
+      rateable: Rateable::Entity.new()
+    ) # TODO: that's part of the populator (part of form) job?
 
-    if @form.validate(params[:rating]) # TODO: make that "rating".
+    if @form.validate(params[:rating])
       @form.save
       @form.model.save
 
@@ -73,6 +78,24 @@ class RatingsController < ApplicationController
   def edit
     rating  = Rating::Entity.find(params[:id])
     @form   = Rating::Form.new(rating)
+
+    render :action => :new
+  end
+
+  def update
+    rating  = Rating::Entity.find(params[:id])
+
+    rating.rateable = Object.new
+
+
+    @form   = Rating::Form.new(rating)
+
+    if @form.validate(params[:rating])
+      @form.save
+      @form.model.save
+
+      return redirect_to edit_rateable_rating_path(1, rating) # rating.url.edit
+    end
 
     render :action => :new
   end

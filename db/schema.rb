@@ -11,12 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140404093232) do
+ActiveRecord::Schema.define(version: 20140406080556) do
+
+  create_table "rateables", force: true do |t|
+    t.text "name"
+  end
 
   create_table "ratings", force: true do |t|
     t.text    "comment"
     t.integer "weight"
     t.integer "integer unsigned"
+    t.integer "rateable_id"
   end
 
 end

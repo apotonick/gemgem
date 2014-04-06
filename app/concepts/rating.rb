@@ -8,6 +8,8 @@
 
 # accessors
 
+# why: to let the database layer be awesome but without business logic
+
 # ActiveRecord/ActiveModel stuff is optional, so you can start working on a nested concept without having to implement the outer stuff (rateable)
 
 module Rating
@@ -23,7 +25,7 @@ module Rating
   # require "representable/twin"
   class Entity < Reform::Form # TODO: this is because I want the mapper functionality.
     property :comment # TODO: use concept representer.
-    property :rateable, getter: lambda { |*|  } # TODO: mark an attribute as prototype (not implemented in persistance, yet)
+    property :rateable#, getter: lambda { |*|  } # TODO: mark an attribute as prototype (not implemented in persistance, yet)
     # TODO: make it simple to override def rateable, etc.
 
     # Entity doesn't know about ids, form doesn't know about associations?
@@ -32,7 +34,7 @@ module Rating
       new(Persistance.find(*args))
     end
 
-    def initialize(facaded=Persistance.new)
+    def initialize(facaded=Persistance.new) # Persistance.new or OpenStruct.new
       @facaded = facaded
       super
     end
@@ -60,5 +62,7 @@ module Rating
   # TODO: one example with clean Persistance approach, one with facade for a legacy monolith.
   class Persistance < ActiveRecord::Base
     self.table_name=(:ratings)
+
+    belongs_to :rateable
   end
 end
