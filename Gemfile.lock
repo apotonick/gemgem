@@ -1,10 +1,25 @@
 PATH
+  remote: ../disposable
+  specs:
+    disposable (0.0.1)
+      representable
+      uber
+
+PATH
   remote: ../reform
   specs:
-    reform (0.2.6)
+    reform (0.2.7)
       activemodel
-      representable (>= 1.7.5)
+      representable (~> 1.8.0)
       uber (~> 0.0.4)
+
+PATH
+  remote: ../representable
+  specs:
+    representable (1.8.0)
+      multi_json
+      nokogiri
+      uber
 
 GEM
   remote: https://rubygems.org/
@@ -115,9 +130,6 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rake (10.1.1)
     ref (1.0.5)
-    representable (1.7.7)
-      multi_json
-      nokogiri
     rspec (2.14.1)
       rspec-core (~> 2.14.0)
       rspec-expectations (~> 2.14.0)
@@ -173,6 +185,7 @@ PLATFORMS
 DEPENDENCIES
   binding_of_caller
   coffee-rails (~> 4.0.0)
+  disposable!
   factory_girl_rails
   foundation-rails
   haml-rails
@@ -184,6 +197,7 @@ DEPENDENCIES
   rails (= 4.0.3)
   rails_layout
   reform!
+  representable!
   sass-rails (~> 4.0.0)
   simple_form
   sqlite3

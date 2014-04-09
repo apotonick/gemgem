@@ -23,7 +23,8 @@ gem 'coffee-rails', '~> 4.0.0'
 gem 'jquery-rails'
 
 gem 'reform', path: '../reform'
-# gem 'disposable', path: "../disposable"
+gem 'disposable', path: "../disposable"
+gem 'representable', path: "../representable"
 
 
   # bundle exec rake doc:rails generates the API under doc/api.

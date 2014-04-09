@@ -48,13 +48,13 @@ end
 
 class RatingsController < ApplicationController
   def new
-    rating  = Rating::Entity.new
+    rating  = Rating::Twin.new
     @form   = Rating::Form.new(rating)
   end
 
   # DISCUSS: controller may only work with @form, not with @entity.
   def create
-    rating  = Rating::Entity.new # DISCUSS: we could also add Rateable here.
+    rating  = Rating::Twin.new # DISCUSS: we could also add Rateable here.
     @form   = Rating::Form.new(rating)
 
     form_params = params[:rating]
@@ -76,16 +76,17 @@ class RatingsController < ApplicationController
   end
 
   def edit
-    rating  = Rating::Entity.find(params[:id])
+    rating  = Rating::Twin.find(params[:id])
     @form   = Rating::Form.new(rating)
 
     render :action => :new
   end
 
   def update
-    rating  = Rating::Entity.find(params[:id])
+    rating  = Rating::Twin.find(params[:id])
 
-    rating.rateable = Object.new
+    raise rating.rateable.inspect
+    # rating.rateable = Object.new
 
 
     @form   = Rating::Form.new(rating)
