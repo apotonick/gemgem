@@ -20,20 +20,24 @@ module Rating
     belongs_to :rateable
   end
 
+  # this is the Create form, it finds the Rateable.
+  # TODO: make this work with an HTTP API endpoint where the form _is_ the representer as discussed with @timoschilling.
   class Form < Reform::Form
     property :comment
-    property :rateable # TODO: mark as typed. parse_strategy: :find_by_id would actually do what happens in the controller now.
+
+    # i want rateable to be an actual object so i can verify it is a valid rateable_id!
+    property :rateable, populate_if_empty: lambda { |fragment, *| fragment[:id] } do
+    end # TODO: mark as typed. parse_strategy: :find_by_id would actually do what happens in the controller now.
 
     validates :comment, length: { in: 6..160 }
     validates :rateable, presence: true
   end
 
-  require 'disposable/twin'
   class Twin < Disposable::Twin
     # We have to define all fields we wanna expose.
     property :id
     property :comment
-    property :rateable
+    property :rateable, twin: true
 
     model Persistance
 

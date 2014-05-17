@@ -1,0 +1,10 @@
+%h1 Things#new
+%p Find me in app/views/things/new.html.haml
+
+= simple_form_for [@form] do |f|
+  = f.input :name
+  = f.button :submit
+  -# DISCUSS: we do *not* embed the rateable_id here.
+
+
+= @form.errors.messages
