@@ -13,15 +13,14 @@
 
 ActiveRecord::Schema.define(version: 20140406080556) do
 
-  create_table "rateables", force: true do |t|
-    t.text "name"
-  end
-
   create_table "ratings", force: true do |t|
     t.text    "comment"
     t.integer "weight"
-    t.integer "integer unsigned"
-    t.integer "rateable_id"
+    t.integer "thing_id"
+  end
+
+  create_table "things", force: true do |t|
+    t.text "name"
   end
 
 end

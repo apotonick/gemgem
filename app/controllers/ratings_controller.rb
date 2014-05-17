@@ -3,6 +3,7 @@
 
 class RatingsController < ApplicationController
   def new
+    # thing   =
     rating  = Rating::Twin.new
     @form   = Rating::Form.new(rating)
   end
@@ -13,18 +14,13 @@ class RatingsController < ApplicationController
     @form   = Rating::Form.new(rating)
 
     form_params = params[:rating]
-    # id: params[:rateable_id]
-    # form_params.merge!(
-    #   # rateable: Rateable::Entity.find(params[:rateable_id])
-    #   rateable: Rateable::Entity.new()
-    # ) # TODO: that's part of the populator (part of form) job?
-    form_params[:rateable] = {id: params[:rateable_id]}
+    form_params[:thing] = Thing::Twin.find(params[:thing_id])
 
     if @form.validate(params[:rating])
       @form.save
       #@form.model.save
 
-      raise rating.model.inspect
+      raise rating.inspect
       return
     end
 

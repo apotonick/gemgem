@@ -17,7 +17,7 @@ module Rating
   class Persistance < ActiveRecord::Base
     self.table_name=(:ratings)
 
-    belongs_to :rateable
+    belongs_to :thing, class_name: Thing::Persistence
   end
 
   # this is the Create form, it finds the Rateable.
@@ -26,18 +26,18 @@ module Rating
     property :comment
 
     # i want rateable to be an actual object so i can verify it is a valid rateable_id!
-    property :rateable, populate_if_empty: lambda { |fragment, *| fragment[:id] } do
-    end # TODO: mark as typed. parse_strategy: :find_by_id would actually do what happens in the controller now.
+    property :thing#do#, populate_if_empty: lambda { |fragment, *| Thing::Twin.find(fragment[:id]) } do
+    #end # TODO: mark as typed. parse_strategy: :find_by_id would actually do what happens in the controller now.
 
     validates :comment, length: { in: 6..160 }
-    validates :rateable, presence: true
+    validates :thing, presence: true
   end
 
   class Twin < Disposable::Twin
     # We have to define all fields we wanna expose.
     property :id
     property :comment
-    property :rateable, twin: true
+    property :thing, twin: true
 
     model Persistance
 

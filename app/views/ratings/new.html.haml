@@ -2,7 +2,7 @@
 %p Find me in app/views/rating/new.html.haml
 
 -# form_for calls rateable_entity_rating_path now, which is stupid.
-= simple_form_for [Rateable::Entity.new, @form] do |f|
+= simple_form_for [Thing::Twin.new, @form] do |f|
   = f.input :comment
   = f.button :submit
   -# DISCUSS: we do *not* embed the rateable_id here.
