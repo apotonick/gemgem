@@ -24,7 +24,7 @@ gem 'jquery-rails'
 
 gem 'reform', path: '../reform'
 gem 'disposable', path: "../disposable"
-gem 'representable', path: "../representable"
+# gem 'representable', path: "../representable"
 
 
   # bundle exec rake doc:rails generates the API under doc/api.

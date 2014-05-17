@@ -1,5 +1,5 @@
 Gemgem::Application.routes.draw do
-  resources :rateables do
+  resources :things do
     resources :ratings
   end
 
