@@ -16,4 +16,8 @@ class ThingsController < ApplicationController
 
     return render action: 'new'
   end
+
+  def show
+    @thing = Thing::Twin.find(params[:id])
+  end
 end

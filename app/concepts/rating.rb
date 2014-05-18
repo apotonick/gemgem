@@ -14,7 +14,7 @@
 
 module Rating
    # TODO: one example with clean Persistance approach, one with facade for a legacy monolith.
-  class Persistance < ActiveRecord::Base
+  class Persistence < ActiveRecord::Base
     self.table_name=(:ratings)
 
     belongs_to :thing, class_name: Thing::Persistence
@@ -26,8 +26,8 @@ module Rating
     property :comment
 
     # i want rateable to be an actual object so i can verify it is a valid rateable_id!
-    property :thing#do#, populate_if_empty: lambda { |fragment, *| Thing::Twin.find(fragment[:id]) } do
-    #end # TODO: mark as typed. parse_strategy: :find_by_id would actually do what happens in the controller now.
+    property :thing, populate_if_empty: lambda { |fragment, *| Thing::Twin.find(fragment[:id]) } do
+    end # TODO: mark as typed. parse_strategy: :find_by_id would actually do what happens in the controller now.
 
     validates :comment, length: { in: 6..160 }
     validates :thing, presence: true
@@ -39,7 +39,7 @@ module Rating
     property :comment
     property :thing, twin: true
 
-    model Persistance
+    model Persistence
 
     def persisted?
       model.persisted?

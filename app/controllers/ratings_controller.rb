@@ -14,14 +14,13 @@ class RatingsController < ApplicationController
     @form   = Rating::Form.new(rating)
 
     form_params = params[:rating]
-    form_params[:thing] = Thing::Twin.find(params[:thing_id])
+    form_params[:thing] = {id: params[:thing_id]}
 
     if @form.validate(params[:rating])
       @form.save
       #@form.model.save
 
-      raise rating.inspect
-      return
+      return redirect_to thing_url(params[:thing_id])
     end
 
     # raise @form.errors.inspect

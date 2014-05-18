@@ -1,0 +1,7 @@
+%h1 #{@thing.name}
+
+%ul
+  - @thing.ratings.each do |rating|
+    %li
+      = rating.id
+      = rating.text
