@@ -2,7 +2,7 @@ module Thing
   class Persistence < ActiveRecord::Base
     self.table_name = :things
 
-    has_many :ratings, class_name: Rating::Persistence
+    has_many :ratings, class_name: Rating::Persistence, foreign_key: :thing_id
   end
 
   class Twin < Disposable::Twin
@@ -10,7 +10,7 @@ module Thing
 
     property :name
     property :id # FIXME: why do i need this, again? should be infered.
-    collection :ratings, twin: Rating::Twin
+    collection :ratings, twin: ->{Rating::Twin}
 
     def persisted?
       model.persisted?
