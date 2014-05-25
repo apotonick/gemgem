@@ -1,7 +1,7 @@
 PATH
   remote: ../disposable
   specs:
-    disposable (0.0.3)
+    disposable (0.0.4)
       representable (~> 1.8.1)
       uber
 

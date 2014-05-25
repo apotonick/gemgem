@@ -18,7 +18,7 @@ class RatingsController < ApplicationController
 
     if @form.validate(params[:rating])
       @form.save
-      #@form.model.save
+      # @form.model.save
 
       return redirect_to thing_url(params[:thing_id])
     end
@@ -51,6 +51,10 @@ class RatingsController < ApplicationController
     end
 
     render :action => :new
+  end
+
+  def show
+    @rating = Rating::Twin.find(params[:id])
   end
 end
 

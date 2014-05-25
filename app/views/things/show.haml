@@ -4,4 +4,5 @@
   - @thing.ratings.each do |rating|
     %li
       = rating.id
-      = rating.text
+      = link_to rating.comment, thing_rating_path(@thing.id, rating.id)
+      - # TODO: the URL helpers are so clumsy, make de-nesting resources easier.
