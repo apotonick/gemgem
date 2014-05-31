@@ -1,5 +1,5 @@
 / = simple_form_for [Thing::Twin.new, model] do |f|
-= simple_form_for model do |f| # POST /ratings/
+= simple_form_for model, url: rating_form_path(model.thing.id) do |f| # POST /ratings/
   = f.input :comment
   = f.button :submit
 

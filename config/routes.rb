@@ -4,6 +4,7 @@ Gemgem::Application.routes.draw do
   resources :things do
     resources :ratings
   end
+  post 'things/:id/form' => 'things#form', as: :rating_form
 
   resources :ratings
 
