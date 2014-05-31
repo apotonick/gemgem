@@ -1,7 +1,11 @@
 Gemgem::Application.routes.draw do
+  root 'home#index'
+
   resources :things do
     resources :ratings
   end
+
+  resources :ratings
 
 
   # The priority is based upon order of creation: first created -> highest priority.

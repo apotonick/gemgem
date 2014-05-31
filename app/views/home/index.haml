@@ -1,0 +1,8 @@
+%h1 Gemgem!!!
+
+%h3 Latest
+
+%ul
+- @ratings.each do |rating|
+  %li
+    = concept("rating/cell", rating).call

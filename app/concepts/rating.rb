@@ -37,6 +37,7 @@ module Rating
     # We have to define all fields we wanna expose.
     property :id
     property :comment
+    property :created_at
     property :thing, twin: ->{Thing::Twin}
 
     model Persistence
