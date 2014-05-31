@@ -31,6 +31,10 @@ module Rating
 
     validates :comment, length: { in: 6..160 }
     validates :thing, presence: true
+
+    def thing_id # needed in simple_form_for
+      model.thing.id
+    end
   end
 
   class Twin < Disposable::Twin

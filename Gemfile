@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 ruby '2.1.1'
-gem 'rails', '4.0.3'
+gem 'rails', '4.1.1'
 
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
@@ -44,6 +44,7 @@ gem 'cells', path: "../cells"
 
 gem 'foundation-rails'
 gem 'haml-rails'
+gem 'haml', git: 'https://github.com/haml/haml'
 gem 'simple_form'
 gem 'therubyracer', :platform=>:ruby
 

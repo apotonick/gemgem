@@ -14,10 +14,15 @@ class ThingsController < ApplicationController
       return render text: "All good, #{@form.model.inspect}"
     end
 
-    return render action: 'new'
+    return render action: 'new' # renders concept.
   end
 
   def show
     @thing = Thing::Twin.find(params[:id])
+
+
+
+    rating  = Rating::Twin.new(thing: @thing)
+    @form   = Rating::Form.new(rating)
   end
 end

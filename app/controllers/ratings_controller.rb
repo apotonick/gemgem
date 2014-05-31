@@ -2,7 +2,7 @@
 
 
 class RatingsController < ApplicationController
-  def new
+  def new # DISCUSS: we don't need this anymore.
     # thing   =
     rating  = Rating::Twin.new
     @form   = Rating::Form.new(rating)
@@ -13,8 +13,8 @@ class RatingsController < ApplicationController
     rating  = Rating::Twin.new # DISCUSS: we could also add Rateable here.
     @form   = Rating::Form.new(rating)
 
-    form_params = params[:rating]
-    form_params[:thing] = {id: params[:thing_id]}
+    # form_params = params[:rating]
+    # form_params[:thing] = {id: params[:thing_id]}
 
     if @form.validate(params[:rating])
       @form.save

@@ -1,5 +1,7 @@
 %h1 #{@thing.name}
 
+= concept("rating/cell/form", @form).call
+
 %ul
   - @thing.ratings.each do |rating|
     %li
