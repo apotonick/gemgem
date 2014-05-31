@@ -1,0 +1,10 @@
+/ = simple_form_for [Thing::Twin.new, model] do |f|
+= simple_form_for model do |f| # POST /ratings/
+  = f.input :comment
+  = f.button :submit
+
+  = f.input :thing_id
+  -# DISCUSS: we do *not* embed the rateable_id here.
+
+
+=# @form.errors.messages
