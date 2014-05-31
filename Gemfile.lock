@@ -1,4 +1,12 @@
 PATH
+  remote: ../cells
+  specs:
+    cells (3.11.0)
+      actionpack (>= 3.0)
+      railties (>= 3.0)
+      uber (~> 0.0.6)
+
+PATH
   remote: ../disposable
   specs:
     disposable (0.0.4)
@@ -181,6 +189,7 @@ PLATFORMS
 
 DEPENDENCIES
   binding_of_caller
+  cells!
   coffee-rails (~> 4.0.0)
   disposable!
   factory_girl_rails

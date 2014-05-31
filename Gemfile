@@ -24,6 +24,7 @@ gem 'jquery-rails'
 
 gem 'reform', path: '../reform'
 gem 'disposable', path: "../disposable"
+gem 'cells', path: "../cells"
 # gem 'representable', path: "../representable"
 
 
