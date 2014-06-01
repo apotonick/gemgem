@@ -12,10 +12,26 @@ class RatingFormTest < MiniTest::Spec
 
   # new Rating.
   it {
-    form.validate(comment: "Fantastic!", thing: {id: thing.id}).must_equal true
+    form.validate(comment: "Fantastic!", thing: {id: thing.id}).must_equal true  # and this is the API to "create" a Rating.
     form.save
 
     rating.thing.send(:model).must_equal thing.send(:model)
-  } # and this is the API to "create" a Rating.
+  }
 
+end
+
+module Rating::Operation
+  class Create
+    def initialize(twin)
+      @rating = twin
+    end
+
+    def call(params)
+      form = Rating::Form.new(@rating)
+      form.validate(params)
+      form.save
+
+      @rating
+    end
+  end
 end
