@@ -1,0 +1,10 @@
+!!!
+%html
+  %head
+    %title gemgem - Feedback For A Better World.
+    = stylesheet_link_tag "application"
+    = javascript_include_tag "application"
+    = csrf_meta_tag
+  %body
+    = link_to "New Thing", new_thing_path
+    = yield

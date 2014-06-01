@@ -12,7 +12,7 @@ class ThingsController < ApplicationController
 
     if @form.validate(params[:thing])
       @form.save
-      return render text: "All good, #{@form.model.inspect}"
+      return redirect_to thing_path(@form.id)
     end
 
     return render action: 'new'
