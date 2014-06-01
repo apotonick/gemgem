@@ -8,9 +8,31 @@ class ThingsController < ApplicationController
   end
 
   def create
-    @form = Thing::Form.new(Thing::Twin.new)
+    local_params = nil
 
-    if @form.validate(params[:thing])
+
+    @form = Thing::Form.new(Thing::Twin.new)
+    if request.format == "application/json"
+      @form.instance_eval do
+        mapper.extend(Roar::Representer::JSON)
+
+        def populate!(params)
+          puts params.inspect
+          mapper.new(self).extend(Reform::Form::Validate::Populator).from_json(params)
+        end
+
+        def deserialize!(params)
+          puts params.inspect
+          mapper.new(self).extend(Reform::Form::Validate::Update).from_json(params)
+        end
+
+
+      end
+      local_params = request.body.string
+    end
+    local_params ||= params[:thing]
+
+    if @form.validate(local_params)
       @form.save
       return redirect_to thing_path(@form.id)
     end

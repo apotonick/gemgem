@@ -1,8 +1,13 @@
 require 'test_helper'
 
+Rails.backtrace_cleaner.remove_silencers!
+
 class ThingsControllerTest < ActionController::TestCase
-  test "should get index" do
-    get :index
+  include Roar::Rails::TestCase
+
+  test "POST /things" do
+    post :create, {title: "Trailblazer"}.to_json, format: :json
+
     assert_response :success
   end
 
