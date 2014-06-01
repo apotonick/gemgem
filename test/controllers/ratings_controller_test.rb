@@ -3,8 +3,8 @@ require 'test_helper'
 class RatingsControllerTest < ActionController::TestCase
   # describe "/rateable/1/ratings/new" do
   # FIXME: i fuckin want describe!
-    it "/rateable/1/ratings/new" do
-      get :new, rateable_id: 1 # TODO: allow integration-like tests here with URL.
+    it "/ratings/new" do
+      get :new, id: 1 # TODO: allow integration-like tests here with URL.
 
       assert_select "form" do
         assert_select "input[name='rating[comment]']", 1

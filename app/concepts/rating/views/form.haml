@@ -3,8 +3,9 @@
   = f.input :comment
   = f.button :submit
 
-  = f.input :thing_id
-  -# DISCUSS: we do *not* embed the rateable_id here.
+  - # DISCUSS: this is as close as possible to the API. we could "simplify" that by allowing thing_id: in UI forms.
+  = f.fields_for :thing do |t|
+    = t.input :id
 
 
 =# @form.errors.messages

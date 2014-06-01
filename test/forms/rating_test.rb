@@ -22,11 +22,12 @@ end
 
 module Rating::Operation
   class Create
-    def initialize(twin)
-      @rating = twin
+    def initialize
+      # @rating = twin
     end
 
     def call(params)
+      @rating = Rating::Twin.new
       form = Rating::Form.new(@rating)
       form.validate(params)
       form.save

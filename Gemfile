@@ -61,7 +61,7 @@ end
 
 group :test do
   gem 'minitest-spec-rails'
-  gem 'minitest-wscolor'
+  # gem 'minitest-wscolor'
   gem 'turnip', '>= 1.1.0'
 end
 
