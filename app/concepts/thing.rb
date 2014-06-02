@@ -31,6 +31,18 @@ module Thing
     end
   end
 
+  class Contract < Reform::Contract
+    property :name
+    validates :name, presence: true
+  end
+
+  require 'representable/decorator'
+  class Representer < Representable::Decorator
+    include Representable::JSON
+
+    @representable_attrs = Contract.representer_class.representable_attrs
+  end
+
   class Form < Reform::Form
     property :name
     validates :name, presence: true

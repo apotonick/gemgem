@@ -20,6 +20,31 @@ module Rating
     belongs_to :thing, class_name: Thing::Persistence
   end
 
+  # module Schema
+  #   include Representable
+
+  #   property :comment
+  #   property :thing, extend: Module.new
+  # end
+
+  class Contract < Reform::Contract
+    property :comment
+
+    # i want rateable to be an actual object so i can verify it is a valid rateable_id!
+    property :thing, populate_if_empty: lambda { |fragment, *| Thing::Twin.find(fragment[:id]) } do
+    end # TODO: mark as typed. parse_strategy: :find_by_id would actually do what happens in the controller now.
+
+    validates :comment, length: { in: 6..160 }
+    validates :thing, presence: true
+  end
+
+  require 'representable/decorator'
+  class Representer < Representable::Decorator
+    @representable_attrs = Contract.representer_class.representable_attrs
+  end
+
+
+
   # this is the Create form, it finds the Rateable.
   # TODO: make this work with an HTTP API endpoint where the form _is_ the representer as discussed with @timoschilling.
   class Form < Reform::Form
@@ -31,10 +56,6 @@ module Rating
 
     validates :comment, length: { in: 6..160 }
     validates :thing, presence: true
-
-    def thing_id # needed in simple_form_for
-      model.thing.id
-    end
   end
 
   class Twin < Disposable::Twin
