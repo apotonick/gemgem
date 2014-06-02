@@ -14,19 +14,11 @@ class ThingsController < ApplicationController
     @form = Thing::Form.new(Thing::Twin.new)
     if request.format == "application/json"
       @form.instance_eval do
-        mapper.extend(Roar::Representer::JSON)
-
-        def populate!(params)
-          puts params.inspect
-          mapper.new(self).extend(Reform::Form::Validate::Populator).from_json(params)
+        #mapper.extend(Roar::Representer::JSON)
+        # have a representer that gets inherited in the form and use that representer here.
+        def validate(json)
+          super JSON[json]
         end
-
-        def deserialize!(params)
-          puts params.inspect
-          mapper.new(self).extend(Reform::Form::Validate::Update).from_json(params)
-        end
-
-
       end
       local_params = request.body.string
     end

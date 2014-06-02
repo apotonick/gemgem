@@ -6,9 +6,9 @@ class ThingsControllerTest < ActionController::TestCase
   include Roar::Rails::TestCase
 
   test "POST /things" do
-    post :create, {title: "Trailblazer"}.to_json, format: :json
+    post :create, {name: "Trailblazer"}.to_json, format: :json
 
-    assert_response :success
+    assert_response 302 # redirect, success
   end
 
   test "should get new" do
