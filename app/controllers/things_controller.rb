@@ -7,23 +7,29 @@ class ThingsController < ApplicationController
 
   end
 
-  class Contractor
-    def initialize(twin)
-      @twin = twin
-    end
+  class Contractor < Thing::Contract
+    # 1. in initialize, the twin data populates the contract
+    #    that is correct as the twin might be an existing, already populated object
+    #    and the incoming data is only a sub-set.
+    # def initialize(twin)
+    #   @twin = twin
+    #   @contract= Thing::Contract.new(@twin) # Setup
+    # end
 
     def validate(json)
-      Thing::Representer.new(@twin).from_json(json) # this happens in Form#update!.
-      contract= Thing::Contract.new(@twin)
-      contract.validate
+      Thing::Representer.new(self).from_json(json) # this happens in Form#update!.
+
+      # @contract.validate # super
+      super()
     end
 
-    def save
-      @twin.save
-    end
+    require 'reform/form/sync'
+    include Sync
+    require 'reform/form/save'
+    include Save
 
     def id
-      @twin.id
+      model.id
     end
   end
 
