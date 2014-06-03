@@ -7,24 +7,36 @@ class ThingsController < ApplicationController
 
   end
 
-  def create
-    @form = Thing::Form.new(Thing::Twin.new)
-    if request.format == "application/json"
-      thing = Thing::Twin.new
-      Thing::Representer.new(thing).from_json(request.body.string) # this happens in Form#update!.
-
-      contract= Thing::Contract.new(thing)
-
-      if contract.validate # this happens in Form#validate.
-        thing.save # this happens in Form#save.
-        return redirect_to thing_path(thing.id)
-      end
-
-      raise contract.errors.inspect
+  class Contractor
+    def initialize(twin)
+      @twin = twin
     end
 
+    def validate(json)
+      Thing::Representer.new(@twin).from_json(json) # this happens in Form#update!.
+      contract= Thing::Contract.new(@twin)
+      contract.validate
+    end
 
-    if @form.validate(params[:thing])
+    def save
+      @twin.save
+    end
+
+    def id
+      @twin.id
+    end
+  end
+
+  def create
+    is_json = request.format == "application/json"
+
+    thing = Thing::Twin.new
+
+    @form = (is_json ? Contractor : Thing::Form).new(thing)
+    input = is_json ? request.body.string : params[:thing]
+
+
+    if @form.validate(input)
       @form.save
       return redirect_to thing_path(@form.id)
     end
