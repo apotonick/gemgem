@@ -24,9 +24,9 @@ class ThingsController < ApplicationController
     end
 
     require 'reform/form/sync'
-    include Sync
+    include Reform::Form::Sync
     require 'reform/form/save'
-    include Save
+    include Reform::Form::Save
 
     def id
       model.id
