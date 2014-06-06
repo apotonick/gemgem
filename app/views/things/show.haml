@@ -7,4 +7,5 @@
     %li
       = rating.id
       = link_to rating.comment, thing_rating_path(@thing.id, rating.id)
+      #{rating.weight}
       - # TODO: the URL helpers are so clumsy, make de-nesting resources easier.

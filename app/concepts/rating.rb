@@ -60,6 +60,10 @@ module Rating
     validates :thing, presence: true
 
     validates :weight, presence: true
+
+    def weight
+      super or 1 # select Nice!
+    end
   end
 
   class Twin < Disposable::Twin
