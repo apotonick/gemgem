@@ -1,6 +1,7 @@
 / = simple_form_for [Thing::Twin.new, model] do |f|
 = simple_form_for model, url: rating_form_path(model.thing.id) do |f| # POST /ratings/
   = f.input :comment
+  = f.collection_radio_buttons :weight, [[1, 'Nice!'] ,[0, 'Rubbish!']], :first, :last
   = f.button :submit
 
   - # DISCUSS: this is as close as possible to the API. we could "simplify" that by allowing thing_id: in UI forms.
@@ -8,4 +9,4 @@
     = t.input :id
 
 
-=# @form.errors.messages
+= model.errors.messages

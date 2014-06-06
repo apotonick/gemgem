@@ -49,6 +49,8 @@ module Rating
   # TODO: make this work with an HTTP API endpoint where the form _is_ the representer as discussed with @timoschilling.
   class Form < Reform::Form
     property :comment
+    property :weight
+
 
     # i want rateable to be an actual object so i can verify it is a valid rateable_id!
     property :thing, populate_if_empty: lambda { |fragment, *| Thing::Twin.find(fragment[:id]) } do
@@ -56,12 +58,17 @@ module Rating
 
     validates :comment, length: { in: 6..160 }
     validates :thing, presence: true
+
+    validates :weight, presence: true
   end
 
   class Twin < Disposable::Twin
     # We have to define all fields we wanna expose.
     property :id
+
     property :comment
+    property :weight
+
     property :created_at
     property :thing, twin: ->{Thing::Twin}
 
