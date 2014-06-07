@@ -49,7 +49,7 @@ module Rating
   # TODO: make this work with an HTTP API endpoint where the form _is_ the representer as discussed with @timoschilling.
   class Form < Reform::Form
     property :comment
-    property :weight
+    property :weight, presentation_accessors: true
 
 
     # i want rateable to be an actual object so i can verify it is a valid rateable_id!
@@ -61,7 +61,7 @@ module Rating
 
     validates :weight, presence: true
 
-    def weight
+    def weight # only for presentation layer (UI).
       super or 1 # select Nice!
     end
   end
