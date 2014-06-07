@@ -1,3 +1,58 @@
+class Thing::Eva < Thing::Contract
+  # 1. in initialize, the twin data populates the contract
+  #    that is correct as the twin might be an existing, already populated object
+  #    and the incoming data is only a sub-set.
+  # def initialize(twin)
+  #   @twin = twin
+  #   @contract= Thing::Contract.new(@twin) # Setup
+  # end
+
+  def validate(json)
+    deserialize(json)
+     # this happens in Form#update!.
+
+    super()
+  end
+
+  require 'reform/form/sync'
+  include Reform::Form::Sync
+  require 'reform/form/save'
+  include Reform::Form::Save
+
+  def id
+    model.id
+  end
+
+  class JSON < self
+    def deserialize(json)
+      Thing::Representer.new(self).from_json(json)
+    end
+  end
+
+  class Hash < self
+    def deserialize(json)
+      Thing::Representer.new(self).from_hash(json)
+    end
+  end
+
+  module Flow # or is that an Operation?
+    def flow(controller, input)
+      if validate(input)
+        save
+        return controller.redirect_to controller.thing_path(id)
+      end
+
+      controller.render action: 'new'
+    end
+  end
+  include Flow
+  # DISCUSS: could also be separate class.
+
+end
+
+
+
+
 class ThingsController < ApplicationController
   def index
   end
@@ -7,47 +62,13 @@ class ThingsController < ApplicationController
 
   end
 
-  class Contractor < Thing::Contract
-    # 1. in initialize, the twin data populates the contract
-    #    that is correct as the twin might be an existing, already populated object
-    #    and the incoming data is only a sub-set.
-    # def initialize(twin)
-    #   @twin = twin
-    #   @contract= Thing::Contract.new(@twin) # Setup
-    # end
-
-    def validate(json)
-      Thing::Representer.new(self).from_json(json) # this happens in Form#update!.
-
-      # @contract.validate # super
-      super()
-    end
-
-    require 'reform/form/sync'
-    include Reform::Form::Sync
-    require 'reform/form/save'
-    include Reform::Form::Save
-
-    def id
-      model.id
-    end
-  end
-
   def create
-    is_json = request.format == "application/json"
+    # Thing::Operation::Create.for(
+    #   # form: valid: redirect, invalid: render
+    #   # json: valid: render, invalid: render something else
+    #   )
 
-    thing = Thing::Twin.new
-
-    @form = (is_json ? Contractor : Thing::Form).new(thing)
-    input = is_json ? request.body.string : params[:thing]
-
-
-    if @form.validate(input)
-      @form.save
-      return redirect_to thing_path(@form.id)
-    end
-
-    return render action: 'new'
+    Thing::Operation::Create.fixme_for_form_and_json(self, params)
   end
 
   # has_cell :
