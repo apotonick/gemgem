@@ -66,6 +66,43 @@ module Rating
     end
   end
 
+  class Operation < Contract
+    include Trailblazer::Operation
+
+    def id
+      model.thing.id # FIXME.
+    end
+
+    def remove_me
+      'show'
+    end
+
+    class JSON < self
+      def deserialize(json) # an Operation's content subclass should always use the concept's representer.
+        Rating::Representer.new(self).from_json(json)
+      end
+    end
+
+    class Hash < self
+      def deserialize(json)
+        Rating::Representer.new(self).from_hash(json)
+      end
+    end
+
+
+    include Trailblazer::Operation::Flow
+    # DISCUSS: could also be separate class.
+
+
+    class Form < Rating::Form # FIXME.
+      include Trailblazer::Operation::Flow
+
+      def remove_me
+      'show'
+    end
+    end
+  end
+
   class Twin < Disposable::Twin
     # We have to define all fields we wanna expose.
     property :id

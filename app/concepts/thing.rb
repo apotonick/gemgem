@@ -50,24 +50,29 @@ module Thing
     model Thing
   end
 
-  # ContentOrchestrator:
+  # ContentOrchestrator -> Endpoint:
   # Thing::Operation::Create.call({..}) # "model API"
   # Thing::Operation::Create::Form.call({..})
   # Thing::Operation::Create::JSON.call({..})
 
-  class Operation
+  class Endpoint # in Trailblazer, controllers are Endpoints. they shouldn't be overridden as they do pretty generic shit.
     class Create
 
-      def self.fixme_for_form_and_json(controller, params)
-        thing = Thing::Twin.new
+      def call(controller, params)
+        thing = domain::Twin.new
 
         # TODO: no json or http stuff in here!
         is_json = controller.request.format == "application/json"
-        @form = (is_json ? Thing::Eva::JSON : Thing::Form).new(thing)
+        @form = (is_json ? domain::Operation::JSON : domain::Form).new(thing)
         input = is_json ? controller.request.body.string : params[:thing]
 
-        @form.extend(Thing::Eva::Flow) # FIXME: Only for fuckin Form.
+        @form.extend(domain::Operation::Flow) # FIXME: Only for fuckin Form.
         @form.flow(controller, input) # TODO: remove dependency
+      end
+
+    private
+      def domain
+        Thing
       end
     end
   end

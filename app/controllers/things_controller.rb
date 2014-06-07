@@ -1,4 +1,6 @@
-class Thing::Eva < Thing::Contract
+class Thing::Operation < Thing::Contract
+  include ::Trailblazer::Operation
+
   # 1. in initialize, the twin data populates the contract
   #    that is correct as the twin might be an existing, already populated object
   #    and the incoming data is only a sub-set.
@@ -7,24 +9,8 @@ class Thing::Eva < Thing::Contract
   #   @contract= Thing::Contract.new(@twin) # Setup
   # end
 
-  def validate(json)
-    deserialize(json)
-     # this happens in Form#update!.
-
-    super()
-  end
-
-  require 'reform/form/sync'
-  include Reform::Form::Sync
-  require 'reform/form/save'
-  include Reform::Form::Save
-
-  def id
-    model.id
-  end
-
   class JSON < self
-    def deserialize(json)
+    def deserialize(json) # an Operation's content subclass should always use the concept's representer.
       Thing::Representer.new(self).from_json(json)
     end
   end
@@ -35,19 +21,14 @@ class Thing::Eva < Thing::Contract
     end
   end
 
-  module Flow # or is that an Operation?
-    def flow(controller, input)
-      if validate(input)
-        save
-        return controller.redirect_to controller.thing_path(id)
-      end
 
-      controller.render action: 'new'
-    end
-  end
-  include Flow
+  include Trailblazer::Operation::Flow
   # DISCUSS: could also be separate class.
 
+
+  class Form < Thing::Form # FIXME.
+    include Trailblazer::Operation::Flow
+  end
 end
 
 
@@ -68,7 +49,7 @@ class ThingsController < ApplicationController
     #   # json: valid: render, invalid: render something else
     #   )
 
-    Thing::Operation::Create.fixme_for_form_and_json(self, params)
+    Thing::Endpoint::Create.new.call(self, params)
   end
 
   # has_cell :
@@ -81,21 +62,29 @@ class ThingsController < ApplicationController
      # renders concept.
   end
   def form # TODO: this should happen in the cell-ajax.
-    # DISCUSS: we could also think about hooking an Operation to a route that then renders the cell?
+    # DISCUSS: we could also think about hooking an Endpoint/Operation to a route that then renders the cell?
     # but, why? UI and API have different behaviour anyway.
 
     @thing = Thing::Twin.find(params[:id])
     # rating  = Rating::Twin.new(thing: @thing)
 
+    # should be Operation::Create::Form or Form.create
+
+
     # everything below the line here is done in Rating::Operation::Create
     rating  = Rating::Twin.new
-    @form   = Rating::Form.new(rating)
 
-    if @form.validate(params[:rating])
-      @form.save
-      return redirect_to thing_path(@thing.id)
-    end
+    @form = Rating::Operation::Form.new(rating)
+    @form.flow(self, params[:rating])
 
-    render action: :show
+
+    # @form   = Rating::Form.new(rating)
+
+    # if @form.validate(params[:rating])
+    #   @form.save
+    #   return redirect_to thing_path(@thing.id)
+    # end
+
+    # render action: :show
   end
 end
