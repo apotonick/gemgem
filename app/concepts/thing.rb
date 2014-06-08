@@ -55,10 +55,12 @@ module Thing
   # Thing::Operation::Create::Form.call({..})
   # Thing::Operation::Create::JSON.call({..})
 
+  # endpoint is kind of multiplexer for different formats in one action.
+  # it then calls one "CRUD" operation.
   class Endpoint # in Trailblazer, controllers are Endpoints. they shouldn't be overridden as they do pretty generic shit.
     class Create
 
-      def call(controller, params)
+      def call(controller, params, endpoint_actions)
         thing = domain::Twin.new
 
         # TODO: no json or http stuff in here!
@@ -66,8 +68,11 @@ module Thing
         @form = (is_json ? domain::Operation::JSON : domain::Form).new(thing)
         input = is_json ? controller.request.body.string : params[:thing]
 
-        @form.extend(domain::Operation::Flow) # FIXME: Only for fuckin Form.
-        @form.flow(controller, input) # TODO: remove dependency
+        # FIXME: don't allow instance variables in controllers?
+        controller.instance_variable_set(:@form, @form)
+
+        @form.extend(Trailblazer::Operation::Flow) # FIXME: Only for fuckin Form.
+        @form.flow(input, endpoint_actions[is_json ? :json : :form])
       end
 
     private

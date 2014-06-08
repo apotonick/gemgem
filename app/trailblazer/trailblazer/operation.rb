@@ -16,20 +16,17 @@ module Trailblazer
       model.id
     end
 
-    def remove_me
-      'new'
-    end
-
 
     module Flow # or is that an Operation?
-      def flow(controller, input)
+      def flow(input, actions)
         if validate(input)
           save
-          controller.redirect_to controller.thing_path(id)
+          actions[:success].call(self)
+
           return self
         end
 
-        controller.render action: remove_me
+        actions[:invalid].call(self)
       end
     end
   end

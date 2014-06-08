@@ -26,9 +26,9 @@ class Thing::Operation < Thing::Contract
   # DISCUSS: could also be separate class.
 
 
-  class Form < Thing::Form # FIXME.
-    include Trailblazer::Operation::Flow
-  end
+  # class Form < Thing::Form # FIXME.
+  #   include Trailblazer::Operation::Flow
+  # end
 end
 
 
@@ -39,8 +39,7 @@ class ThingsController < ApplicationController
   end
 
   def new
-    @form = Thing::Form.new(Thing::Twin.new)
-
+    @form = Thing::Form.new(Thing::Twin.new) # Thing::Endpoint::New or Operation::Form::New
   end
 
   def create
@@ -49,7 +48,12 @@ class ThingsController < ApplicationController
     #   # json: valid: render, invalid: render something else
     #   )
 
-    Thing::Endpoint::Create.new.call(self, params)
+    # you can still do whatever you want in the controller, but the domain logic is encapsulated.
+    Thing::Endpoint::Create.new.call(self, params,
+      {form: {
+        success: lambda { |form| redirect_to thing_path(form.model.id) },
+        invalid: lambda { |*| render action: "new" } # if this did actually call #new as in cells, we don't need the form object.
+      }})
   end
 
   # has_cell :
@@ -74,8 +78,14 @@ class ThingsController < ApplicationController
     # everything below the line here is done in Rating::Operation::Create
     rating  = Rating::Twin.new
 
-    @form = Rating::Operation::Form.new(rating)
-    @form.flow(self, params[:rating])
+    # Eva.form gives you form to render
+    # Eva.call(success: .., failure: ..) runs rules
+
+    @form = Rating::Form.new(rating)  # do we need an explicit Operation here? this is only UI
+    @form.extend(Trailblazer::Operation::Flow) # instantiate Flow/callable-Operation object?
+    @form.flow(self, params[:rating],
+      success: lambda { redirect_to thing_path(@thing.id) },
+      invalid: lambda { render action: "new" })
 
 
     # @form   = Rating::Form.new(rating)
