@@ -70,12 +70,7 @@ class ThingsController < ApplicationController
     # DISCUSS: we could also think about hooking an Endpoint/Operation to a route that then renders the cell?
     # but, why? UI and API have different behaviour anyway.
 
-
-
-
     # use Endpoint::Create::"Form" here directly.
-
-
     @thing = Thing::Twin.find(params[:id])
     # rating  = Rating::Twin.new(thing: @thing)
 
@@ -90,18 +85,8 @@ class ThingsController < ApplicationController
 
     @form = Rating::Form.new(rating)  # do we need an explicit Operation here? this is only UI
     @form.extend(Trailblazer::Operation::Flow) # instantiate Flow/callable-Operation object?
-    @form.flow(self, params[:rating],
-      success: lambda { redirect_to thing_path(@thing.id) },
-      invalid: lambda { render action: "new" })
-
-
-    # @form   = Rating::Form.new(rating)
-
-    # if @form.validate(params[:rating])
-    #   @form.save
-    #   return redirect_to thing_path(@thing.id)
-    # end
-
-    # render action: :show
+    @form.flow(params[:rating],
+      success: lambda { |*| redirect_to thing_path(@thing.id) },
+      invalid: lambda { |*| render action: :show })
   end
 end
