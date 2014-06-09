@@ -10,21 +10,12 @@ class RatingsController < ApplicationController
 
   # DISCUSS: controller may only work with @form, not with @entity.
   def create
-    rating  = Rating::Twin.new # DISCUSS: we could also add Rateable here.
-    @form   = Rating::Form.new(rating)
-
-    # form_params = params[:rating]
-    # form_params[:thing] = {id: params[:thing_id]}
-
-    if @form.validate(params[:rating])
-      @form.save
-      # @form.model.save
-
-      return redirect_to thing_url(params[:thing_id])
-    end
-
-    # raise @form.errors.inspect
-    render :action => :new
+    Trailblazer::Endpoint::Create.new.call(self, params,
+      {form: {
+        success: lambda { |form| redirect_to thing_path(form.model.id) },
+        invalid: lambda { |*| render action: "new" } # if this did actually call #new as in cells, we don't need the form object.
+      }},
+      Rating)
   end
 
   def edit

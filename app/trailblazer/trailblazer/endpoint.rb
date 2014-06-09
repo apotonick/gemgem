@@ -8,7 +8,7 @@ module Trailblazer
         # TODO: no json or http stuff in here!
         is_json = controller.request.format == "application/json"
         @form = (is_json ? domain::Operation::JSON : domain::Form).new(thing)
-        input = is_json ? controller.request.body.string : params[:thing]
+        input = is_json ? controller.request.body.string : params[domain.to_s.underscore] #params[:thing]
 
         # FIXME: don't allow instance variables in controllers?
         controller.instance_variable_set(:@form, @form)
