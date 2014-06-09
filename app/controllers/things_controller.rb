@@ -49,11 +49,12 @@ class ThingsController < ApplicationController
     #   )
 
     # you can still do whatever you want in the controller, but the domain logic is encapsulated.
-    Thing::Endpoint::Create.new.call(self, params,
+    Trailblazer::Endpoint::Create.new.call(self, params,
       {form: {
         success: lambda { |form| redirect_to thing_path(form.model.id) },
         invalid: lambda { |*| render action: "new" } # if this did actually call #new as in cells, we don't need the form object.
-      }})
+      }},
+      Thing)
   end
 
   # has_cell :
@@ -68,6 +69,12 @@ class ThingsController < ApplicationController
   def form # TODO: this should happen in the cell-ajax.
     # DISCUSS: we could also think about hooking an Endpoint/Operation to a route that then renders the cell?
     # but, why? UI and API have different behaviour anyway.
+
+
+
+
+    # use Endpoint::Create::"Form" here directly.
+
 
     @thing = Thing::Twin.find(params[:id])
     # rating  = Rating::Twin.new(thing: @thing)
