@@ -66,15 +66,11 @@ module Rating
     end
   end
 
-  class Operation < Contract
+  class Operation < Contract # "Saveable"
     include Trailblazer::Operation
 
     def id
       model.thing.id # FIXME.
-    end
-
-    def remove_me
-      'show'
     end
 
     class JSON < self
@@ -87,19 +83,6 @@ module Rating
       def deserialize(json)
         Rating::Representer.new(self).from_hash(json)
       end
-    end
-
-
-    include Trailblazer::Operation::Flow
-    # DISCUSS: could also be separate class.
-
-
-    class Form < Rating::Form # FIXME.
-      include Trailblazer::Operation::Flow
-
-      def remove_me
-      'show'
-    end
     end
   end
 

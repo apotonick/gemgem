@@ -11,6 +11,7 @@ module Trailblazer
     include Reform::Form::Sync
     require 'reform/form/save'
     include Reform::Form::Save
+    # should this be something like ValidateSaveableContract (better name, of course)?
 
     def id
       model.id
