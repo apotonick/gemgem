@@ -50,9 +50,15 @@ class ThingsController < ApplicationController
 
     # you can still do whatever you want in the controller, but the domain logic is encapsulated.
     Trailblazer::Endpoint::Create.new.call(self, params,
+      # TODO: there's gonna be clever default settings a la Rails.
       {form: {
         success: lambda { |form| redirect_to thing_path(form.model.id) },
         invalid: lambda { |*| render action: "new" } # if this did actually call #new as in cells, we don't need the form object.
+      },
+      json: {
+        success: lambda { |form| redirect_to thing_path(form.model.id) },
+        # TODO: implement error handling.
+        # invalid: lambda { |*| render action: "new" } # if this did actually call #new as in cells, we don't need the form object.
       }},
       Thing)
   end
