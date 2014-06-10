@@ -81,18 +81,10 @@ class ThingsController < ApplicationController
     # rating  = Rating::Twin.new(thing: @thing)
 
     # should be Operation::Create::Form or Form.create
-
-
-    # everything below the line here is done in Rating::Operation::Create
-    rating  = Rating::Twin.new
-
-    # Eva.form gives you form to render
-    # Eva.call(success: .., failure: ..) runs rules
-
-    @form = Rating::Form.new(rating)  # do we need an explicit Operation here? this is only UI
-    @form.extend(Trailblazer::Operation::Flow) # instantiate Flow/callable-Operation object?
-    @form.flow(params[:rating],
+    Trailblazer::Operation::Create.new.call(Rating, Rating::Form, params[:rating],
       success: lambda { |*| redirect_to thing_path(@thing.id) },
-      invalid: lambda { |*| render action: :show })
+      invalid: lambda { |*| render action: :show }) do |form|
+        @form = form
+      end
   end
 end
