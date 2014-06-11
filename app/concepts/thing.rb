@@ -42,12 +42,35 @@ module Thing
 
     @representable_attrs = Contract.representer_class.representable_attrs
   end
+  module Schema
+    include Representable
+    representable_attrs.inherit Contract.representer_class.representable_attrs
+  end
 
   class Form < Reform::Form
     property :name
     validates :name, presence: true
 
     model Thing
+  end
+
+  class Operation < Trailblazer::Contract # "Saveable"
+    include Trailblazer::Operation
+    # include Rating::Representer
+    include Representable
+    include Schema
+
+    def id
+      model.thing.id # FIXME.
+    end
+
+    class JSON < self
+      include Trailblazer::Contract::JSON
+    end
+
+    class Hash < self
+      include Trailblazer::Contract::Hash
+    end
   end
 
   # ContentOrchestrator -> Endpoint:

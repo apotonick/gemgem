@@ -1,39 +1,3 @@
-class Thing::Operation < Thing::Contract
-  include ::Trailblazer::Operation
-
-  # 1. in initialize, the twin data populates the contract
-  #    that is correct as the twin might be an existing, already populated object
-  #    and the incoming data is only a sub-set.
-  # def initialize(twin)
-  #   @twin = twin
-  #   @contract= Thing::Contract.new(@twin) # Setup
-  # end
-
-  class JSON < self
-    def deserialize(json) # an Operation's content subclass should always use the concept's representer.
-      Thing::Representer.new(self).from_json(json)
-    end
-  end
-
-  class Hash < self
-    def deserialize(json)
-      Thing::Representer.new(self).from_hash(json)
-    end
-  end
-
-
-  include Trailblazer::Operation::Flow
-  # DISCUSS: could also be separate class.
-
-
-  # class Form < Thing::Form # FIXME.
-  #   include Trailblazer::Operation::Flow
-  # end
-end
-
-
-
-
 class ThingsController < ApplicationController
   def index
   end

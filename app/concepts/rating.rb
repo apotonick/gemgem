@@ -39,6 +39,11 @@ module Rating
   end
 
   require 'representable/decorator'
+  module Schema
+    include Representable
+    @representable_attrs = Contract.representer_class.representable_attrs
+  end
+
   class Representer < Representable::Decorator
     @representable_attrs = Contract.representer_class.representable_attrs
   end
@@ -66,23 +71,22 @@ module Rating
     end
   end
 
-  class Operation < Contract # "Saveable"
+  class Operation < Trailblazer::Contract # "Saveable"
     include Trailblazer::Operation
+    # include Rating::Representer
+    include Representable
+    include Schema
 
     def id
       model.thing.id # FIXME.
     end
 
     class JSON < self
-      def deserialize(json) # an Operation's content subclass should always use the concept's representer.
-        Rating::Representer.new(self).from_json(json)
-      end
+      include Trailblazer::Contract::JSON
     end
 
     class Hash < self
-      def deserialize(json)
-        Rating::Representer.new(self).from_hash(json)
-      end
+      include Trailblazer::Contract::Hash
     end
   end
 

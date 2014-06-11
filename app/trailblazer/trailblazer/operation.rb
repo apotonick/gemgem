@@ -1,12 +1,5 @@
 module Trailblazer
   module Operation # TODO: make a class. # TODO: should this be Operation::CRUD or something?
-    def validate(json)
-      deserialize(json)
-       # this happens in Form#update!.
-
-      super()
-    end
-
     require 'reform/form/sync'
     include Reform::Form::Sync
     require 'reform/form/save'
