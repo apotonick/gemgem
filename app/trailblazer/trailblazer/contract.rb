@@ -13,10 +13,13 @@ module Trailblazer
     end
 
     module Hash
-      include Representable::Hash
+      # include Representable::Hash
 
       def deserialize_for!(hash)
-        self.class.new(fields).from_hash(hash)
+        map = mapper
+        map.send(:include,Representable::Hash) # TODO: Make that nicer.
+        map.new(fields).from_hash(hash)
+        puts "fields: #{fields.inspect}, #{hash.inspect}"
       end
     end
 
@@ -25,7 +28,7 @@ module Trailblazer
 
       def deserialize_for!(hash)
         map = mapper
-        map.send(:include,Representable::JSON)
+        map.send(:include,Representable::JSON) # TODO: Make that nicer.
         map.new(fields).from_json(hash)
       end
     end

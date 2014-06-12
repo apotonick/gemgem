@@ -24,3 +24,14 @@ class ThingsControllerTest < ActionController::TestCase
   end
 
 end
+
+class ThingColonColonDomainlayerthatneedsAName < MiniTest::Spec
+  subject { Thing::Twin.new }
+
+  before { @res = Thing::Operation::Hash.new(subject).
+    extend(Trailblazer::Operation::Flow). # TODO: do that per default.
+    flow({"name" => "Chop Suey"}, {success: lambda {|*|}, invalid: lambda{|*|} }) }
+
+  it { @res.must_equal true }
+  it { subject.name.must_equal "Chop Suey" }
+end

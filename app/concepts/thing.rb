@@ -32,7 +32,7 @@ module Thing
   end
 
   class Contract < Reform::Contract
-    property :name
+    property :name, presentation_accessors: true
     validates :name, presence: true
   end
 
@@ -57,8 +57,10 @@ module Thing
   class Operation < Trailblazer::Contract # "Saveable"
     include Trailblazer::Operation
     # include Rating::Representer
-    include Representable
-    include Schema
+
+    # include Representable
+    # include Schema
+    representer_class.representable_attrs.inherit Schema.representable_attrs
 
     def id
       model.thing.id # FIXME.

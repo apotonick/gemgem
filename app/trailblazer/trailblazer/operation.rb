@@ -13,11 +13,11 @@ module Trailblazer
 
     module Flow # or is that an Operation?
       def flow(input, actions)
-        if validate(input)
+        if result = validate(input)
           save
           actions[:success].call(self)
 
-          return self
+          return result
         end
 
         actions[:invalid].call(self)
