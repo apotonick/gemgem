@@ -36,12 +36,6 @@ module Thing
     validates :name, presence: true
   end
 
-  require 'representable/decorator'
-  class Representer < Representable::Decorator
-    include Representable::JSON
-
-    @representable_attrs = Contract.representer_class.representable_attrs
-  end
   module Schema
     include Representable
     representable_attrs.inherit Contract.representer_class.representable_attrs
@@ -54,7 +48,8 @@ module Thing
     model Thing
   end
 
-  class Operation < Trailblazer::Contract # "Saveable"
+  # new(twin).validate(params)[.save]
+  class Operation < Trailblazer::Contract # "Validate- and Saveable"
     include Trailblazer::Operation
     # include Rating::Representer
 

@@ -44,11 +44,6 @@ module Rating
     @representable_attrs = Contract.representer_class.representable_attrs
   end
 
-  class Representer < Representable::Decorator
-    @representable_attrs = Contract.representer_class.representable_attrs
-  end
-
-
 
   # this is the Create form, it finds the Rateable.
   # TODO: make this work with an HTTP API endpoint where the form _is_ the representer as discussed with @timoschilling.

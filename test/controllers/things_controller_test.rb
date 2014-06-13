@@ -47,6 +47,21 @@ class RatingsControllerTest < ActionController::TestCase
   end
 
 end
+class RatingColonColonDomainlayerthatneedsAName < MiniTest::Spec
+  subject { Rating::Twin.new }
+
+  # Thing::Operation::Update::Hash # should we alias Update to Operation?
+
+  # Rating::Operation::Create::Hash.new.call == Fucktory
+
+  before { @res = Rating::Operation::Hash.new(subject).
+    extend(Trailblazer::Operation::Flow). # TODO: do that per default.
+    flow({"comment" => "Amazing!"}, {success: lambda {|*|}, invalid: lambda{|*| raise } }) }
+
+  it { @res.must_equal true }
+  it { subject.comment.must_equal "Amazing!" }
+end
+
 
 
 class ThingColonColonDomainlayerthatneedsAName < MiniTest::Spec
