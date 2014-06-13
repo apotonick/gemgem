@@ -10,9 +10,11 @@ class RatingsController < ApplicationController
 
   # DISCUSS: controller may only work with @form, not with @entity.
   def create
+    params[:rating][:thing] = {:id => params[:thing_id]} # it is possible to set stuff before triggering Create.
+
     Trailblazer::Endpoint::Create.new.call(self, params,
       {form: {
-        success: lambda { |form| redirect_to thing_path(form.model.id) },
+        success: lambda { |form| redirect_to thing_path(form.model.thing.id) },
         invalid: lambda { |*| render action: "new" } # if this did actually call #new as in cells, we don't need the form object.
       }},
       Rating)
