@@ -56,7 +56,7 @@ class RatingColonColonDomainlayerthatneedsAName < MiniTest::Spec
 
   before { @res = Rating::Operation::Hash.new(subject).
     extend(Trailblazer::Operation::Flow). # TODO: do that per default.
-    flow({"comment" => "Amazing!"}, {success: lambda {|*|}, invalid: lambda{|*| raise } }) }
+    flow({"comment" => "Amazing!"}, {success: lambda {|*|}, invalid: lambda{|form| raise form.errors.messages.inspect } }) }
 
   it { @res.must_equal true }
   it { subject.comment.must_equal "Amazing!" }

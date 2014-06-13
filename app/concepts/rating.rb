@@ -27,7 +27,10 @@ module Rating
   #   property :thing, extend: Module.new
   # end
 
-  class Contract < Reform::Contract
+  class Contract < Trailblazer::Contract #Reform::Contract
+    # inherit attributes from schema
+
+
     property :comment
 
     # i want rateable to be an actual object so i can verify it is a valid rateable_id!
@@ -66,7 +69,8 @@ module Rating
     end
   end
 
-  class Operation < Trailblazer::Contract # "Saveable"
+  # think of this as Operation::Update
+  class Operation < Contract # "Saveable"
     include Trailblazer::Operation
     # include Rating::Representer
     include Representable
