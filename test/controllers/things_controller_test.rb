@@ -53,13 +53,32 @@ class RatingColonColonDomainlayerthatneedsAName < MiniTest::Spec
   # Thing::Operation::Update::Hash # should we alias Update to Operation?
 
   # Rating::Operation::Create::Hash.new.call == Fucktory
+  let (:operation) { Rating::Operation::Hash.new(subject).
+    extend(Trailblazer::Operation::Flow) }
+  let (:flow) { @res = operation. # TODO: do that per default.
+    flow(params, {success: lambda {|*|}, invalid: lambda{|form| raise form.errors.messages.inspect } }) }
 
-  before { @res = Rating::Operation::Hash.new(subject).
-    extend(Trailblazer::Operation::Flow). # TODO: do that per default.
-    flow({"comment" => "Amazing!"}, {success: lambda {|*|}, invalid: lambda{|form| raise form.errors.messages.inspect } }) }
 
-  it { @res.must_equal true }
-  it { subject.comment.must_equal "Amazing!" }
+  describe "valid" do
+    let (:params) { {"comment" => "Amazing!", "thing" => {:id => 1}} }
+
+    before { flow }
+
+    it { @res.must_equal true }
+    it { subject.comment.must_equal "Amazing!" }
+  end
+
+
+  describe "invalid" do
+    let (:params) { {"comment" => "Amazing!"} }
+
+    before { assert_raises { flow } }
+
+    it { @res.must_equal false }
+    it { subject.comment.must_equal nil }
+    it { operation.comment.must_equal "Amazing!" }
+    it { operation.errors.messages.must_equal({:thing=>["can't be blank"]}) }
+  end
 end
 
 
