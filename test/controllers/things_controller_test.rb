@@ -53,8 +53,7 @@ class RatingColonColonDomainlayerthatneedsAName < MiniTest::Spec
   # Thing::Operation::Update::Hash # should we alias Update to Operation?
 
   # Rating::Operation::Create::Hash.new.call == Fucktory
-  let (:operation) { Rating::Operation::Hash.new(subject).
-    extend(Trailblazer::Operation::Flow) }
+  let (:operation) { Rating::Operation::Hash.new(subject) }
   let (:flow) { @res = operation. # TODO: do that per default.
     flow(params, {success: lambda {|*|}, invalid: lambda{|form| raise form.errors.messages.inspect } }) }
 
@@ -89,7 +88,7 @@ class ThingColonColonDomainlayerthatneedsAName < MiniTest::Spec
   # Thing::Operation::Update::Hash # should we alias Update to Operation?
 
   before { @res = Thing::Operation::Hash.new(subject).
-    extend(Trailblazer::Operation::Flow). # TODO: do that per default.
+    # extend(Trailblazer::Operation::Flow). # TODO: do that per default.
     flow({"name" => "Chop Suey"}, {success: lambda {|*|}, invalid: lambda{|*|} }) }
 
   it { @res.must_equal true }

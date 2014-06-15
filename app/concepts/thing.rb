@@ -46,6 +46,9 @@ module Thing
     validates :name, presence: true
 
     model Thing
+
+    # FIXME
+    include Trailblazer::Contract::Flow
   end
 
   # new(twin).validate(params)[.save]

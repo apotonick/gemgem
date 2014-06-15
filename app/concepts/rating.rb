@@ -67,19 +67,13 @@ module Rating
     def weight # only for presentation layer (UI).
       super or 1 # select Nice!
     end
+
+    # FIXME
+    include Trailblazer::Contract::Flow
   end
 
   # think of this as Operation::Update
   class Operation < Contract # "Saveable"
-    include Trailblazer::Operation
-    # include Rating::Representer
-    include Representable
-    include Schema
-
-    def id
-      model.thing.id # FIXME.
-    end
-
     class JSON < self
       include Trailblazer::Contract::JSON
     end
@@ -87,6 +81,10 @@ module Rating
     class Hash < self
       include Trailblazer::Contract::Hash
     end
+
+    # class Form < self
+    #   include Trailblazer::Contract::Form
+    # end
   end
 
   class Twin < Disposable::Twin
