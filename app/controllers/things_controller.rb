@@ -3,7 +3,7 @@ class ThingsController < ApplicationController
   end
 
   def new
-    @form = Thing::Form.new(Thing::Twin.new) # Thing::Endpoint::New or Operation::Form::New
+    @form = Thing::Operation::Form.new(Thing::Twin.new) # Thing::Endpoint::New or Operation::Form::New
   end
 
   def create

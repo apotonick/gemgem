@@ -30,8 +30,8 @@ module Rating
   class Contract < Trailblazer::Contract #Reform::Contract
     # inherit attributes from schema
 
-
     property :comment
+    property :weight, presentation_accessors: true
 
     # i want rateable to be an actual object so i can verify it is a valid rateable_id!
     property :thing, populate_if_empty: lambda { |fragment, *| Thing::Twin.find(fragment[:id]) } do
@@ -82,9 +82,15 @@ module Rating
       include Trailblazer::Contract::Hash
     end
 
-    # class Form < self
-    #   include Trailblazer::Contract::Form
-    # end
+    class Form < self
+      include Trailblazer::Contract::Form
+
+      validates :weight, presence: true
+
+      def weight # only for presentation layer (UI).
+        super or 1 # select Nice!
+      end
+    end
   end
 
   class Twin < Disposable::Twin

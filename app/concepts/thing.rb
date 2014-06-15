@@ -31,7 +31,7 @@ module Thing
     end
   end
 
-  class Contract < Reform::Contract
+  class Contract < Trailblazer::Contract
     property :name, presentation_accessors: true
     validates :name, presence: true
   end
@@ -41,24 +41,22 @@ module Thing
     representable_attrs.inherit Contract.representer_class.representable_attrs
   end
 
-  class Form < Reform::Form
-    property :name
-    validates :name, presence: true
+  # class Form < Reform::Form
+  #   property :name
+  #   validates :name, presence: true
 
-    model Thing
+  #   model Thing
 
-    # FIXME
-    include Trailblazer::Contract::Flow
-  end
+  #   # FIXME
+  #   include Trailblazer::Contract::Flow
+  # end
 
   # new(twin).validate(params)[.save]
-  class Operation < Trailblazer::Contract # "Validate- and Saveable"
-    include Trailblazer::Operation
+  class Operation < Contract # "Validate- and Saveable"
     # include Rating::Representer
 
     # include Representable
     # include Schema
-    representer_class.representable_attrs.inherit Schema.representable_attrs
 
     def id
       model.thing.id # FIXME.
@@ -70,6 +68,10 @@ module Thing
 
     class Hash < self
       include Trailblazer::Contract::Hash
+    end
+
+    class Form < self
+      include Trailblazer::Contract::Form
     end
   end
 

@@ -1,16 +1,20 @@
 module Trailblazer
   # new(twin).validate(params)[.save]
   class Contract < Reform::Contract # module?
-    def validate(json)
-      deserialize!(json)
-       # this happens in Form#update!.
+    # Normally, a Reform::Contract only provides #validate().
+    module WithDeserialize
+      def validate(json)
+        deserialize!(json)
+         # this happens in Form#update!.
 
-      super()
+        super()
+      end
+
+      def deserialize!(document)
+        deserialize_for!(document)
+      end
     end
 
-    def deserialize!(document)
-      deserialize_for!(document)
-    end
 
 
     # Implements a Flow with validating input and processing the result.
@@ -37,6 +41,7 @@ module Trailblazer
 
 
     module Hash
+      include WithDeserialize
       # include Representable::Hash
 
       def deserialize_for!(hash)
@@ -48,6 +53,7 @@ module Trailblazer
     end
 
     module JSON
+      include WithDeserialize
       # include Representable::JSON
 
       def deserialize_for!(hash)
@@ -57,24 +63,46 @@ module Trailblazer
       end
     end
 
-    # module Form
-    #   def self.included(base)
-    #     base.representer_class = Reform::Representer.for(:form_class => base)
-    #   end
+    module Form
+      def self.included(base)
+        bla=self
+        base.class_eval do
+          puts "base: #{base}"
+          base.representer_class.options[:form_class] = Reform::Form
 
-    #   require "reform/form/virtual_attributes"
+          require "reform/form/virtual_attributes" # TODO: where's this included?
 
-    #   require 'reform/form/validate'
-    #   include Validate # extend Contract#validate with additional behaviour.
-    #   require 'reform/form/sync'
-    #   include Sync
-    #   require 'reform/form/save'
-    #   include Save
+          require 'reform/form/validate'
+          include Reform::Form::Validate # extend Contract#validate with additional behaviour.
+          require 'reform/form/sync'
+          include Reform::Form::Sync
+          require 'reform/form/save'
+          include Reform::Form::Save
 
-    #   require 'reform/form/multi_parameter_attributes'
-    #   include MultiParameterAttributes # TODO: make features dynamic.
+          require 'reform/form/multi_parameter_attributes'
+          include Reform::Form::MultiParameterAttributes # TODO: make features dynamic.
 
-    #   # def aliased_model # DISCUSS: in Trailblazer, we don't need that.
-    # end
+          include Reform::Form::ActiveModel
+
+          extend ModelName
+        end
+
+
+
+        # def aliased_model # DISCUSS: in Trailblazer, we don't need that.
+      end
+
+      module ModelName
+          def model_name
+            if model_options
+              form_name = model_options.first.to_s.camelize
+            else
+              form_name = name.sub(/::Operation::Form$/, "") # Song::Form => "Song"
+            end
+
+            active_model_name_for(form_name)
+          end
+        end
+    end
   end
 end

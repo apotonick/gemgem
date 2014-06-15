@@ -4,7 +4,7 @@ module Trailblazer
 
       def call(controller, params, endpoint_actions, domain=Thing) # FIXME: no dependency.
         is_json = controller.request.format == "application/json"
-        namespace = (is_json ? domain::Operation::JSON : domain::Form)
+        namespace = (is_json ? domain::Operation::JSON : domain::Operation::Form)
         input = is_json ? controller.request.body.string : params[domain.to_s.underscore] #params[:thing]
 
         # FIXME: don't allow instance variables in controllers?

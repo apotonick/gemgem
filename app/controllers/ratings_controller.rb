@@ -15,7 +15,7 @@ class RatingsController < ApplicationController
     Trailblazer::Endpoint::Create.new.call(self, params,
       {form: {
         success: lambda { |form| redirect_to thing_path(form.model.thing.id) },
-        invalid: lambda { |*| render action: "new" } # if this did actually call #new as in cells, we don't need the form object.
+        invalid: lambda { |form| puts form.errors.messages.inspect; render action: "new" } # if this did actually call #new as in cells, we don't need the form object.
       }},
       Rating)
   end

@@ -45,7 +45,6 @@ class RatingsControllerTest < ActionController::TestCase
     get :new
     assert_response :success
   end
-
 end
 class RatingColonColonDomainlayerthatneedsAName < MiniTest::Spec
   subject { Rating::Twin.new }
