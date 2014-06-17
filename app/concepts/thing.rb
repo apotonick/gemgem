@@ -31,47 +31,34 @@ module Thing
     end
   end
 
-  class Contract < Trailblazer::Contract
-    property :name, presentation_accessors: true
-    validates :name, presence: true
+  class Schema < Trailblazer::Schema
+    define do
+      property :name, presentation_accessors: true
+      validates :name, presence: true
+    end
   end
 
-  module Schema
-    include Representable
-    representable_attrs.inherit Contract.representer_class.representable_attrs
-  end
-
-  # class Form < Reform::Form
-  #   property :name
-  #   validates :name, presence: true
-
-  #   model Thing
-
-  #   # FIXME
-  #   include Trailblazer::Contract::Flow
-  # end
 
   # new(twin).validate(params)[.save]
-  class Operation < Contract # "Validate- and Saveable"
-    # include Rating::Representer
-
-    # include Representable
-    # include Schema
-
-    def id
-      model.thing.id # FIXME.
-    end
+  # think of this as Operation::Update
+  class Operation < Reform::Contract # "Saveable"
+    include Trailblazer::Contract::Flow
 
     class JSON < self
       include Trailblazer::Contract::JSON
+      instance_exec(&Schema.block)
     end
 
     class Hash < self
       include Trailblazer::Contract::Hash
+      instance_exec(&Schema.block)
     end
 
-    class Form < self
-      include Trailblazer::Contract::Form
+    class Form < Reform::Form
+      include Trailblazer::Contract::Flow
+      instance_exec(&Schema.block)
+
+      model :thing
     end
   end
 

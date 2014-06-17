@@ -62,47 +62,5 @@ module Trailblazer
         map.new(fields).from_json(hash)
       end
     end
-
-    module Form
-      def self.included(base)
-        bla=self
-        base.class_eval do
-          puts "base: #{base}"
-          base.representer_class.options[:form_class] = Reform::Form
-
-          require "reform/form/virtual_attributes" # TODO: where's this included?
-
-          require 'reform/form/validate'
-          include Reform::Form::Validate # extend Contract#validate with additional behaviour.
-          require 'reform/form/sync'
-          include Reform::Form::Sync
-          require 'reform/form/save'
-          include Reform::Form::Save
-
-          require 'reform/form/multi_parameter_attributes'
-          include Reform::Form::MultiParameterAttributes # TODO: make features dynamic.
-
-          include Reform::Form::ActiveModel
-
-          extend ModelName
-        end
-
-
-
-        # def aliased_model # DISCUSS: in Trailblazer, we don't need that.
-      end
-
-      module ModelName
-          def model_name
-            if model_options
-              form_name = model_options.first.to_s.camelize
-            else
-              form_name = name.sub(/::Operation::Form$/, "") # Song::Form => "Song"
-            end
-
-            active_model_name_for(form_name)
-          end
-        end
-    end
   end
 end
