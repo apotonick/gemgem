@@ -51,10 +51,10 @@ class RatingColonColonDomainlayerthatneedsAName < MiniTest::Spec
 
   # Thing::Operation::Update::Hash # should we alias Update to Operation?
 
+
   # Rating::Operation::Create::Hash.new.call == Fucktory
   let (:operation) { Rating::Operation::Hash.new(subject) }
-  let (:flow) { @res = operation. # TODO: do that per default.
-    flow(params, {success: lambda {|*|}, invalid: lambda{|form| raise form.errors.messages.inspect } }) }
+  let (:flow) { @res = operation.flow(params) }
 
 
   describe "valid" do

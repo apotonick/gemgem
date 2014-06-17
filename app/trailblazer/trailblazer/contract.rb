@@ -15,16 +15,25 @@ module Trailblazer
       end
     end
 
+    # TODO: should be Operation::Actions or something like that.
+    class Actions < Hash
+      def default
+        new(
+          :success => lambda { |form| },
+          :invalid => lambda { |form| raise form.errors.messages.inspect }
+        )
+      end
+    end
 
 
     # Implements a Flow with validating input and processing the result.
-    module Flow
+    module Flow # should be Flow::Save
       require 'reform/form/sync'
       include Reform::Form::Sync
       require 'reform/form/save'
       include Reform::Form::Save
 
-      def flow(input, actions)
+      def flow(input, actions=Actions.default)
         if result = validate(input)
           save
           actions[:success].call(self) # handle that in Operation::Create?
