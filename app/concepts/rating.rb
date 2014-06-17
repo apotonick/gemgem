@@ -47,6 +47,8 @@ module Rating
     class Hash < self
       include Trailblazer::Contract::Hash
       instance_exec(&Schema.block)
+
+      property :thing, inherit: true, parse_strategy: lambda { |*| Thing::Twin.new }
     end
 
     class Form < Reform::Form

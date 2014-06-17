@@ -17,8 +17,9 @@ module Trailblazer
 
     # TODO: should be Operation::Actions or something like that.
     class Actions < Hash
-      def default
-        new(
+      def self.default
+        hash = new
+        hash.merge!(
           :success => lambda { |form| },
           :invalid => lambda { |form| raise form.errors.messages.inspect }
         )

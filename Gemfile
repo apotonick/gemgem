@@ -56,13 +56,7 @@ group :development do
   gem 'rails_layout'
 end
 
-group :development, :test do
-  gem 'factory_girl_rails'
-end
-
 group :test do
   gem 'minitest-spec-rails'
-  # gem 'minitest-wscolor'
-  gem 'turnip', '>= 1.1.0'
 end
 

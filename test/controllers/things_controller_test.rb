@@ -1,7 +1,5 @@
 require 'test_helper'
 
-Rails.backtrace_cleaner.remove_silencers!
-
 class ThingsControllerTest < ActionController::TestCase
   include Roar::Rails::TestCase
   tests ThingsController
@@ -46,42 +44,11 @@ class RatingsControllerTest < ActionController::TestCase
     assert_response :success
   end
 end
-class RatingColonColonDomainlayerthatneedsAName < MiniTest::Spec
-  subject { Rating::Twin.new }
-
-  # Thing::Operation::Update::Hash # should we alias Update to Operation?
-
-
-  # Rating::Operation::Create::Hash.new.call == Fucktory
-  let (:operation) { Rating::Operation::Hash.new(subject) }
-  let (:flow) { @res = operation.flow(params) }
-
-
-  describe "valid" do
-    let (:params) { {"comment" => "Amazing!", "thing" => {:id => 1}} }
-
-    before { flow }
-
-    it { @res.must_equal true }
-    it { subject.comment.must_equal "Amazing!" }
-  end
-
-
-  describe "invalid" do
-    let (:params) { {"comment" => "Amazing!"} }
-
-    before { assert_raises { flow } }
-
-    it { @res.must_equal false }
-    it { subject.comment.must_equal nil }
-    it { operation.comment.must_equal "Amazing!" }
-    it { operation.errors.messages.must_equal({:thing=>["can't be blank"]}) }
-  end
-end
 
 
 
-class ThingColonColonDomainlayerthatneedsAName < MiniTest::Spec
+
+class ThingColonColonDomainlayerthatneedsANameTest < MiniTest::Spec
   subject { Thing::Twin.new }
 
   # Thing::Operation::Update::Hash # should we alias Update to Operation?
