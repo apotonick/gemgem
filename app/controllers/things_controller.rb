@@ -32,7 +32,7 @@ class ThingsController < ApplicationController
   def show
     @thing = Thing::Twin.find(params[:id])
     rating  = Rating::Twin.new(thing: @thing) # Thing.ratings.build, or should that be handled by the form?
-    @form   = Rating::Form.new(rating)
+    @form   = Rating::Operation::Form.new(rating)
 
      # renders concept.
   end
@@ -45,7 +45,7 @@ class ThingsController < ApplicationController
     # rating  = Rating::Twin.new(thing: @thing)
 
     # should be Operation::Create::Form or Form.create
-    Trailblazer::Operation::Create.new.call(Rating, Rating::Form, params[:rating],
+    Trailblazer::Operation::Create.new.call(Rating, Rating::Operation::Form, params[:rating],
       success: lambda { |*| redirect_to thing_path(@thing.id) },
       invalid: lambda { |*| render action: :show }) do |form|
         @form = form

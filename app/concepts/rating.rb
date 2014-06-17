@@ -20,70 +20,41 @@ module Rating
     belongs_to :thing, class_name: Thing::Persistence
   end
 
-  # module Schema
-  #   include Representable
-
-  #   property :comment
-  #   property :thing, extend: Module.new
-  # end
-
-  class Contract < Trailblazer::Contract #Reform::Contract
-    # inherit attributes from schema
-
-    property :comment
-    property :weight, presentation_accessors: true
-
-    # i want rateable to be an actual object so i can verify it is a valid rateable_id!
-    property :thing, populate_if_empty: lambda { |fragment, *| Thing::Twin.find(fragment[:id]) } do
-    end # TODO: mark as typed. parse_strategy: :find_by_id would actually do what happens in the controller now.
-
-    validates :comment, length: { in: 6..160 }
-    validates :thing, presence: true
-  end
-
   require 'representable/decorator'
-  module Schema
-    include Representable
-    @representable_attrs = Contract.representer_class.representable_attrs
-  end
+  class Schema < Trailblazer::Schema
+    define do # FIXME: I hate that.
+      property :comment
+      property :weight, presentation_accessors: true
 
+      # i want rateable to be an actual object so i can verify it is a valid rateable_id!
+      property :thing, populate_if_empty: lambda { |fragment, *| Thing::Twin.find(fragment[:id]) } do
+      end # TODO: mark as typed. parse_strategy: :find_by_id would actually do what happens in the controller now.
 
-  # this is the Create form, it finds the Rateable.
-  # TODO: make this work with an HTTP API endpoint where the form _is_ the representer as discussed with @timoschilling.
-  class Form < Reform::Form
-    property :comment
-    property :weight, presentation_accessors: true
-
-
-    # i want rateable to be an actual object so i can verify it is a valid rateable_id!
-    property :thing, populate_if_empty: lambda { |fragment, *| Thing::Twin.find(fragment[:id]) } do
-    end # TODO: mark as typed. parse_strategy: :find_by_id would actually do what happens in the controller now.
-
-    validates :comment, length: { in: 6..160 }
-    validates :thing, presence: true
-
-    validates :weight, presence: true
-
-    def weight # only for presentation layer (UI).
-      super or 1 # select Nice!
+      validates :comment, length: { in: 6..160 }
+      validates :thing, presence: true
     end
-
-    # FIXME
-    include Trailblazer::Contract::Flow
   end
 
   # think of this as Operation::Update
-  class Operation < Contract # "Saveable"
+  class Operation < Reform::Contract # "Saveable"
+    include Trailblazer::Contract::Flow
+
     class JSON < self
       include Trailblazer::Contract::JSON
+      instance_exec(&Schema.block)
     end
 
     class Hash < self
       include Trailblazer::Contract::Hash
+      instance_exec(&Schema.block)
     end
 
-    class Form < self
-      include Trailblazer::Contract::Form
+    class Form < Reform::Form
+      include Trailblazer::Contract::Flow
+      instance_exec(&Schema.block)
+
+      model :rating # otherwise params[:rating] doesn't work.
+
 
       validates :weight, presence: true
 
