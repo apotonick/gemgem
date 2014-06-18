@@ -17,7 +17,7 @@ describe "OP::Create" do
     before { flow }
 
     it { @res.must_equal true }
-    it { subject.comment.must_equal "Amazing!!asdfasdf" }
+    it { subject.comment.must_equal "Amazing!" }
   end
 
 
@@ -32,14 +32,15 @@ describe "OP::Create" do
     it { operation.errors.messages.must_equal({:thing=>["can't be blank"]}) }
   end
 end
+
 class RatingOperationUpdateTest < MiniTest::Spec
-  let (:twin) { Rating::Twin.new } # TODO: return from flow.
-  let (:rating) { Rating::Operation::Hash.new(twin).flow({comment: "Amazing!", thing: {id: 1}}) }
+#   let (:twin) { Rating::Twin.new } # TODO: return from flow.
+#   let (:rating) { Rating::Operation::Hash.new(twin).flow({comment: "Amazing!", thing: {id: 1}}) }
 
-  it "what" do
-    rating
-    puts twin.inspect
+#   it "what" do
+#     rating
+#     puts twin.inspect
 
-    Rating::Operation::Hash.new(twin).flow({comment: "Amazing!", thing: {id: 1}})
-  end
+#     Rating::Operation::Hash.new(twin).flow({comment: "Amazing!", thing: {id: 1}})
+#   end
 end

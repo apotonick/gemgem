@@ -39,16 +39,14 @@ module Rating
   class Operation < Reform::Contract # "Saveable"
     include Trailblazer::Contract::Flow
 
-    class JSON < self
+    class JSON < Trailblazer::Contract
       include Trailblazer::Contract::JSON
       instance_exec(&Schema.block)
     end
 
-    class Hash < self
-      include Trailblazer::Contract::Hash
+    class Hash < Trailblazer::Contract
+      include Trailblazer::Contract::Hash # currently empty.
       instance_exec(&Schema.block)
-
-      property :thing, inherit: true, parse_strategy: lambda { |*| Thing::Twin.new }
     end
 
     class Form < Reform::Form

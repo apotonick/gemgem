@@ -41,8 +41,7 @@ module Thing
 
   # new(twin).validate(params)[.save]
   # think of this as Operation::Update
-  class Operation < Reform::Contract # "Saveable"
-    include Trailblazer::Contract::Flow
+  class Operation < Trailblazer::Contract # "Saveable"
 
     class JSON < self
       include Trailblazer::Contract::JSON

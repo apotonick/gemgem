@@ -1,13 +1,18 @@
 module Trailblazer
   # new(twin).validate(params)[.save]
   class Contract < Reform::Contract # module?
+    self.representer_class = Reform::Representer.for(:form_class => self)
     # Normally, a Reform::Contract only provides #validate().
+
+    include Reform::Form::Validate
+
     module WithDeserialize
       def validate(json)
-        deserialize!(json)
+        #deserialize!(json)
          # this happens in Form#update!.
 
-        super()
+
+        super(json) # 1. populate, 2. validate.
       end
 
       def deserialize!(document)
@@ -51,25 +56,14 @@ module Trailblazer
 
 
     module Hash
-      include WithDeserialize
-      # include Representable::Hash
-
-      def deserialize_for!(hash)
-        map = mapper
-        map.send(:include,Representable::Hash) # TODO: Make that nicer.
-        map.new(fields).from_hash(hash)
-        puts "fields: #{fields.inspect}, #{hash.inspect}"
-      end
     end
 
     module JSON
-      include WithDeserialize
-      # include Representable::JSON
+      def validate(json)
+        #deserialize!(json)
 
-      def deserialize_for!(hash)
-        map = mapper
-        map.send(:include,Representable::JSON) # TODO: Make that nicer.
-        map.new(fields).from_json(hash)
+        # TODO: use representable's parsing here.
+        super(::JSON[json]) # 1. populate, 2. validate.
       end
     end
   end
