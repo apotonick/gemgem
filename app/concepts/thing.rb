@@ -33,7 +33,7 @@ module Thing
 
   class Schema < Trailblazer::Schema
     define do
-      property :name, presentation_accessors: true
+      property :name
       validates :name, presence: true
     end
   end

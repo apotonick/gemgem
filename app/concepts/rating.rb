@@ -24,7 +24,7 @@ module Rating
   class Schema < Trailblazer::Schema
     define do # FIXME: I hate that.
       property :comment
-      property :weight, presentation_accessors: true
+      property :weight
 
       # i want rateable to be an actual object so i can verify it is a valid rateable_id!
       property :thing, populate_if_empty: lambda { |fragment, *| Thing::Twin.find(fragment[:id]) } do
