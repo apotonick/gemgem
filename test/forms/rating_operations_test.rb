@@ -26,7 +26,7 @@ describe "OP::Create" do
 
     before { assert_raises( RuntimeError) { flow } }
 
-    it { @res.must_equal false }
+    it { @res.must_equal nil }
     it { subject.comment.must_equal nil }
     it { operation.comment.must_equal "Amazing!" }
     it { operation.errors.messages.must_equal({:thing=>["can't be blank"]}) }
