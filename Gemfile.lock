@@ -9,17 +9,31 @@ PATH
   remote: ../disposable
   specs:
     disposable (0.0.4)
-      representable (~> 1.8.1)
+      representable (~> 2.0.0)
       uber
 
 PATH
   remote: ../reform
   specs:
-    reform (1.0.3)
+    reform (1.0.4)
       activemodel
       disposable (~> 0.0.4)
-      representable (~> 1.8.1)
+      representable (~> 2.0.0)
       uber (~> 0.0.4)
+
+PATH
+  remote: ../representable
+  specs:
+    representable (2.0.0)
+      multi_json
+      nokogiri
+      uber (~> 0.0.7)
+
+PATH
+  remote: ../trailblazer
+  specs:
+    trailblazer (0.0.1)
+      actionpack
 
 GEM
   remote: https://rubygems.org/
@@ -67,8 +81,8 @@ GEM
     coffee-script-source (1.7.0)
     debug_inspector (0.0.2)
     erubis (2.7.0)
-    execjs (2.2.0)
-    foundation-rails (5.2.3.0)
+    execjs (2.2.1)
+    foundation-rails (5.3.0.1)
       railties (>= 3.1.0)
       sass (>= 3.2.0)
     haml-rails (0.5.3)
@@ -84,7 +98,7 @@ GEM
       hpricot (~> 0.8.6)
       ruby_parser (~> 3.1.1)
     i18n (0.6.9)
-    jquery-rails (3.1.0)
+    jquery-rails (3.1.1)
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
     json (1.8.1)
@@ -94,7 +108,7 @@ GEM
       treetop (~> 1.4.8)
     mime-types (1.25.1)
     mini_portile (0.6.0)
-    minitest (5.3.4)
+    minitest (5.3.5)
     minitest-spec-rails (5.0.4)
       minitest (~> 5.0)
       rails (~> 4.1.0.rc2)
@@ -102,7 +116,7 @@ GEM
     nokogiri (1.6.2.1)
       mini_portile (= 0.6.0)
     polyglot (0.3.5)
-    quiet_assets (1.0.2)
+    quiet_assets (1.0.3)
       railties (>= 3.1, < 5.0)
     rack (1.5.2)
     rack-test (0.6.2)
@@ -117,7 +131,7 @@ GEM
       bundler (>= 1.3.0, < 2.0)
       railties (= 4.1.1)
       sprockets-rails (~> 2.0)
-    rails_layout (1.0.19)
+    rails_layout (1.0.20)
     railties (4.1.1)
       actionpack (= 4.1.1)
       activesupport (= 4.1.1)
@@ -125,10 +139,6 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rake (10.3.2)
     ref (1.0.5)
-    representable (1.8.5)
-      multi_json
-      nokogiri
-      uber
     roar (0.12.7)
       representable (>= 1.6.0)
     roar-rails (0.1.6)
@@ -172,7 +182,7 @@ GEM
       polyglot (>= 0.3.1)
     tzinfo (1.2.1)
       thread_safe (~> 0.1)
-    uber (0.0.6)
+    uber (0.0.7)
     uglifier (2.5.1)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
@@ -195,9 +205,11 @@ DEPENDENCIES
   rails (= 4.1.1)
   rails_layout
   reform!
+  representable!
   roar-rails
   sass-rails (~> 4.0.0)
   simple_form
   sqlite3
   therubyracer
+  trailblazer!
   uglifier (>= 1.3.0)

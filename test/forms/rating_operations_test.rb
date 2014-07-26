@@ -34,13 +34,18 @@ describe "OP::Create" do
 end
 
 class RatingOperationUpdateTest < MiniTest::Spec
-#   let (:twin) { Rating::Twin.new } # TODO: return from flow.
-#   let (:rating) { Rating::Operation::Hash.new(twin).flow({comment: "Amazing!", thing: {id: 1}}) }
+  let (:twin) { Rating::Twin.new } # TODO: return from flow.
+  let (:rating) { Rating::Operation::Hash.new(twin).flow({comment: "Amazing!", thing: {id: 1}}) }
 
-#   it "what" do
-#     rating
-#     puts twin.inspect
+  it "what" do
+    rating
+    puts twin.inspect
 
-#     Rating::Operation::Hash.new(twin).flow({comment: "Amazing!", thing: {id: 1}})
-#   end
+    Rating::Operation::Hash.new(twin).flow({comment: "Amazing!!"
+      # , thing: {id: 1}
+    })
+
+    twin.comment.must_equal "Amazing!!"
+    twin.thing.id.must_equal 1
+  end
 end

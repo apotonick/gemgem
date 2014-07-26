@@ -12,6 +12,8 @@
 
 # ActiveRecord/ActiveModel stuff is optional, so you can start working on a nested concept without having to implement the outer stuff (rateable)
 
+# * make a validation where the thing is only valid when "owned"?
+
 module Rating
    # TODO: one example with clean Persistance approach, one with facade for a legacy monolith.
   class Persistence < ActiveRecord::Base
@@ -38,6 +40,18 @@ module Rating
   # think of this as Operation::Update
   class Operation < Reform::Contract # "Saveable"
     include Trailblazer::Contract::Flow
+    # include Schema
+
+    # class Form < self
+
+    # class Update < self # Operation
+    #   property :thing, undefine: true
+
+    #   class Form < self
+    #     include Trailblazer::Form
+    #   end
+
+    # end
 
     class JSON < Trailblazer::Contract
       include Trailblazer::Contract::JSON

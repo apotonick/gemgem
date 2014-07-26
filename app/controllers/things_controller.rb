@@ -3,10 +3,16 @@ class ThingsController < ApplicationController
   end
 
   def new
-    @form = Thing::Operation::Form.new(Thing::Twin.new) # Thing::Endpoint::New or Operation::Form::New
+    @form = Thing::Form.new(Thing::Persistence.new) # Thing::Endpoint::New or Operation::Form::New
   end
 
   def create
+    @form = Thing::Operation::Create.flow(params[:thing]) do |form|
+      return redirect_to thing_path(form.model.id)
+    end
+
+    return render action: "new"
+
     # Thing::Operation::Create.for(
     #   # form: valid: redirect, invalid: render
     #   # json: valid: render, invalid: render something else
@@ -30,7 +36,7 @@ class ThingsController < ApplicationController
   # has_cell :
 
   def show
-    @thing = Thing::Twin.find(params[:id])
+    @thing = Thing::Persistence.find(params[:id])
     rating  = Rating::Twin.new(thing: @thing) # Thing.ratings.build, or should that be handled by the form?
     @form   = Rating::Operation::Form.new(rating)
 

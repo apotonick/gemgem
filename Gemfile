@@ -26,7 +26,8 @@ gem 'reform', path: '../reform'
 gem 'disposable', path: "../disposable"
 gem 'cells', "3.11.1" #path: "../cells"
 gem 'roar-rails'
-# gem 'representable', path: "../representable"
+gem 'representable', path: "../representable"
+gem 'trailblazer', path: "../trailblazer"
 
 
   # bundle exec rake doc:rails generates the API under doc/api.

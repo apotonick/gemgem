@@ -1,3 +1,5 @@
+require 'trailblazer/operation'
+
 module Thing
   class Persistence < ActiveRecord::Base
     self.table_name = :things
@@ -5,61 +7,48 @@ module Thing
     has_many :ratings, class_name: Rating::Persistence, foreign_key: :thing_id
   end
 
-  class Twin < Disposable::Twin
-    model Persistence
 
+  class Form < Reform::Form
     property :name
-    property :id # FIXME: why do i need this, again? should be infered.
-    collection :ratings, twin: ->{Rating::Twin}
-
-    def persisted?
-      model.persisted?
-    end
-
-    def self.model_name
-      ::ActiveModel::Name.new(self, nil, "Thing") # Twin::ActiveModel should implement that. as a sustainable fix, we should simplify routing helpers.
-    end
-
-    def to_key
-    #   return [1]
-      model.to_key
-    end
-
-    # DISCUSS: this is used in simple_form_for [Rateable::Entity.new, @form] to compute nested URL. there must be a stupid respond_tp?(to_param) call in the URL helpers - remove that in Trailblazer.
-    def to_param
-      1
-    end
+    validates :name, presence: true
   end
 
-  class Schema < Trailblazer::Schema
-    define do
-      property :name
-      validates :name, presence: true
+  module Operation
+    class Create < Trailblazer::Operation
+      extend Flow
+
+      def run(params)
+        model = Thing::Persistence.new
+
+        validate(model, params, Form) do |f|
+          f.save
+        end
+      end
     end
   end
 
 
   # new(twin).validate(params)[.save]
   # think of this as Operation::Update
-  class Operation < Trailblazer::Contract # "Saveable"
+  # class Operation < Trailblazer::Contract # "Saveable"
 
-    class JSON < self
-      include Trailblazer::Contract::JSON
-      instance_exec(&Schema.block)
-    end
+  #   class JSON < self
+  #     include Trailblazer::Contract::JSON
+  #     instance_exec(&Schema.block)
+  #   end
 
-    class Hash < self
-      include Trailblazer::Contract::Hash
-      instance_exec(&Schema.block)
-    end
+  #   class Hash < self
+  #     include Trailblazer::Contract::Hash
+  #     instance_exec(&Schema.block)
+  #   end
 
-    class Form < Reform::Form
-      include Trailblazer::Contract::Flow
-      instance_exec(&Schema.block)
+  #   class Form < Reform::Form
+  #     include Trailblazer::Contract::Flow
+  #     instance_exec(&Schema.block)
 
-      model :thing
-    end
-  end
+  #     model :thing
+  #   end
+  # end
 
   # ContentOrchestrator -> Endpoint:
   # Thing::Operation::Create.call({..}) # "model API"
