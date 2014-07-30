@@ -1,11 +1,8 @@
 require 'trailblazer/operation'
 
-module Thing
-  class Persistence < ActiveRecord::Base
-    self.table_name = :things
+class Thing < ActiveRecord::Base
+  has_many :ratings, class_name: Rating::Persistence, foreign_key: :thing_id
 
-    has_many :ratings, class_name: Rating::Persistence, foreign_key: :thing_id
-  end
 
 
   class Form < Reform::Form
@@ -18,7 +15,7 @@ module Thing
       extend Flow
 
       def run(params)
-        model = Thing::Persistence.new
+        model = Thing.new
 
         validate(model, params, Form) do |f|
           f.save
