@@ -23,10 +23,10 @@ gem 'coffee-rails', '~> 4.0.0'
 gem 'jquery-rails'
 
 gem 'reform', path: '../reform'
-gem 'disposable', path: "../disposable"
+gem 'disposable' #, path: "../disposable"
 gem 'cells', "3.11.1" #path: "../cells"
 gem 'roar-rails'
-gem 'representable', path: "../representable"
+gem 'representable', "~> 2.0.0" #path: "../representable"
 gem 'trailblazer', path: "../trailblazer"
 
 

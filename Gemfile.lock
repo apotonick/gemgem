@@ -6,28 +6,13 @@ GIT
       tilt
 
 PATH
-  remote: ../disposable
-  specs:
-    disposable (0.0.4)
-      representable (~> 2.0.0)
-      uber
-
-PATH
   remote: ../reform
   specs:
     reform (1.0.4)
       activemodel
-      disposable (~> 0.0.4)
+      disposable (~> 0.0.5)
       representable (~> 2.0.0)
       uber (~> 0.0.4)
-
-PATH
-  remote: ../representable
-  specs:
-    representable (2.0.0)
-      multi_json
-      nokogiri
-      uber (~> 0.0.7)
 
 PATH
   remote: ../trailblazer
@@ -80,6 +65,9 @@ GEM
       execjs
     coffee-script-source (1.7.0)
     debug_inspector (0.0.2)
+    disposable (0.0.5)
+      representable (~> 2.0.0)
+      uber
     erubis (2.7.0)
     execjs (2.2.1)
     foundation-rails (5.3.0.1)
@@ -139,6 +127,10 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rake (10.3.2)
     ref (1.0.5)
+    representable (2.0.0)
+      multi_json
+      nokogiri
+      uber (~> 0.0.7)
     roar (0.12.7)
       representable (>= 1.6.0)
     roar-rails (0.1.6)
@@ -194,7 +186,7 @@ DEPENDENCIES
   binding_of_caller
   cells (= 3.11.1)
   coffee-rails (~> 4.0.0)
-  disposable!
+  disposable
   foundation-rails
   haml!
   haml-rails
@@ -205,7 +197,7 @@ DEPENDENCIES
   rails (= 4.1.1)
   rails_layout
   reform!
-  representable!
+  representable (~> 2.0.0)
   roar-rails
   sass-rails (~> 4.0.0)
   simple_form
