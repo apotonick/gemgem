@@ -5,20 +5,43 @@ class Thing < ActiveRecord::Base
 
 
 
-  class Form < Reform::Form
+  module Form
+    include Reform::Form::Module
+
     property :name
     validates :name, presence: true
   end
+
 
   module Operation
     class Create < Trailblazer::Operation
       extend Flow
 
+      class Contract < Reform::Form
+        include Form
+        model :thing # needed for form_for to figure out path.
+      end
+
       def run(params)
         model = Thing.new
 
-        validate(model, params, Form) do |f|
+        validate(model, params) do |f|
           f.save
+        end
+      end
+
+
+      class JSON < self
+        class Contract < Reform::Form
+          self.representer_class.class_eval do
+            include Representable::JSON
+          end
+
+          def deserialize_method
+            :from_json
+          end
+
+          include Form
         end
       end
     end

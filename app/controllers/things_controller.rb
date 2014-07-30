@@ -3,16 +3,28 @@ class ThingsController < ApplicationController
   end
 
   def new
-    @form = Thing::Form.new(Thing.new) # Thing::Endpoint::New or Operation::Form::New
+    @form = Thing::Operation::Create::Contract.new(Thing.new) # Thing::Endpoint::New or Operation::Form::New
   end
 
   def create
-    @form = Thing::Operation::Create.flow(params[:thing]) do |form|
-      return redirect_to thing_path(form.model.id)
+    # TODO: this will get abstracted into Endpoint.
+    if request.format == :html
+
+      @form = Thing::Operation::Create.flow(params[:thing]) do |form|
+        return redirect_to thing_path(form.model.id)
+      end
+
+      return render action: "new"
+
+    elsif request.format == :json
+
+      @form = Thing::Operation::Create::JSON.flow(request.body.string) do |form|
+        return redirect_to thing_path(form.model.id)
+      end
+
+      raise # return render action: "new"
+
     end
-
-    return render action: "new"
-
     # Thing::Operation::Create.for(
     #   # form: valid: redirect, invalid: render
     #   # json: valid: render, invalid: render something else

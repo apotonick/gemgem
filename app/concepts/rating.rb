@@ -19,7 +19,7 @@ module Rating
   class Persistence < ActiveRecord::Base
     self.table_name=(:ratings)
 
-    belongs_to :thing, class_name: Thing::Persistence
+    belongs_to :thing
   end
 
   require 'representable/decorator'
