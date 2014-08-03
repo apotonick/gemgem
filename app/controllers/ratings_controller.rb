@@ -46,6 +46,12 @@ class RatingsController < ApplicationController
   def show
     @rating = Rating::Twin.find(params[:id])
   end
+
+  def destroy
+    Rating::Operation::Delete[id: params[:id]]
+
+
+  end
 end
 
 

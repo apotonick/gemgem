@@ -38,6 +38,6 @@ class RatingOperationTest < MiniTest::Spec
 
     Rating::Operation::Delete[id: rating.id]
 
-    Rating.where(id: rating.id).must_equal []
+    Rating.find(rating.id).deleted.must_equal 1
   end
 end

@@ -74,7 +74,10 @@ class Rating < ActiveRecord::Base
 
     class Delete < Trailblazer::Operation
       def run(params)
-        [true, Rating.find(params[:id]).destroy]
+        # note that we could also use a Form here.
+
+
+        [true, Rating.find(params[:id]).update_column(:deleted, 1)]
       end
     end
   end

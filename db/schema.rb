@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140531070447) do
+ActiveRecord::Schema.define(version: 20140803042716) do
 
   create_table "ratings", force: true do |t|
     t.text     "comment"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 20140531070447) do
     t.integer  "thing_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "deleted"
   end
 
   create_table "things", force: true do |t|
