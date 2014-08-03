@@ -48,18 +48,27 @@ class ThingsController < ApplicationController
   # has_cell :
 
   def show
-    @thing = Thing::Persistence.find(params[:id])
-    rating  = Rating::Twin.new(thing: @thing) # Thing.ratings.build, or should that be handled by the form?
-    @form   = Rating::Operation::Form.new(rating)
+    @thing = Thing.find(params[:id])
 
-     # renders concept.
+    Rating::Operation::New.new.run(params) do |c|
+      @form = c
+    end
+    # renders concept.
   end
   def form # TODO: this should happen in the cell-ajax.
     # DISCUSS: we could also think about hooking an Endpoint/Operation to a route that then renders the cell?
     # but, why? UI and API have different behaviour anyway.
 
     # use Endpoint::Create::"Form" here directly.
-    @thing = Thing::Twin.find(params[:id])
+    @thing = Thing.find(params[:id])
+
+    @form = Rating::Operation::Create.flow(params[:rating]) do |c|
+     return redirect_to thing_path(@thing.id)
+    end
+
+    return render action: :show
+
+
     # rating  = Rating::Twin.new(thing: @thing)
 
     # should be Operation::Create::Form or Form.create

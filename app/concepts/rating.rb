@@ -14,94 +14,71 @@
 
 # * make a validation where the thing is only valid when "owned"?
 
-module Rating
+class Rating < ActiveRecord::Base
    # TODO: one example with clean Persistance approach, one with facade for a legacy monolith.
-  class Persistence < ActiveRecord::Base
-    self.table_name=(:ratings)
-
-    belongs_to :thing
-  end
-
-  require 'representable/decorator'
-  class Schema < Trailblazer::Schema
-    define do # FIXME: I hate that.
-      property :comment
-      property :weight
-
-      # i want rateable to be an actual object so i can verify it is a valid rateable_id!
-      property :thing, populate_if_empty: lambda { |fragment, *| Thing::Twin.find(fragment[:id]) } do
-      end # TODO: mark as typed. parse_strategy: :find_by_id would actually do what happens in the controller now.
-
-      validates :comment, length: { in: 6..160 }
-      validates :thing, presence: true
-    end
-  end
-
-  # think of this as Operation::Update
-  class Operation < Reform::Contract # "Saveable"
-    include Trailblazer::Contract::Flow
-    # include Schema
-
-    # class Form < self
-
-    # class Update < self # Operation
-    #   property :thing, undefine: true
-
-    #   class Form < self
-    #     include Trailblazer::Form
-    #   end
-
-    # end
-
-    class JSON < Trailblazer::Contract
-      include Trailblazer::Contract::JSON
-      instance_exec(&Schema.block)
-    end
-
-    class Hash < Trailblazer::Contract
-      include Trailblazer::Contract::Hash # currently empty.
-      instance_exec(&Schema.block)
-    end
-
-    class Form < Reform::Form
-      include Trailblazer::Contract::Flow
-      instance_exec(&Schema.block)
-
-      model :rating # otherwise params[:rating] doesn't work.
+  belongs_to :thing
 
 
-      validates :weight, presence: true
-
-      def weight # only for presentation layer (UI).
-        super or 1 # select Nice!
-      end
-    end
-  end
-
-  class Twin < Disposable::Twin
-    # We have to define all fields we wanna expose.
-    property :id
+  module Form
+    include Reform::Form::Module
 
     property :comment
     property :weight
 
-    property :created_at
-    property :thing, twin: ->{Thing::Twin}
+    # i want rateable to be an actual object so i can verify it is a valid rateable_id!
+    property :thing, populate_if_empty: lambda { |fragment, *| Thing.find(fragment[:id]) } do
+    end # TODO: mark as typed. parse_strategy: :find_by_id would actually do what happens in the controller now.
 
-    model Persistence
+    validates :comment, length: { in: 6..160 }
+    validates :thing, presence: true
+  end
 
-    def persisted?
-      model.persisted?
+
+  # think of this as Operation::Update
+  module Operation
+    class New < Trailblazer::Operation
+      def run(params)
+        thing = Thing.find(params[:id])
+        rating = Rating.new(thing_id: thing.id)
+
+        yield Create::Contract.new(rating)
+      end
     end
 
-    def to_key
-      model.to_key
+    class Create < Trailblazer::Operation
+      extend Flow
+
+      class Contract < Reform::Form
+        include Form
+
+        model :rating
+
+        validates :weight, presence: true
+
+        # DISCUSS: this is presentation.
+        def weight # only for presentation layer (UI).
+          super or 1 # select Nice!
+        end
+      end
+
+
+      def run(params)
+        model = Rating.new
+
+        validate(model, params) do |f|
+          f.save
+        end
+      end
     end
 
-    def to_param
-      id
+
+    class Delete < Trailblazer::Operation
+      def run(params)
+        [true, Rating.find(params[:id]).destroy]
+      end
     end
   end
+
 
   # name for "intermediate data copy can can sync back to twin"... copy, twin, shadow
     # property :rateable#, getter: lambda { |*|  } # TODO: mark an attribute as prototype (not implemented in persistance, yet)

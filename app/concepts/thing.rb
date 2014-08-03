@@ -1,8 +1,7 @@
 require 'trailblazer/operation'
 
 class Thing < ActiveRecord::Base
-  has_many :ratings, class_name: Rating::Persistence, foreign_key: :thing_id
-
+  has_many :ratings
 
 
   module Form
