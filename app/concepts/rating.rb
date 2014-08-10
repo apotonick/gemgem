@@ -75,9 +75,11 @@ class Rating < ActiveRecord::Base
     class Delete < Trailblazer::Operation
       def run(params)
         # note that we could also use a Form here.
+        model = Rating.find(params[:id])
 
+        model.update_column(:deleted, 1)
 
-        [true, Rating.find(params[:id]).update_column(:deleted, 1)]
+        super model
       end
     end
   end

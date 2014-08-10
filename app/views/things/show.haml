@@ -8,5 +8,6 @@
       = rating.id
       = link_to rating.comment, thing_rating_path(@thing.id, rating.id)
       #{rating.weight}
-      = link_to "Delete", rating_path(rating.id), method: :delete
+      - if rating.deleted?
+      	= link_to "Delete", rating_path(rating.id), method: :delete
       - # TODO: the URL helpers are so clumsy, make de-nesting resources easier.
