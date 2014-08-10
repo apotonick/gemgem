@@ -85,6 +85,13 @@ class Rating < ActiveRecord::Base
   end
 
 
+  class Twin < Disposable::Twin
+    def deleted?
+      model.deleted == 1
+    end
+  end
+
+
   # name for "intermediate data copy can can sync back to twin"... copy, twin, shadow
     # property :rateable#, getter: lambda { |*|  } # TODO: mark an attribute as prototype (not implemented in persistance, yet)
     # TODO: make it simple to override def rateable, etc.
