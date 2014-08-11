@@ -48,7 +48,14 @@ class RatingsController < ApplicationController
   end
 
   def destroy
-    Rating::Operation::Delete[id: params[:id]]
+    rating = Rating::Operation::Delete[id: params[:id]]
+    redirect_to thing_path(rating.thing.id)
+  end
+
+   def undo
+    Rating::Operation::Undo.flow(id: params[:id]) do |rating|
+      redirect_to thing_path(rating.thing.id)
+    end
   end
 end
 

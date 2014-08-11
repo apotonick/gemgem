@@ -73,6 +73,8 @@ class Rating < ActiveRecord::Base
 
 
     class Delete < Trailblazer::Operation
+      extend Flow
+
       def run(params)
         # note that we could also use a Form here.
         model = Rating.find(params[:id])
@@ -85,6 +87,8 @@ class Rating < ActiveRecord::Base
 
 
     class Undo < Trailblazer::Operation
+      extend Flow # DISCUSS: could this also be implemented with #run?
+
       def run(params)
         # note that we could also use a Form here.
         model = Rating.find(params[:id])
