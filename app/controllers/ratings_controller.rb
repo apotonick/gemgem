@@ -49,8 +49,6 @@ class RatingsController < ApplicationController
 
   def destroy
     Rating::Operation::Delete[id: params[:id]]
-
-
   end
 end
 

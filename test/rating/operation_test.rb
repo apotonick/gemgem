@@ -40,4 +40,18 @@ class RatingOperationTest < MiniTest::Spec
 
     Rating.find(rating.id).deleted.must_equal 1
   end
+
+  # undo
+  it do
+    rating = Rating::Operation::Create[
+      thing:   {id: thing.id},
+      comment: "Fantastic!",
+      weight:  1
+    ].model
+
+    Rating::Operation::Delete[id: rating.id].must_equal rating
+
+    Rating::Operation::Undo[id: rating.id].must_equal rating
+    Rating.find(rating.id).deleted.must_equal 0
+  end
 end

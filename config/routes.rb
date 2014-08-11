@@ -6,7 +6,11 @@ Gemgem::Application.routes.draw do
   end
   post 'things/:id/form' => 'things#form', as: :rating_form
 
-  resources :ratings
+  resources :ratings do
+    member do
+      post :undo
+    end
+  end
 
 
   # The priority is based upon order of creation: first created -> highest priority.

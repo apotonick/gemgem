@@ -9,7 +9,7 @@
       = link_to rating.comment, thing_rating_path(@thing.id, rating.id)
       #{rating.weight}
       - if rating.deleted?
-        = link_to "Undo", rating_path(rating.id)
+        = link_to "Undo", undo_rating_path(rating.id), method: :post
       - else
         = link_to "Delete", rating_path(rating.id), method: :delete
       - # TODO: the URL helpers are so clumsy, make de-nesting resources easier.

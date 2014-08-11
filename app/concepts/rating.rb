@@ -82,6 +82,18 @@ class Rating < ActiveRecord::Base
         super model
       end
     end
+
+
+    class Undo < Trailblazer::Operation
+      def run(params)
+        # note that we could also use a Form here.
+        model = Rating.find(params[:id])
+
+        model.update_column(:deleted, 0)
+
+        super model
+      end
+    end
   end
 
 
