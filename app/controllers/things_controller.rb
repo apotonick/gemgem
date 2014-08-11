@@ -66,16 +66,6 @@ class ThingsController < ApplicationController
      return redirect_to thing_path(@thing.id)
     end
 
-    return render action: :show
-
-
-    # rating  = Rating::Twin.new(thing: @thing)
-
-    # should be Operation::Create::Form or Form.create
-    Trailblazer::Operation::Create.new.call(Rating, Rating::Operation::Form, params[:rating],
-      success: lambda { |*| redirect_to thing_path(@thing.id) },
-      invalid: lambda { |*| render action: :show }) do |form|
-        @form = form
-      end
+    render action: :show
   end
 end
