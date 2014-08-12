@@ -21,7 +21,7 @@ class Thing < ActiveRecord::Base
         model :thing # needed for form_for to figure out path.
       end
 
-      def run(params)
+      def process
         model = Thing.new
 
         validate(model, params) do |f|
