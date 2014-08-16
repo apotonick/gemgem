@@ -8,5 +8,10 @@
   = f.fields_for :thing do |t|
     = t.input :id
 
+  = f.fields_for :user do |u|
+    = u.input :name
+    = u.input :email
+
+
 
 = model.errors.messages

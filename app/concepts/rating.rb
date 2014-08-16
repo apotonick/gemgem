@@ -17,6 +17,7 @@
 class Rating < ActiveRecord::Base
    # TODO: one example with clean Persistance approach, one with facade for a legacy monolith.
   belongs_to :thing
+  belongs_to :user
 
 
   module Form
@@ -40,6 +41,7 @@ class Rating < ActiveRecord::Base
       def run(params)
         thing = Thing.find(params[:id])
         rating = Rating.new(thing_id: thing.id)
+        rating.build_user # DISCUSS: where does this go?
 
         yield Create::Contract.new(rating)
       end
@@ -58,6 +60,15 @@ class Rating < ActiveRecord::Base
         # DISCUSS: this is presentation.
         def weight # only for presentation layer (UI).
           super or 1 # select Nice!
+        end
+
+
+        property :user, populate_if_empty: User do
+          property :name
+          property :email
+
+          validates :email, presence: true
+          # validates :email, email: true
         end
       end
 

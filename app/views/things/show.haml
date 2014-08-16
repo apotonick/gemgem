@@ -3,7 +3,7 @@
 = concept("rating/cell/form", @form).call
 
 %ul
-  - @thing.ratings.each do |rating|
+  - @thing.ratings.reverse.each do |rating|
     %li
       = rating.id
       = link_to rating.comment, thing_rating_path(@thing.id, rating.id)
@@ -13,3 +13,5 @@
       - else
         = link_to "Delete", rating_path(rating.id), method: :delete
       - # TODO: the URL helpers are so clumsy, make de-nesting resources easier.
+
+      = rating.user.email if rating.user
