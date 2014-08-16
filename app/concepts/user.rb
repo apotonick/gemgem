@@ -6,4 +6,15 @@ class User < ActiveRecord::Base
       end
     end
   end
+
+
+  class Twin < Disposable::Twin
+    def avatar
+      "/images/avatar.png"
+    end
+
+    def thumb
+      "/images/avatar-thumb.png"
+    end
+  end
 end
