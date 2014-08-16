@@ -25,6 +25,8 @@ class Thing < ActiveRecord::Base
         model = Thing.new
 
         validate(model, params) do |f|
+          Uploads.run(params[:image]) # make this chainable. also, after validations (jpeg/png)
+
           f.save
         end
       end
@@ -44,8 +46,24 @@ class Thing < ActiveRecord::Base
         end
       end
     end
+
+
+    class Uploads < Trailblazer::Operation
+      def process#(file)
+        file = params # I AM FUCKING STUPID AND FORGOT TO PUSH FROM MY WORK BOX!!!! :()
+        versions = Image.new({}).task(file) # do |versions|
+        versions.process!(:original) {}
+        versions.process!(:thumb) { |job| job.thumb!("180x180#") }
+
+        raise (versions.metadata.inspect)
+        # @pic.update_attribute(:image_meta_data, versions.metadata)
+      end
+    end
   end
 
+
+  class Image < Paperdragon::Attachment
+  end
 
   # new(twin).validate(params)[.save]
   # think of this as Operation::Update

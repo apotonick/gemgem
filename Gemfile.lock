@@ -6,6 +6,13 @@ GIT
       tilt
 
 PATH
+  remote: ../paperdragon
+  specs:
+    paperdragon (0.0.1)
+      dragonfly
+      uber
+
+PATH
   remote: ../reform
   specs:
     reform (1.0.4)
@@ -68,6 +75,9 @@ GEM
     disposable (0.0.5)
       representable (~> 2.0.0)
       uber
+    dragonfly (1.0.5)
+      multi_json (~> 1.0)
+      rack
     erubis (2.7.0)
     execjs (2.2.1)
     foundation-rails (5.3.0.1)
@@ -193,6 +203,7 @@ DEPENDENCIES
   html2haml
   jquery-rails
   minitest-spec-rails
+  paperdragon!
   quiet_assets
   rails (= 4.1.1)
   rails_layout

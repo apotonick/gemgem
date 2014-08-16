@@ -3,6 +3,7 @@
 
 = simple_form_for [@form] do |f|
   = f.input :name
+  = f.input(:image, as: :file)
   = f.button :submit
   -# DISCUSS: we do *not* embed the rateable_id here.
 
