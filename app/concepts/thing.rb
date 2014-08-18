@@ -3,6 +3,14 @@ require 'trailblazer/operation'
 class Thing < ActiveRecord::Base
   has_many :ratings
 
+  serialize :image_meta_data
+
+
+  class Image < Paperdragon::Attachment
+  end
+  include Paperdragon::Model
+  processable :image, Image
+
 
   module Form
     include Reform::Form::Module
@@ -22,11 +30,10 @@ class Thing < ActiveRecord::Base
       end
 
       def process(params)
-        puts params.inspect
         model = Thing.new
 
         validate(model, params) do |f|
-          Upload.run(params[:image]) if params[:image] # make this chainable. also, after validations (jpeg/png)
+          Upload.run(model, params[:image]) if params[:image] # make this chainable. also, after validations (jpeg/png)
 
           f.save
         end
@@ -50,20 +57,18 @@ class Thing < ActiveRecord::Base
 
 
     class Upload < Trailblazer::Operation
-      def process(file)
+      def process(model, file)
         versions = Image.new({}).task(file) # do |versions|
         versions.process!(:original) {}
         versions.process!(:thumb) { |job| job.thumb!("180x180#") }
 
-        raise (versions.metadata.inspect)
-        # @pic.update_attribute(:image_meta_data, versions.metadata)
+        # raise (versions.metadata.inspect)
+        model.update_attribute(:image_meta_data, versions.metadata)
       end
     end
   end
 
 
-  class Image < Paperdragon::Attachment
-  end
 
   # new(twin).validate(params)[.save]
   # think of this as Operation::Update

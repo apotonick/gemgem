@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140816011325) do
+ActiveRecord::Schema.define(version: 20140818100141) do
 
   create_table "ratings", force: true do |t|
     t.text     "comment"
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 20140816011325) do
 
   create_table "things", force: true do |t|
     t.text "name"
+    t.text "image_meta_data"
   end
 
   create_table "users", force: true do |t|
