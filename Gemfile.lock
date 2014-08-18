@@ -1,16 +1,15 @@
-GIT
-  remote: https://github.com/haml/haml
-  revision: 9a4a53b48d8d5b31b9e524d5a5b2e9b1387e4785
-  specs:
-    haml (4.1.0.beta.1)
-      tilt
-
 PATH
   remote: ../paperdragon
   specs:
     paperdragon (0.0.1)
       dragonfly
       uber
+
+PATH
+  remote: ../trailblazer
+  specs:
+    trailblazer (0.0.1)
+      actionpack
 
 PATH
   remote: ../reform
@@ -21,11 +20,12 @@ PATH
       representable (~> 2.0.0)
       uber (~> 0.0.4)
 
-PATH
-  remote: ../trailblazer
+GIT
+  remote: https://github.com/haml/haml
+  revision: 9a4a53b48d8d5b31b9e524d5a5b2e9b1387e4785
   specs:
-    trailblazer (0.0.1)
-      actionpack
+    haml (4.1.0.beta.1)
+      tilt
 
 GEM
   remote: https://rubygems.org/

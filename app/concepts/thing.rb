@@ -21,11 +21,12 @@ class Thing < ActiveRecord::Base
         model :thing # needed for form_for to figure out path.
       end
 
-      def process
+      def process(params)
+        puts params.inspect
         model = Thing.new
 
         validate(model, params) do |f|
-          Uploads.run(params[:image]) # make this chainable. also, after validations (jpeg/png)
+          Upload.run(params[:image]) if params[:image] # make this chainable. also, after validations (jpeg/png)
 
           f.save
         end
@@ -48,9 +49,8 @@ class Thing < ActiveRecord::Base
     end
 
 
-    class Uploads < Trailblazer::Operation
-      def process#(file)
-        file = params # I AM FUCKING STUPID AND FORGOT TO PUSH FROM MY WORK BOX!!!! :()
+    class Upload < Trailblazer::Operation
+      def process(file)
         versions = Image.new({}).task(file) # do |versions|
         versions.process!(:original) {}
         versions.process!(:thumb) { |job| job.thumb!("180x180#") }

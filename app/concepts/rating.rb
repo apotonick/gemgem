@@ -72,7 +72,7 @@ class Rating < ActiveRecord::Base
         end
       end
 
-      def process
+      def process(params)
         model = Rating.new
 
         validate(model, params) do |f|
@@ -87,7 +87,7 @@ class Rating < ActiveRecord::Base
 
 
 
-      def process
+      def process(params)
         model = Rating.find(params[:id])
         model.update_column(:deleted, 1)
         model
@@ -98,7 +98,7 @@ class Rating < ActiveRecord::Base
     class Undo < Trailblazer::Operation
       extend Flow # DISCUSS: could this also be implemented with #run?
 
-      def process
+      def process(params)
         # note that we could also use a Form here.
         model = Rating.find(params[:id])
         model.update_column(:deleted, 0)
