@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/haml/haml
+  revision: 9a4a53b48d8d5b31b9e524d5a5b2e9b1387e4785
+  specs:
+    haml (4.1.0.beta.1)
+      tilt
+
 PATH
   remote: ../paperdragon
   specs:
@@ -6,26 +13,19 @@ PATH
       uber
 
 PATH
+  remote: ../reform
+  specs:
+    reform (1.1.0)
+      activemodel
+      disposable (~> 0.0.5)
+      representable (~> 2.0.3)
+      uber (~> 0.0.4)
+
+PATH
   remote: ../trailblazer
   specs:
     trailblazer (0.0.1)
       actionpack
-
-PATH
-  remote: ../reform
-  specs:
-    reform (1.0.4)
-      activemodel
-      disposable (~> 0.0.5)
-      representable (~> 2.0.0)
-      uber (~> 0.0.4)
-
-GIT
-  remote: https://github.com/haml/haml
-  revision: 9a4a53b48d8d5b31b9e524d5a5b2e9b1387e4785
-  specs:
-    haml (4.1.0.beta.1)
-      tilt
 
 GEM
   remote: https://rubygems.org/
@@ -111,7 +111,7 @@ GEM
       minitest (~> 5.0)
       rails (~> 4.1.0.rc2)
     multi_json (1.10.1)
-    nokogiri (1.6.2.1)
+    nokogiri (1.6.3.1)
       mini_portile (= 0.6.0)
     polyglot (0.3.5)
     quiet_assets (1.0.3)
@@ -137,7 +137,7 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rake (10.3.2)
     ref (1.0.5)
-    representable (2.0.0)
+    representable (2.0.3)
       multi_json
       nokogiri
       uber (~> 0.0.7)
@@ -184,7 +184,7 @@ GEM
       polyglot (>= 0.3.1)
     tzinfo (1.2.1)
       thread_safe (~> 0.1)
-    uber (0.0.7)
+    uber (0.0.8)
     uglifier (2.5.1)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
@@ -208,7 +208,6 @@ DEPENDENCIES
   rails (= 4.1.1)
   rails_layout
   reform!
-  representable (~> 2.0.0)
   roar-rails
   sass-rails (~> 4.0.0)
   simple_form

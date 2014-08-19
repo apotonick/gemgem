@@ -26,7 +26,7 @@ gem 'reform', path: '../reform'
 gem 'disposable' #, path: "../disposable"
 gem 'cells', "3.11.1" #path: "../cells"
 gem 'roar-rails'
-gem 'representable', "~> 2.0.0" #path: "../representable"
+# gem 'representable', "~> 2.0.0" #path: "../representable"
 gem 'trailblazer', path: "../trailblazer"
 gem 'paperdragon', path: "../paperdragon"
 

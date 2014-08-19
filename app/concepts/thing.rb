@@ -58,12 +58,13 @@ class Thing < ActiveRecord::Base
 
     class Upload < Trailblazer::Operation
       def process(model, file)
-        versions = Image.new({}).task(file) # do |versions|
-        versions.process!(:original) {}
-        versions.process!(:thumb) { |job| job.thumb!("180x180#") }
+        metadata = Image.new({}).task(file) do |v|
+          v.process!(:original) {}
+          v.process!(:thumb) { |job| job.thumb!("180x180#") }
+        end
 
         # raise (versions.metadata.inspect)
-        model.update_attribute(:image_meta_data, versions.metadata)
+        model.update_attribute(:image_meta_data, metadata)
       end
     end
   end
