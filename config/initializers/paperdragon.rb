@@ -3,5 +3,5 @@ Dragonfly.app.configure do
 
   datastore :file,
     :server_root => 'public',
-    :root_path => 'public/paperdragon'
+    :root_path => 'public/images'
 end

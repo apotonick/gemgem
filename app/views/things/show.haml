@@ -1,5 +1,5 @@
 %h1 #{@thing.name}
-= @thing.image[:thumb].url
+= image_tag @thing.image[:thumb].url
 
 = concept("rating/cell/form", @form).call
 
