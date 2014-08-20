@@ -27,13 +27,22 @@ class Thing < ActiveRecord::Base
       class Contract < Reform::Form
         include Form
         model :thing # needed for form_for to figure out path.
+
+        property :image, virtual: true
+
+        def image=(file)
+          super Dragonfly.app.new_job(file)
+        end
+
+        extend Dragonfly::Model::Validations
+        validates_property :format, of: :image, in: ['jpeg', 'png', 'gif']
       end
 
       def process(params)
         model = Thing.new
 
-        validate(model, params) do |f|
-          Upload.run(model, params[:image]) if params[:image] # make this chainable. also, after validations (jpeg/png)
+        validate(model, params) do |f| # image must be validated here!
+          Upload.run(model, params[:image]) if params[:image] # make this chainable.
 
           f.save
         end
@@ -59,7 +68,7 @@ class Thing < ActiveRecord::Base
     class Upload < Trailblazer::Operation
       def process(model, file)
         metadata = Image.new({}).task(file) do |v|
-          v.process!(:original) {}
+          v.process!(:original)
           v.process!(:thumb) { |job| job.thumb!("180x180#") }
         end
 
