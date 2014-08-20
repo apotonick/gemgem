@@ -34,6 +34,7 @@ class Thing < ActiveRecord::Base
           super Dragonfly.app.new_job(file)
         end
 
+        # TODO: test for no image, pdf, png.
         extend Dragonfly::Model::Validations
         validates_property :format, of: :image, in: ['jpeg', 'png', 'gif']
       end
@@ -67,7 +68,8 @@ class Thing < ActiveRecord::Base
 
     class Upload < Trailblazer::Operation
       def process(model, file)
-        metadata = Image.new({}).task(file) do |v|
+        # metadata = Image.new({}).task(file) do |v|
+        metadata = model.image.task(file) do |v|
           v.process!(:original)
           v.process!(:thumb) { |job| job.thumb!("180x180#") }
         end
