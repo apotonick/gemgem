@@ -5,11 +5,8 @@ class Thing < ActiveRecord::Base
 
   serialize :image_meta_data
 
-
-  class Image < Paperdragon::Attachment
-  end
   include Paperdragon::Model
-  processable :image, Image
+  processable :image
 
 
   module Form
