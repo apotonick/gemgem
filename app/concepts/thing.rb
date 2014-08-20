@@ -28,7 +28,7 @@ class Thing < ActiveRecord::Base
         include Form
         model :thing # needed for form_for to figure out path.
 
-        property :image, virtual: true
+        property :image, empty: true
 
         def image=(file)
           super Dragonfly.app.new_job(file)
