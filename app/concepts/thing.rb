@@ -36,8 +36,13 @@ class Thing < ActiveRecord::Base
         validates_property :format, of: :image, in: ['jpeg', 'png', 'gif']
       end
 
+      def setup!(params)
+        @model = Thing.new
+      end
+      attr_reader :model
+
       def process(params)
-        model = Thing.new
+        # model = Thing.new
 
         validate(model, params) do |f| # image must be validated here!
           Upload.run(model, params[:image]) if params[:image] # make this chainable.
@@ -59,6 +64,13 @@ class Thing < ActiveRecord::Base
 
           include Form
         end
+      end
+    end
+
+
+    class Update < Create
+      def setup!(params)
+        @model = Thing.find(params[:id])
       end
     end
 

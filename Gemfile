@@ -22,7 +22,8 @@ gem 'coffee-rails', '~> 4.0.0'
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 
-gem 'reform', path: '../reform'
+gem 'reform', "1.1.0"
+# gem 'reform', path: '../reform'
 gem 'disposable' #, path: "../disposable"
 gem 'cells', "3.11.2" #path: "../cells"
 gem 'roar-rails'

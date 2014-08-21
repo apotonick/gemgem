@@ -37,16 +37,6 @@ class Rating < ActiveRecord::Base
 
   # think of this as Operation::Update
   module Operation
-    class New < Trailblazer::Operation
-      def run(params)
-        thing = Thing.find(params[:id])
-        rating = Rating.new(thing_id: thing.id)
-        rating.build_user # DISCUSS: where does this go?
-
-        yield Create::Contract.new(rating)
-      end
-    end
-
     class Create < Trailblazer::Operation
       extend Flow
 
@@ -72,12 +62,24 @@ class Rating < ActiveRecord::Base
         end
       end
 
-      def process(params)
-        model = Rating.new
+      def setup!(params)
+        @model = Rating.new
+      end
+      attr_reader :model
 
+      def process(params)
         validate(model, params) do |f|
           f.save
         end
+      end
+    end
+
+
+    class New < Create
+      def setup!(params)
+        thing  = Thing.find(params[:id])
+        @model = Rating.new(thing_id: thing.id)
+        @model.build_user # DISCUSS: where does this go?
       end
     end
 

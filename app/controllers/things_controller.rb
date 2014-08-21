@@ -3,7 +3,7 @@ class ThingsController < ApplicationController
   end
 
   def new
-    @form = Thing::Operation::Create::Contract.new(Thing.new) # Thing::Endpoint::New or Operation::Form::New
+    @form = Thing::Operation::Create.contract(params) # Thing::Endpoint::New or Operation::Form::New
   end
 
   def create
@@ -45,14 +45,19 @@ class ThingsController < ApplicationController
       Thing)
   end
 
+  def edit
+    @form = Thing::Operation::Update.contract(params)
+
+    render action: :new
+  end
+
   # has_cell :
 
+  # TODO: test with and without image
   def show
     @thing = Thing.find(params[:id])
 
-    Rating::Operation::New.new.run(params) do |c|
-      @form = c
-    end
+    @form = Rating::Operation::New.contract(params)
     # renders concept.
   end
   def form # TODO: this should happen in the cell-ajax.

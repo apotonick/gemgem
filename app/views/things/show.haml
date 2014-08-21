@@ -1,5 +1,5 @@
 %h1 #{@thing.name}
-= image_tag @thing.image[:thumb].url
+= image_tag @thing.image[:thumb].url if @thing.image.exists?
 
 = concept("rating/cell/form", @form).call
 
