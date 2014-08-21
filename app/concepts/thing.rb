@@ -9,8 +9,20 @@ class Thing < ActiveRecord::Base
   processable :image
 
 
+  module Representer
+    include Roar::Representer::JSON::HAL
+
+    property :name
+
+    property :authors, embedded: true do
+      property :email
+    end
+  end
+
+
   module Form
     include Reform::Form::Module
+    include Representer
 
     property :name
     validates :name, presence: true

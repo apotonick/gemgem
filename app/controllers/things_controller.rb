@@ -55,6 +55,11 @@ class ThingsController < ApplicationController
 
   # TODO: test with and without image
   def show
+    # TODO: let that do an Endpoint
+    if request.format == :json
+
+    end
+
     @thing = Thing.find(params[:id])
 
     @form = Rating::Operation::New.contract(params)
