@@ -44,7 +44,7 @@ class Thing < ActiveRecord::Base
       def process(params)
         # model = Thing.new
 
-        validate(model, params) do |f| # image must be validated here!
+        validate(params, model) do |f| # image must be validated here!
           Upload.run(model, params[:image]) if params[:image] # make this chainable.
 
           f.save

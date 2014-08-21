@@ -68,7 +68,7 @@ class Rating < ActiveRecord::Base
       attr_reader :model
 
       def process(params)
-        validate(model, params) do |f|
+        validate(params, model) do |f|
           f.save
         end
       end
