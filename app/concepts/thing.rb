@@ -2,6 +2,12 @@ require 'trailblazer/operation'
 
 class Thing < ActiveRecord::Base
   has_many :ratings
+  def authors
+    []
+  end
+  def authors=(*)
+
+  end
 
   serialize :image_meta_data
 
@@ -14,15 +20,17 @@ class Thing < ActiveRecord::Base
 
     property :name
 
-    property :authors, embedded: true do
+    collection :authors, embedded: true do
       property :email
     end
+
+    link(:self) { thing_path(represented) }
   end
 
 
   module Form
     include Reform::Form::Module
-    include Representer
+    # include Representer
 
     property :name
     validates :name, presence: true
@@ -34,7 +42,11 @@ class Thing < ActiveRecord::Base
       extend Flow
 
       class Contract < Reform::Form
-        include Form
+        #include Form
+        include Representer
+        validates :name, presence: true
+
+
         model :thing # needed for form_for to figure out path.
 
         property :image, empty: true

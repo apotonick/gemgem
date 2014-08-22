@@ -22,15 +22,15 @@ gem 'coffee-rails', '~> 4.0.0'
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 
-gem 'reform', "1.1.0"
-# gem 'reform', path: '../reform'
+# gem 'reform', "1.1.0"
+gem 'reform', path: '../reform'
 gem 'disposable' #, path: "../disposable"
 gem 'cells', "3.11.2" #path: "../cells"
 gem 'roar-rails'
-# gem 'representable', "~> 2.0.0" #path: "../representable"
+# gem 'representable', path: "../representable"
 gem 'trailblazer', path: "../trailblazer"
 gem 'paperdragon', path: "../paperdragon"
-
+gem 'roar', path: "../roar"
 
   # bundle exec rake doc:rails generates the API under doc/api.
 

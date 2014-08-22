@@ -13,6 +13,21 @@ PATH
       uber
 
 PATH
+  remote: ../reform
+  specs:
+    reform (1.1.0)
+      activemodel
+      disposable (~> 0.0.5)
+      representable (~> 2.0.3)
+      uber (~> 0.0.8)
+
+PATH
+  remote: ../roar
+  specs:
+    roar (1.0.0)
+      representable (~> 2.0.0)
+
+PATH
   remote: ../trailblazer
   specs:
     trailblazer (0.0.1)
@@ -128,17 +143,10 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rake (10.3.2)
     ref (1.0.5)
-    reform (1.1.0)
-      activemodel
-      disposable (~> 0.0.5)
-      representable (~> 2.0.3)
-      uber (~> 0.0.8)
     representable (2.0.3)
       multi_json
       nokogiri
       uber (~> 0.0.7)
-    roar (0.12.7)
-      representable (>= 1.6.0)
     roar-rails (0.1.6)
       actionpack
       railties (>= 3.0.0)
@@ -203,7 +211,8 @@ DEPENDENCIES
   quiet_assets
   rails (= 4.1.1)
   rails_layout
-  reform (= 1.1.0)
+  reform!
+  roar!
   roar-rails
   sass-rails (~> 4.0.0)
   simple_form
