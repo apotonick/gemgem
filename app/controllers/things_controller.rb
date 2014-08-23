@@ -58,18 +58,18 @@ class ThingsController < ApplicationController
 
   # TODO: test with and without image
   def show
-    @form = Rating::Operation::New.contract(params)
+    @thing = Thing::Operation::Show[params]
+
 
     # TODO: let that do an Endpoint
     if request.format == "application/json"
-      return respond_with @form.model.thing
+      return respond_with @thing
     end
 
-    @thing = Thing.find(params[:id])
-
-
-    # renders concept.
+    # this is UI, only, and could also be in a cell.
+    @form = Rating::Operation::New.contract(params)
   end
+
   def form # TODO: this should happen in the cell-ajax.
     # DISCUSS: we could also think about hooking an Endpoint/Operation to a route that then renders the cell?
     # but, why? UI and API have different behaviour anyway.

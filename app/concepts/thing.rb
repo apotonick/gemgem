@@ -38,6 +38,12 @@ class Thing < ActiveRecord::Base
 
 
   module Operation
+    class Show < Trailblazer::Operation
+      def process(params)
+        Thing.find(params[:id])
+      end
+    end
+
     class Create < Trailblazer::Operation
       extend Flow
 
