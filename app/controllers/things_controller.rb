@@ -1,4 +1,7 @@
 class ThingsController < ApplicationController
+  include Roar::Rails::ControllerAdditions
+  represents :json, :entity => Thing::Representer
+
   def index
   end
 
@@ -55,14 +58,16 @@ class ThingsController < ApplicationController
 
   # TODO: test with and without image
   def show
-    # TODO: let that do an Endpoint
-    if request.format == :json
+    @form = Rating::Operation::New.contract(params)
 
+    # TODO: let that do an Endpoint
+    if request.format == "application/json"
+      return respond_with @form.model.thing
     end
 
     @thing = Thing.find(params[:id])
 
-    @form = Rating::Operation::New.contract(params)
+
     # renders concept.
   end
   def form # TODO: this should happen in the cell-ajax.

@@ -2,14 +2,26 @@ require 'test_helper'
 
 class ThingsControllerTest < ActionController::TestCase
   include Roar::Rails::TestCase
+  include Roar::Rails::TestCase
+
   tests ThingsController
 
+  let (:thing) { Thing::Operation::Create[name: "Cells"] }
+
+  # JSON HAL tests.
   test "[json] POST /things" do
     post :create, {name: "Trailblazer"}.to_json, format: :json
 
     assert_response 302 # redirect, success
   end
 
+  test "[json] GET /things/1" do
+    get :show, id: thing.id, format: :json
+    response.body.must_equal "{\"name\":\"Cells\",\"_embedded\":{\"authors\":[]},\"_links\":{\"self\":{\"href\":\"/things/10\"}}}"
+  end
+
+
+  # form tests.
   test "[form] POST /things" do
     post :create, {thing: {name: "Trailblazer"}}
 
