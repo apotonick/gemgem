@@ -94,6 +94,10 @@ class Thing < ActiveRecord::Base
 
           include Form
         end
+
+        def validate(params, *args)
+          super(params[:request_body], *args)
+        end
       end
     end
 

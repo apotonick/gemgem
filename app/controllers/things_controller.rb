@@ -20,8 +20,8 @@ class ThingsController < ApplicationController
       return render action: "new"
 
     elsif request.format == :json
-
-      @form = Thing::Operation::Create::JSON.flow(request.body.string) do |form|
+      # TODO: MAKe it default behaviour in an Endpoint to merge that shizzle into the other shizzle.
+      @form = Thing::Operation::Create::JSON.flow(params.merge(request_body: request.body.string)) do |form|
         return redirect_to thing_path(form.model.id)
       end
 
