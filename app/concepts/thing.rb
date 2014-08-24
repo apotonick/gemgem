@@ -96,7 +96,7 @@ class Thing < ActiveRecord::Base
         end
 
         def validate(params, *args)
-          super(params[:request_body], *args)
+          super(params[:request_body], *args) # TODO: make string first arg here.
         end
       end
     end
@@ -119,6 +119,42 @@ class Thing < ActiveRecord::Base
 
         # raise (versions.metadata.inspect)
         model.update_attribute(:image_meta_data, metadata)
+      end
+    end
+
+
+    class Crop < Trailblazer::Operation
+      class Contract < Reform::Form
+        properties [:x, :y, :w, :h], empty: true
+        model Thing
+      end
+
+      def process(params)
+        @model = Thing.find(params[:id])
+
+        # FIXME: when calling contract, why does this still return @model?
+        validate(params, @model) do |contract|
+          metadata = contract.model.image.task do |v|
+
+            original = contract.model.image[:original] # FIXME: sucks
+
+            width  = original.metadata[:width]
+            height = original.metadata[:height]
+
+            ratio_x = width.to_f / 300
+
+
+            raise ratio_x.inspect
+
+            raise width.inspect
+
+            # FIXME: WE don't change filename (this gets appended which sucks)
+            #   file type is wrong
+            #   metadata should be ALL versions, not just thumb.
+            v.reprocess!(:thumb, original) { |j| j.thumb!("#{contract.w}x#{contract.h}+#{contract.x}+#{contract.y}") }
+          end
+          puts metadata.inspect
+        end
       end
     end
   end

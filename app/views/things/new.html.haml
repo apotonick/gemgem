@@ -4,8 +4,49 @@
 = simple_form_for [@form] do |f|
   = f.input :name
   = f.input(:image, as: :file)
+  - # this should appear in edit mode, only.
+  - if @form.model.image.exists?
+    = image_tag @form.model.image[:thumb].url
+    = image_tag @form.model.image[:original].url, width: 300, id: :croppable # "croppable"
   = f.button :submit
   -# DISCUSS: we do *not* embed the rateable_id here.
 
 
 = @form.errors.messages
+
+
+= form_for @crop, url: crop_thing_path(@crop.model) do |f|
+  = f.text_field :x, :id => 'crop_x'
+  = f.text_field :y, :id => 'crop_y'
+  = f.text_field :w, :id => 'crop_w'
+  = f.text_field :h, :id => 'crop_h'
+  = f.text_field :id, value: @crop.model.id
+  = f.submit "Crop!"
+
+:javascript
+  $(function(){
+
+    $('#croppable').Jcrop({
+      onChange: updateForm,
+      aspectRatio: 1
+    });
+
+  });
+
+  function updateForm(coords)
+  {
+    $('#crop_x').val(coords.x);
+    $('#crop_y').val(coords.y);
+    $('#crop_w').val(coords.w);
+    $('#crop_h').val(coords.h);
+
+    var rx = 100 / coords.w;
+    var ry = 100 / coords.h;
+
+    $('#preview').css({
+      width: Math.round(rx * 500) + 'px',
+      height: Math.round(ry * 370) + 'px',
+      marginLeft: '-' + Math.round(rx * coords.x) + 'px',
+      marginTop: '-' + Math.round(ry * coords.y) + 'px'
+    });
+  }

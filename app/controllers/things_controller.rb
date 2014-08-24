@@ -50,6 +50,7 @@ class ThingsController < ApplicationController
 
   def edit
     @form = Thing::Operation::Update.contract(params)
+    @crop = Thing::Operation::Crop.contract(params)
 
     render action: :new
   end
@@ -82,5 +83,9 @@ class ThingsController < ApplicationController
     end
 
     render action: :show
+  end
+
+  def crop
+    redirect_to thing_path(Thing::Operation::Crop[params[:thing]])
   end
 end
