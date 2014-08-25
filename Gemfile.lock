@@ -1,8 +1,9 @@
-PATH
-  remote: ../roar
+GIT
+  remote: https://github.com/haml/haml
+  revision: 9a4a53b48d8d5b31b9e524d5a5b2e9b1387e4785
   specs:
-    roar (0.13.0)
-      representable (~> 2.0.0)
+    haml (4.1.0.beta.1)
+      tilt
 
 PATH
   remote: ../paperdragon
@@ -10,22 +11,6 @@ PATH
     paperdragon (0.0.1)
       dragonfly
       uber
-
-PATH
-  remote: ../trailblazer
-  specs:
-    trailblazer (0.0.1)
-      actionpack
-
-PATH
-  remote: ../roar-rails
-  specs:
-    roar-rails (0.1.6)
-      actionpack
-      railties (>= 3.0.0)
-      roar (>= 0.11.13)
-      test_xml (>= 0.1.6)
-      uber (>= 0.0.5)
 
 PATH
   remote: ../reform
@@ -36,12 +21,27 @@ PATH
       representable (~> 2.0.3)
       uber (~> 0.0.8)
 
-GIT
-  remote: https://github.com/haml/haml
-  revision: 9a4a53b48d8d5b31b9e524d5a5b2e9b1387e4785
+PATH
+  remote: ../roar
   specs:
-    haml (4.1.0.beta.1)
-      tilt
+    roar (1.0.0)
+      representable (~> 2.0.0)
+
+PATH
+  remote: ../roar-rails
+  specs:
+    roar-rails (0.1.6)
+      actionpack
+      railties (>= 3.0.0)
+      roar (>= 0.11.13)
+      test_xml (>= 0.1.6)
+      uber
+
+PATH
+  remote: ../trailblazer
+  specs:
+    trailblazer (0.0.1)
+      actionpack
 
 GEM
   remote: https://rubygems.org/
@@ -73,6 +73,10 @@ GEM
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
     arel (5.0.1.20140414130214)
+    axiom-types (0.1.1)
+      descendants_tracker (~> 0.0.4)
+      ice_nine (~> 0.11.0)
+      thread_safe (~> 0.3, >= 0.3.1)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
     builder (3.2.2)
@@ -80,6 +84,8 @@ GEM
       actionpack (>= 3.0)
       railties (>= 3.0)
       uber (~> 0.0.8)
+    coercible (1.0.0)
+      descendants_tracker (~> 0.0.1)
     coffee-rails (4.0.1)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0, < 5.0)
@@ -88,12 +94,15 @@ GEM
       execjs
     coffee-script-source (1.7.0)
     debug_inspector (0.0.2)
+    descendants_tracker (0.0.4)
+      thread_safe (~> 0.3, >= 0.3.1)
     disposable (0.0.5)
       representable (~> 2.0.0)
       uber
     dragonfly (1.0.5)
       multi_json (~> 1.0)
       rack
+    equalizer (0.0.9)
     erubis (2.7.0)
     execjs (2.2.1)
     foundation-rails (5.3.0.1)
@@ -112,6 +121,7 @@ GEM
       hpricot (~> 0.8.6)
       ruby_parser (~> 3.1.1)
     i18n (0.6.11)
+    ice_nine (0.11.0)
     jcrop-rails-v2 (0.9.12.3)
     jquery-rails (3.1.1)
       railties (>= 3.0, < 5.0)
@@ -199,6 +209,11 @@ GEM
     uglifier (2.5.1)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
+    virtus (1.0.2)
+      axiom-types (~> 0.1)
+      coercible (~> 1.0)
+      descendants_tracker (~> 0.0.3)
+      equalizer (~> 0.0.9)
 
 PLATFORMS
   ruby
@@ -229,3 +244,4 @@ DEPENDENCIES
   therubyracer
   trailblazer!
   uglifier (>= 1.3.0)
+  virtus

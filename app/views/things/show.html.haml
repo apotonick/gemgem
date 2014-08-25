@@ -1,3 +1,6 @@
+= link_to "Edit", edit_thing_path(@thing)
+
+
 %h1 #{@thing.name}
 = image_tag @thing.image[:thumb].url if @thing.image.exists?
 

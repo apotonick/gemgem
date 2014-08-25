@@ -25,6 +25,7 @@ gem 'jcrop-rails-v2'
 
 # gem 'reform', "1.1.0"
 gem 'reform', path: '../reform'
+gem 'virtus'
 gem 'disposable' #, path: "../disposable"
 gem 'cells', "3.11.2" #path: "../cells"
 gem 'roar-rails', path: '../roar-rails'

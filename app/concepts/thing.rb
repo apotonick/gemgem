@@ -122,10 +122,11 @@ class Thing < ActiveRecord::Base
       end
     end
 
-
+    require "reform/form/coercion"
     class Crop < Trailblazer::Operation
       class Contract < Reform::Form
-        properties [:x, :y, :w, :h], empty: true
+        include Coercion
+        properties [:x, :y, :w, :h], empty: true, type: Integer
         model Thing
       end
 
@@ -141,18 +142,19 @@ class Thing < ActiveRecord::Base
             width  = original.metadata[:width]
             height = original.metadata[:height]
 
-            ratio_x = width.to_f / 300
+            r = width.to_f / 300
 
-
-            raise ratio_x.inspect
-
-            raise width.inspect
-
-            # FIXME: WE don't change filename (this gets appended which sucks)
+            # contract.save do |h|
+              # cropping = "#{(h[:w]*r).to_i}x#{(h[:w]*r).to_i}+#{(h[:x]*r).to_i}+#{(h[:y]*r).to_i}"
+              cropping = "#{(contract.w*r).to_i}x#{(contract.h*r).to_i}+#{(contract.x*r).to_i}+#{(contract.y*r).to_i}"
+              v.reprocess!(:thumb, Time.now.to_i) { |j| j.thumb!(cropping).thumb!("180x180#") }
+            # end
             #   file type is wrong
-            #   metadata should be ALL versions, not just thumb.
-            v.reprocess!(:thumb, original) { |j| j.thumb!("#{contract.w}x#{contract.h}+#{contract.x}+#{contract.y}") }
+
           end
+
+          @model.update_attribute(:image_meta_data, metadata)
+
           puts metadata.inspect
         end
       end
