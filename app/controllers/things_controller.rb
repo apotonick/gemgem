@@ -55,6 +55,14 @@ class ThingsController < ApplicationController
     render action: :new
   end
 
+  def update
+    @form = Thing::Operation::Update.flow(params[:thing]) do |form|
+        return redirect_to thing_path(form.model.id)
+      end
+
+      return render action: "new"
+  end
+
   # has_cell :
 
   # TODO: test with and without image

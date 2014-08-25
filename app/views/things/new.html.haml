@@ -7,8 +7,10 @@
   - # this should appear in edit mode, only.
   - if @form.model.image.exists?
     = image_tag @form.model.image[:thumb].url
-    = image_tag @form.model.image[:original].url, width: 300, id: :croppable # "croppable"
+
   = f.button :submit
+  -# TODO: the id should be around in edit mode only.
+  = f.text_field :id, value: @form.model.id
   -# DISCUSS: we do *not* embed the rateable_id here.
 
 
@@ -16,6 +18,8 @@
 
 
 - if @crop
+  - if @form.model.image.exists?
+    = image_tag @form.model.image[:original].url, width: 300, id: :croppable # "croppable"
   = form_for @crop, url: crop_thing_path(@crop.model) do |f|
     = f.text_field :x, :id => 'crop_x'
     = f.text_field :y, :id => 'crop_y'
