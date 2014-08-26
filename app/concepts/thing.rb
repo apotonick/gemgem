@@ -126,6 +126,10 @@ class Thing < ActiveRecord::Base
       class Contract < Reform::Form
         include Coercion
         properties [:x, :y, :w, :h], empty: true, type: Integer
+        validates :x, :y, :w, :h, presence: true
+
+        property :croppable_width, default: 300, type: Integer, empty: true
+
         model Thing
       end
 
@@ -141,7 +145,7 @@ class Thing < ActiveRecord::Base
             width  = original.metadata[:width]
             height = original.metadata[:height]
 
-            r = width.to_f / 300
+            r = width.to_f / contract.croppable_width
 
             # contract.save do |h|
               # cropping = "#{(h[:w]*r).to_i}x#{(h[:w]*r).to_i}+#{(h[:x]*r).to_i}+#{(h[:y]*r).to_i}"
