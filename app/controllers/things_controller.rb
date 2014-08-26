@@ -13,7 +13,7 @@ class ThingsController < ApplicationController
     # TODO: this will get abstracted into Endpoint.
     if request.format == :html
 
-      @form = Thing::Operation::Create.flow(params[:thing]) do |form|
+      @form = Thing::Operation::Create.run(params[:thing]) do |form|
         return redirect_to thing_path(form.model.id)
       end
 
@@ -21,7 +21,7 @@ class ThingsController < ApplicationController
 
     elsif request.format == :json
       # TODO: MAKe it default behaviour in an Endpoint to merge that shizzle into the other shizzle.
-      @form = Thing::Operation::Create::JSON.flow(params.merge(request_body: request.body.string)) do |form|
+      @form = Thing::Operation::Create::JSON.run(params.merge(request_body: request.body.string)) do |form|
         return redirect_to thing_path(form.model.id)
       end
 
@@ -56,7 +56,7 @@ class ThingsController < ApplicationController
   end
 
   def update
-    @form = Thing::Operation::Update.flow(params[:thing]) do |form|
+    @form = Thing::Operation::Update.run(params[:thing]) do |form|
         return redirect_to thing_path(form.model.id)
       end
 
@@ -86,7 +86,7 @@ class ThingsController < ApplicationController
     # use Endpoint::Create::"Form" here directly.
     @thing = Thing.find(params[:id])
 
-    @form = Rating::Operation::Create.flow(params[:rating]) do |c|
+    @form = Rating::Operation::Create.run(params[:rating]) do |c|
      return redirect_to thing_path(@thing.id)
     end
 

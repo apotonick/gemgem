@@ -53,7 +53,7 @@ class RatingsController < ApplicationController
   end
 
    def undo
-    Rating::Operation::Undo.flow(id: params[:id]) do |rating|
+    Rating::Operation::Undo.run(id: params[:id]) do |rating|
       redirect_to thing_path(rating.thing.id)
     end
   end

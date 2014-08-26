@@ -20,6 +20,7 @@ class Thing < ActiveRecord::Base
 
     property :name
 
+    # idea: make it a req to have 3 authors or something to demonstrate complex validations/consolidations.
     collection :authors, embedded: true do
       property :email
     end
@@ -45,8 +46,6 @@ class Thing < ActiveRecord::Base
     end
 
     class Create < Trailblazer::Operation
-      extend Flow
-
       class Contract < Reform::Form
         #include Form
         include Representer

@@ -38,9 +38,7 @@ class Rating < ActiveRecord::Base
   # think of this as Operation::Update
   module Operation
     class Create < Trailblazer::Operation
-      extend Flow
-
-      class Contract < Reform::Form
+     class Contract < Reform::Form
         include Form
 
         model :rating
@@ -85,10 +83,6 @@ class Rating < ActiveRecord::Base
 
 
     class Delete < Trailblazer::Operation
-      extend Flow
-
-
-
       def process(params)
         model = Rating.find(params[:id])
         model.update_column(:deleted, 1)
@@ -98,8 +92,6 @@ class Rating < ActiveRecord::Base
 
 
     class Undo < Trailblazer::Operation
-      extend Flow # DISCUSS: could this also be implemented with #run?
-
       def process(params)
         # note that we could also use a Form here.
         model = Rating.find(params[:id])
