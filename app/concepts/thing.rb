@@ -2,12 +2,8 @@ require 'trailblazer/operation'
 
 class Thing < ActiveRecord::Base
   has_many :ratings
-  def authors
-    []
-  end
-  def authors=(*)
 
-  end
+  has_and_belongs_to_many :users
 
   serialize :image_meta_data
 
