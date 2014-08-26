@@ -138,14 +138,8 @@ class Thing < ActiveRecord::Base
 
         # FIXME: when calling contract, why does this still return @model?
         validate(params, @model) do |contract|
-          metadata = contract.model.image.task do |v|
-
-            original = contract.model.image[:original] # FIXME: sucks
-
-            width  = original.metadata[:width]
-            height = original.metadata[:height]
-
-            r = width.to_f / contract.croppable_width
+          metadata = @model.image.task do |v|
+            r = original_width / contract.croppable_width
 
             # contract.save do |h|
               # cropping = "#{(h[:w]*r).to_i}x#{(h[:w]*r).to_i}+#{(h[:x]*r).to_i}+#{(h[:y]*r).to_i}"
@@ -157,9 +151,14 @@ class Thing < ActiveRecord::Base
           end
 
           @model.update_attribute(:image_meta_data, metadata)
-
-          puts metadata.inspect
         end
+      end
+
+    private
+      def original_width
+        original = @model.image[:original]
+        width    = original.metadata[:width].to_f
+        # height   = original.metadata[:height]
       end
     end
   end
