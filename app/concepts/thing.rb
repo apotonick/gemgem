@@ -2,8 +2,9 @@ require 'trailblazer/operation'
 
 class Thing < ActiveRecord::Base
   has_many :ratings
-
-  has_and_belongs_to_many :users
+  has_and_belongs_to_many :authors,
+    association_foreign_key: :user_id,
+    foreign_key: :thing_id, class_name: "User" # seriouslaaayyyyy?
 
   serialize :image_meta_data
 
@@ -17,7 +18,7 @@ class Thing < ActiveRecord::Base
     property :name
 
     # idea: make it a req to have 3 authors or something to demonstrate complex validations/consolidations.
-    collection :authors, embedded: true do
+    collection :authors, embedded: true, populate_if_empty: lambda { |*| User.new } do
       property :email
     end
 
@@ -59,6 +60,13 @@ class Thing < ActiveRecord::Base
         # TODO: test for no image, pdf, png.
         extend Dragonfly::Model::Validations
         validates_property :format, of: :image, in: ['jpeg', 'png', 'gif']
+
+
+        # presentation method
+        def authors
+          return [User.new] if super.blank? # here, i offer one form to enter an author.
+          super
+        end
       end
 
       def setup!(params)
@@ -107,13 +115,12 @@ class Thing < ActiveRecord::Base
     class Upload < Trailblazer::Operation
       def process(model, file)
         # metadata = Image.new({}).task(file) do |v|
-        metadata = model.image.task(file) do |v|
+        model.image(file) do |v|
           v.process!(:original)
           v.process!(:thumb) { |job| job.thumb!("180x180#") }
         end
 
-        # raise (versions.metadata.inspect)
-        model.update_attribute(:image_meta_data, metadata)
+        model.save
       end
     end
 
@@ -134,7 +141,7 @@ class Thing < ActiveRecord::Base
 
         # FIXME: when calling contract, why does this still return @model?
         validate(params, @model) do |contract|
-          metadata = @model.image.task do |v|
+          @model.image do |v|
             r = original_width / contract.croppable_width
 
             # contract.save do |h|
@@ -146,7 +153,7 @@ class Thing < ActiveRecord::Base
 
           end
 
-          @model.update_attribute(:image_meta_data, metadata)
+          @model.save
         end
       end
 

@@ -4,6 +4,10 @@
 %h1 #{@thing.name}
 = image_tag @thing.image[:thumb].url if @thing.image.exists?
 
+By
+- @thing.authors.each do |author|
+  = author.email
+
 = concept("rating/cell/form", @form).call
 
 %ul
