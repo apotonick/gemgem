@@ -16,7 +16,10 @@
     Do you know any authors?
     = f.fields_for :authors do |a|
       = a.input :email
-
+:javascript
+  $("input.email").autocomplete({
+    source: '#{search_users_path}'
+  });
 
 = @form.errors.messages
 

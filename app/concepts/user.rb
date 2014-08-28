@@ -5,6 +5,14 @@ class User < ActiveRecord::Base
         User.create(params)
       end
     end
+
+    class Search < Trailblazer::Operation
+      def process(params)
+        User.where("email LIKE ?", "%#{params[:term]}%").collect do |usr|
+          {value: usr.id, label: usr.email}
+        end
+      end
+    end
   end
 
 
