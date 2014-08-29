@@ -1,6 +1,7 @@
 class ThingsController < ApplicationController
-  include Roar::Rails::ControllerAdditions
-  represents :json, :entity => Thing::Representer
+  #include Roar::Rails::ControllerAdditions
+  #represents :json, :entity => Thing::Representer
+  respond_to :html, :json
 
   def index
   end
@@ -11,41 +12,14 @@ class ThingsController < ApplicationController
 
   def create
     # TODO: this will get abstracted into Endpoint.
-    if request.format == :html
+    # if request.format == :html
+    operation = request.format == :json ? Thing::Operation::Create::JSON : Thing::Operation::Create
+    _params    = request.format == :json ? params.merge(request_body: request.body.string) : params[:thing]
 
-      @form = Thing::Operation::Create.run(params[:thing]) do |form|
-        return redirect_to thing_path(form.model.id)
-      end
+    op = operation.new
+    _, @form = op.run(_params)
 
-      return render action: "new"
-
-    elsif request.format == :json
-      # TODO: MAKe it default behaviour in an Endpoint to merge that shizzle into the other shizzle.
-      @form = Thing::Operation::Create::JSON.run(params.merge(request_body: request.body.string)) do |form|
-        return redirect_to thing_path(form.model.id)
-      end
-
-      raise # return render action: "new"
-
-    end
-    # Thing::Operation::Create.for(
-    #   # form: valid: redirect, invalid: render
-    #   # json: valid: render, invalid: render something else
-    #   )
-
-    # you can still do whatever you want in the controller, but the domain logic is encapsulated.
-    Trailblazer::Endpoint::Create.new.call(self, params,
-      # TODO: there's gonna be clever default settings a la Rails.
-      {form: {
-        success: lambda { |form| redirect_to thing_path(form.model.id) },
-        invalid: lambda { |*| render action: "new" } # if this did actually call #new as in cells, we don't need the form object.
-      },
-      json: {
-        success: lambda { |form| redirect_to thing_path(form.model.id) },
-        # TODO: implement error handling.
-        # invalid: lambda { |*| render action: "new" } # if this did actually call #new as in cells, we don't need the form object.
-      }},
-      Thing)
+    respond_with op
   end
 
   def edit
@@ -67,12 +41,13 @@ class ThingsController < ApplicationController
 
   # TODO: test with and without image
   def show
-    @thing = Thing::Operation::Show[params]
+    op = Thing::Operation::Show.new
+    _, @thing = op.run(params)
 
 
     # TODO: let that do an Endpoint
     if request.format == "application/json"
-      return respond_with @thing
+      return respond_with op
     end
 
     # this is UI, only, and could also be in a cell.

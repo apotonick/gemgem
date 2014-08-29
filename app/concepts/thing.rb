@@ -85,6 +85,20 @@ class Thing < ActiveRecord::Base
       end
 
 
+      # FIXME: this is to make it work with a responder
+      def self.model_name
+        ::ActiveModel::Name.new(self, nil, "thing")
+      end
+      def to_param
+        "1"
+      end
+      def errors
+        return [] if @valid
+        [1]
+      end
+
+
+
       class JSON < self
         class Contract < Reform::Form
           self.representer_class.class_eval do
@@ -100,6 +114,12 @@ class Thing < ActiveRecord::Base
 
         def validate(params, *args)
           super(params[:request_body], *args) # TODO: make string first arg here.
+        end
+
+
+        # FIXME: this is to make it work with a responder
+        def to_json(*) #
+          Contract.representer_class.prepare(@model).to_json
         end
       end
     end

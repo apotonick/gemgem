@@ -12,12 +12,18 @@ class ThingsControllerTest < ActionController::TestCase
   test "[json] POST /things" do
     post :create, {name: "Trailblazer"}.to_json, format: :json
 
-    assert_response 302 # redirect, success
+    response.body.must_equal "{\"name\":\"Trailblazer\"}"
+  end
+
+  test "[json with errors] POST /things" do
+    post :create, {thing: {name: ""}}.to_json, format: :json
+
+    assert_response 422 # :unprocessable
   end
 
   test "[json] GET /things/1" do
     get :show, id: thing.id, format: :json
-    response.body.must_equal "{\"name\":\"Cells\",\"_embedded\":{\"authors\":[]},\"_links\":{\"self\":{\"href\":\"/things/10\"}}}"
+    response.body.must_equal "{\"name\":\"Cells\",\"_embedded\":{\"authors\":[]},\"_links\":{\"self\":{\"href\":\"/things/#{thing.id}\"}}}"
   end
 
 
@@ -25,7 +31,15 @@ class ThingsControllerTest < ActionController::TestCase
   test "[form] POST /things" do
     post :create, {thing: {name: "Trailblazer"}}
 
-    assert_response 302 # redirect, success
+    assert_redirected_to "/things/#{Thing.last.id}"
+  end
+
+  test "[form with errors] POST /things" do
+    post :create, {thing: {name: ""}}
+
+    assert_response :success
+    assert_template :new
+    assert_select "form"
   end
 
   test "should get new" do
