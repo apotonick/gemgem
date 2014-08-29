@@ -38,7 +38,14 @@ class Thing < ActiveRecord::Base
   module Operation
     class Show < Trailblazer::Operation
       def process(params)
-        Thing.find(params[:id])
+        @model = Thing.find(params[:id])
+      end
+
+      # the official way here would be to
+      # a) use roar-rails and just chuck @model to respond_with
+      # b) implement Show::JSON, which is a lot of work. can we re-use from Create::JSON?
+      def to_json(*)
+        Representer.prepare(@model).to_json
       end
     end
 
