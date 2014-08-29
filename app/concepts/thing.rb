@@ -18,7 +18,13 @@ class Thing < ActiveRecord::Base
     property :name
 
     # idea: make it a req to have 3 authors or something to demonstrate complex validations/consolidations.
-    collection :authors, embedded: true, populate_if_empty: lambda { |*| User.new } do
+    collection :authors, embedded: true,
+      # show how this goes into form, as no api logic.
+      # populate_if_empty: lambda { |hash, *args| (id = hash.delete("email").sub("id:", "") and User.find(id)) or User.new } do
+      populate_if_empty: lambda { |hash, *args|
+        puts hash.inspect
+        (id = hash.delete("email").sub("id:", "") and User.find(id)) or User.new } do # TODO: move into form, this is no API logic.
+
       property :email
     end
 
@@ -97,7 +103,7 @@ class Thing < ActiveRecord::Base
         ::ActiveModel::Name.new(self, nil, "thing")
       end
       def to_param
-        "1"
+        @model.to_param
       end
       def errors
         return [] if @valid
@@ -108,6 +114,8 @@ class Thing < ActiveRecord::Base
 
       class JSON < self
         class Contract < Reform::Form
+          include Representer
+
           self.representer_class.class_eval do
             include Representable::JSON
           end
@@ -116,7 +124,7 @@ class Thing < ActiveRecord::Base
             :from_json
           end
 
-          include Form
+
         end
 
         def validate(params, *args)
@@ -126,6 +134,7 @@ class Thing < ActiveRecord::Base
 
         # FIXME: this is to make it work with a responder
         def to_json(*) #
+          # raise @model.authors.inspect
           Contract.representer_class.prepare(@model).to_json
         end
       end

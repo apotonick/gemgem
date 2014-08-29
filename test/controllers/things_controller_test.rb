@@ -14,6 +14,11 @@ class ThingsControllerTest < ActionController::TestCase
 
     response.body.must_equal "{\"name\":\"Trailblazer\"}"
   end
+  test "[json] POST /things with authors" do
+    post :create, {name: "Trailblazer", authors: [{email: "nick@gmail.com"}]}.to_json, format: :json
+
+    response.body.must_equal "{\"name\":\"Trailblazer\"}"
+  end
 
   test "[json with errors] POST /things" do
     post :create, {thing: {name: ""}}.to_json, format: :json

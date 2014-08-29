@@ -50,6 +50,8 @@ class ThingsController < ApplicationController
       return respond_with op
     end
 
+    # what if we had a Cell(contract/operation).show for html here? (to_html)
+
     # this is UI, only, and could also be in a cell.
     @form = Rating::Operation::New.contract(params)
   end

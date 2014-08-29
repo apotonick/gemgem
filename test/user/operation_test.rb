@@ -21,8 +21,8 @@ class UserOperationTest < MiniTest::Spec
 
     User::Operation::Search[term: "no"].must_equal []
     User::Operation::Search[term: "ick"].must_equal [
-      {value: user1.id, label: "nick@trailblazerb.org"},
-      {value: user3.id, label: "apotonick@gmail.com"}
+      {value: "id:#{user1.id}", label: "nick@trailblazerb.org"},
+      {value: "id:#{user3.id}", label: "apotonick@gmail.com"}
     ]
   end
 end
