@@ -16,14 +16,14 @@ class Thing < ActiveRecord::Base
     include Roar::Representer::JSON::HAL
 
     property :name
+    # TODO: image_url: (only in representer!)
 
     # idea: make it a req to have 3 authors or something to demonstrate complex validations/consolidations.
     collection :authors, embedded: true,
       # show how this goes into form, as no api logic.
-      # populate_if_empty: lambda { |hash, *args| (id = hash.delete("email").sub("id:", "") and User.find(id)) or User.new } do
-      populate_if_empty: lambda { |hash, *args|
-        puts hash.inspect
-        (id = hash.delete("email").sub("id:", "") and User.find(id)) or User.new } do # TODO: move into form, this is no API logic.
+      property :twitter
+      property :github
+    do # TODO: move into form, this is no API logic.
 
       property :email
     end
@@ -32,12 +32,17 @@ class Thing < ActiveRecord::Base
   end
 
 
-  module Form
+  module Schema
     include Reform::Form::Module
     # include Representer
 
     property :name
     validates :name, presence: true
+
+    collection :authors, embedded: true do
+      property :email
+      validates :email, presence: true
+    end
   end
 
 
@@ -57,9 +62,11 @@ class Thing < ActiveRecord::Base
 
     class Create < Trailblazer::Operation
       class Contract < Reform::Form
-        #include Form
-        include Representer
+        include Schema
         validates :name, presence: true
+
+        collection :authors, inherit: true, populate_if_empty: lambda { |hash, *args|
+          (id = hash.delete("email").sub("id:", "") and User.find(id)) or User.new }  # TODO: move into form, this is no API logic.
 
 
         model :thing # needed for form_for to figure out path.
