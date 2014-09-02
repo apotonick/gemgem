@@ -12,26 +12,6 @@ class Thing < ActiveRecord::Base
   processable :image
 
 
-  module Representer
-    include Roar::Representer::JSON::HAL
-
-    property :name
-    # TODO: image_url: (only in representer!)
-
-    # idea: make it a req to have 3 authors or something to demonstrate complex validations/consolidations.
-    collection :authors, embedded: true do # TODO: move into form, this is no API logic.
-      # show how this goes into form, as no api logic.
-      property :twitter
-      property :github
-
-
-      property :email
-    end
-
-    link(:self) { thing_path(represented) }
-  end
-
-
   module Schema
     include Reform::Form::Module
     # include Representer
@@ -44,6 +24,31 @@ class Thing < ActiveRecord::Base
       validates :email, presence: true
       validates_uniqueness_of :email
     end
+  end
+
+
+  module Representer
+    include Roar::Representer::JSON::HAL
+
+    module Validates
+      def self.included(base)
+        base.extend(Validates)
+      end
+
+      def validates(*)
+      end
+      def validates_uniqueness_of(*)
+
+      end
+    end
+    feature Validates
+
+    include Schema
+
+    # property :name
+    # TODO: image_url: (only in representer!)
+
+    link(:self) { thing_path(represented) }
   end
 
 
@@ -64,7 +69,6 @@ class Thing < ActiveRecord::Base
     class Create < Trailblazer::Operation
       class Contract < Reform::Form
         include Schema
-        validates :name, presence: true
 
         collection :authors, inherit: true,
           # TODO: this is no API logic.
@@ -126,7 +130,14 @@ class Thing < ActiveRecord::Base
 
       class JSON < self
         class Contract < Reform::Form
-          include Representer
+          include Schema
+
+          collection :authors, inherit: true,
+            populate_if_empty: lambda { |hash, *| # next: Callable!
+              (id = hash.delete("id") and User.find(id)) or User.new # API behaviour.
+            } do
+              property :email
+            end
 
           self.representer_class.class_eval do
             include Representable::JSON
@@ -146,8 +157,12 @@ class Thing < ActiveRecord::Base
 
         # FIXME: this is to make it work with a responder
         def to_json(*) #
-          # raise @model.authors.inspect
-          Contract.representer_class.prepare(@model).to_json
+          # Problem with representer_class is that nested objects are forms.
+
+          # Contract.representer_class.representable_attrs.get(:authors).merge!(prepare: nil)
+          # Contract.representer_class.prepare(@model).to_json
+
+          Representer.prepare(@model).to_json
         end
       end
     end

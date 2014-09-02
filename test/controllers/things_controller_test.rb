@@ -11,13 +11,15 @@ class ThingsControllerTest < ActionController::TestCase
   # JSON HAL tests.
   test "[json] POST /things" do
     post :create, {name: "Trailblazer"}.to_json, format: :json
+    thing = Thing.last # TODO: any better of finding this?
 
-    response.body.must_equal "{\"name\":\"Trailblazer\"}"
+    response.body.must_equal "{\"name\":\"Trailblazer\",\"_embedded\":{\"authors\":[]},\"_links\":{\"self\":{\"href\":\"/things/#{thing.id}\"}}}"
   end
   test "[json] POST /things with authors" do
     post :create, {name: "Trailblazer", authors: [{email: "nick@gmail.com"}]}.to_json, format: :json
+    thing = Thing.last # TODO: any better of finding this?
 
-    response.body.must_equal "{\"name\":\"Trailblazer\"}"
+    response.body.must_equal "{\"name\":\"Trailblazer\",\"_embedded\":{\"authors\":[{\"email\":\"nick@gmail.com\"}]},\"_links\":{\"self\":{\"href\":\"/things/#{thing.id}\"}}}"
   end
 
   test "[json with errors] POST /things" do

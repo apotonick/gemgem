@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
     class Search < Trailblazer::Operation
       def process(params)
         User.where("email LIKE ?", "%#{params[:term]}%").collect do |usr|
-          {value: "id:#{usr.id}", label: usr.email}
+          {value: "#{usr.id}", label: usr.email}
         end
       end
     end

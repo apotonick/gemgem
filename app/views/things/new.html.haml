@@ -16,9 +16,15 @@
     Do you know any authors?
     = f.fields_for :authors do |a|
       = a.input :email
+      = a.input :id
 :javascript
   $("input.email").autocomplete({
-    source: '#{search_users_path}'
+    source: '#{search_users_path}',
+    select: function(event, ui) {
+      id_input = $(':input:eq(' + ($(':input').index(this) + 1) + ')');
+      id_input.val(ui.item.value)
+      // $(this).val(ui.item.label)
+    }
   });
 
 = @form.errors.messages
