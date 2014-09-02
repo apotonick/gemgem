@@ -12,12 +12,20 @@ class ThingOperationTest < MiniTest::Spec
     User.count.must_equal 1 # TODO: this shouldn't be here.
   end
 
-  # new user, email invalid
+  # empty user
+  it do
+    thing = Thing::Operation::Create[name: "Cells", authors: ["email" => ""]].model
+
+    thing.authors.must_equal []
+    User.count.must_equal 0 # TODO: this shouldn't be here.
+  end
+
+  # new user, email invalid # TODO: make this invalid!
   it do
     exc = assert_raises Trailblazer::Operation::InvalidContract do
-      thing = Thing::Operation::Create[name: "Cells", authors: ["email" => ""]].model
+      thing = Thing::Operation::Create[name: "Cells", authors: ["email" => "argh"]].model
     end
-    exc.message.must_equal "{:\"authors.email\"=>[\"can't be blank\"]}"
+    exc.message.must_equal "{:\"authors.email\"=>[\"wrong format\"]}"
   end
 
   # existing user, email already taken!

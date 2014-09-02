@@ -14,16 +14,17 @@ class Thing < ActiveRecord::Base
 
   module Schema
     include Reform::Form::Module
-    # include Representer
 
     property :name
     validates :name, presence: true
 
     collection :authors, embedded: true do
       property :email
-      validates :email, presence: true
+      # validates :email, presence: true
+      # validate :email_ok?
       validates_uniqueness_of :email
     end
+
   end
 
 
@@ -38,14 +39,14 @@ class Thing < ActiveRecord::Base
       def validates(*)
       end
       def validates_uniqueness_of(*)
-
       end
+      # def validate(*)
+      # end
     end
     feature Validates
 
     include Schema
 
-    # property :name
     # TODO: image_url: (only in representer!)
 
     link(:self) { thing_path(represented) }
@@ -75,7 +76,14 @@ class Thing < ActiveRecord::Base
           populate_if_empty: lambda { |hash, *| # next: Callable!
             (id = hash.delete("id") and User.find(id)) or User.new # API behaviour.
             #(id = hash.delete("email") .sub("id:", "") and User.find(id)) or User.new
-          }
+          } do
+
+            validate :email_ok?
+            def email_ok?
+              return if email.blank?
+              errors.add("email", "wrong format") unless email =~ /@/ # yepp, i know.
+            end
+          end
 
 
         model :thing # needed for form_for to figure out path.
