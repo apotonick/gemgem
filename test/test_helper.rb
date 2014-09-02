@@ -14,3 +14,17 @@ class ActiveSupport::TestCase
 end
 
 Rails.backtrace_cleaner.remove_silencers!
+
+# TODO: make cleaner work with our stuff.
+# require 'database_cleaner'
+# DatabaseCleaner.strategy = :transaction
+class MiniTest::Spec
+  # before :each do
+  #   DatabaseCleaner.start
+  # end
+  after :each do
+    # DatabaseCleaner.clean
+    User.delete_all
+
+  end
+end

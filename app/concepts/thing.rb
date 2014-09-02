@@ -19,11 +19,11 @@ class Thing < ActiveRecord::Base
     # TODO: image_url: (only in representer!)
 
     # idea: make it a req to have 3 authors or something to demonstrate complex validations/consolidations.
-    collection :authors, embedded: true,
+    collection :authors, embedded: true do # TODO: move into form, this is no API logic.
       # show how this goes into form, as no api logic.
       property :twitter
       property :github
-    do # TODO: move into form, this is no API logic.
+
 
       property :email
     end
@@ -42,6 +42,7 @@ class Thing < ActiveRecord::Base
     collection :authors, embedded: true do
       property :email
       validates :email, presence: true
+      validates_uniqueness_of :email
     end
   end
 
@@ -65,8 +66,12 @@ class Thing < ActiveRecord::Base
         include Schema
         validates :name, presence: true
 
-        collection :authors, inherit: true, populate_if_empty: lambda { |hash, *args|
-          (id = hash.delete("email").sub("id:", "") and User.find(id)) or User.new }  # TODO: move into form, this is no API logic.
+        collection :authors, inherit: true,
+          # TODO: this is no API logic.
+          populate_if_empty: lambda { |hash, *| # next: Callable!
+            (id = hash.delete("id") and User.find(id)) or User.new # API behaviour.
+            #(id = hash.delete("email") .sub("id:", "") and User.find(id)) or User.new
+          }
 
 
         model :thing # needed for form_for to figure out path.

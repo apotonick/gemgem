@@ -66,5 +66,6 @@ end
 
 group :test do
   gem 'minitest-spec-rails'
+  gem 'database_cleaner'
 end
 
