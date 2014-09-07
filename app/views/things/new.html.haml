@@ -1,5 +1,4 @@
-%h1 Things#new
-%p Find me in app/views/things/new.html.haml
+%h2 What do you want to talk about?
 
 = simple_form_for [@form] do |f|
   = f.input :name
@@ -8,7 +7,7 @@
   - if @form.model.image.exists?
     = image_tag @form.model.image[:thumb].url
 
-  = f.button :submit
+  = f.button :submit, class: :expand
   -# TODO: the id should be around in edit mode only.
   = f.text_field :id, value: @form.model.id
 

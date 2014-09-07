@@ -4,7 +4,7 @@ class ThingOperationTest < MiniTest::Spec
 
   # new user
   it do
-    thing = Thing::Operation::Create[name: "Cells", authors: ["email" => "nick@trb.org"]].model
+    thing = Thing::Operation::Create[name: "Cells", authors: ["email" => "nick@trb.org", "id" => ""]].model
 
     # for API, existing author are automatically associated.
     user = User.find_by_email("nick@trb.org")

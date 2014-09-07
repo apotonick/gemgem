@@ -74,7 +74,7 @@ class Thing < ActiveRecord::Base
         collection :authors, inherit: true,
           # TODO: this is no API logic.
           populate_if_empty: lambda { |hash, *| # next: Callable!
-            (id = hash.delete("id") and User.find(id)) or User.new # API behaviour.
+            (hash["id"].present? and User.find(hash["id"])) or User.new # API behaviour.
             #(id = hash.delete("email") .sub("id:", "") and User.find(id)) or User.new
           },
           skip_if: :all_blank do
