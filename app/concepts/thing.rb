@@ -76,13 +76,16 @@ class Thing < ActiveRecord::Base
           populate_if_empty: lambda { |hash, *| # next: Callable!
             (id = hash.delete("id") and User.find(id)) or User.new # API behaviour.
             #(id = hash.delete("email") .sub("id:", "") and User.find(id)) or User.new
-          } do
+          },
+          skip_if: :all_blank do
 
             validate :email_ok?
             def email_ok?
               return if email.blank?
               errors.add("email", "wrong format") unless email =~ /@/ # yepp, i know.
             end
+
+            property :id, virtual: true, empty: true
           end
 
 

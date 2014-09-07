@@ -31,7 +31,7 @@ gem 'disposable' #, path: "../disposable"
 gem 'cells', "3.11.2" #path: "../cells"
 gem 'roar-rails', path: '../roar-rails'
 gem 'responders'
-# gem 'representable', path: "../representable"
+gem 'representable', path: "../representable"
 gem 'trailblazer', path: "../trailblazer"
 # gem 'paperdragon', path: "../paperdragon"
 gem 'paperdragon', "0.0.6"#path: "../paperdragon"
