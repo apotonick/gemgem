@@ -12,6 +12,9 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require foundation
 //= require_tree .
 //= require jquery.Jcrop
 //= require jquery-ui/autocomplete
+
+$(function(){ $(document).foundation(); });
