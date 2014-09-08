@@ -70,6 +70,7 @@ class Thing < ActiveRecord::Base
     class Create < Trailblazer::Operation
       class Contract < Reform::Form
         include Schema
+        model :thing # needed for form_for to figure out path.
 
         collection :authors, inherit: true,
           # TODO: this is no API logic.
@@ -92,9 +93,6 @@ class Thing < ActiveRecord::Base
 
             property :id, virtual: true, empty: true
           end
-
-
-        model :thing # needed for form_for to figure out path.
 
         property :image, empty: true
 
@@ -193,10 +191,9 @@ class Thing < ActiveRecord::Base
 
     class Upload < Trailblazer::Operation
       def process(model, file)
-        # metadata = Image.new({}).task(file) do |v|
         model.image(file) do |v|
           v.process!(:original)
-          v.process!(:thumb) { |job| job.thumb!("180x180#") }
+          v.process!(:thumb) { |job| job.thumb!("48x48#") }
         end
 
         model.save
