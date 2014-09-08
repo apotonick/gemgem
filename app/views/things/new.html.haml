@@ -1,21 +1,24 @@
 %h2 What do you want to talk about?
 
 = simple_form_for [@form] do |f|
-  = f.input :name
+  = f.input :name, placeholder: "Name", label: false
   = f.input :image, as: :file
   - # this should appear in edit mode, only.
   - if @form.model.image.exists?
     = image_tag @form.model.image[:thumb].url
 
-  = f.button :submit, class: :expand
+
   -# TODO: the id should be around in edit mode only.
-  = f.text_field :id, value: @form.model.id
+  = f.hidden_field :id, value: @form.model.id
 
   %p
     Do you know any authors?
     = f.fields_for :authors do |a|
       = a.input :email
-      = a.input :id
+      = a.hidden_field :id
+
+  = f.button :submit, class: :expand
+
 :javascript
   $("input.email").autocomplete({
     source: '#{search_users_path}',

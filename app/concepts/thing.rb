@@ -75,11 +75,16 @@ class Thing < ActiveRecord::Base
           # TODO: this is no API logic.
           populate_if_empty: lambda { |hash, *| # next: Callable!
             (hash["id"].present? and User.find(hash["id"])) or User.new # API behaviour.
-            #(id = hash.delete("email") .sub("id:", "") and User.find(id)) or User.new
           },
           skip_if: :all_blank do
 
             validate :email_ok?
+
+            def email=(value)
+              return if persisted? # make email non-writable for existing users.
+              super(value)
+            end
+
             def email_ok?
               return if email.blank?
               errors.add("email", "wrong format") unless email =~ /@/ # yepp, i know.

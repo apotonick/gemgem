@@ -12,7 +12,7 @@ class ThingOperationTest < MiniTest::Spec
     User.count.must_equal 1 # TODO: this shouldn't be here.
   end
 
-  # empty user
+  # blank user gets ignored
   it do
     thing = Thing::Operation::Create[name: "Cells", authors: ["email" => ""]].model
 
@@ -20,7 +20,7 @@ class ThingOperationTest < MiniTest::Spec
     User.count.must_equal 0 # TODO: this shouldn't be here.
   end
 
-  # new user, email invalid # TODO: make this invalid!
+  # new user, email invalid
   it do
     exc = assert_raises Trailblazer::Operation::InvalidContract do
       thing = Thing::Operation::Create[name: "Cells", authors: ["email" => "argh"]].model
@@ -44,6 +44,15 @@ class ThingOperationTest < MiniTest::Spec
     thing = Thing::Operation::Create[name: "Cells", authors: ["id" => user.id]].model
 
     thing.authors.must_equal [user]
+  end
+
+  # user-id AND invalid email for existing user, email gets ignored.
+  it do
+    user  = User::Operation::Create[name: "Nick", email: "nick@trb.org"]
+    thing = Thing::Operation::Create[name: "Cells", authors: ["id" => user.id, "email" => "rubbish"]].model
+
+    thing.authors.must_equal [user]
+    user.email.must_equal "nick@trb.org"
   end
 
   # user-id but not existing.
