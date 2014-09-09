@@ -193,7 +193,7 @@ class Thing < ActiveRecord::Base
       def process(model, file)
         model.image(file) do |v|
           v.process!(:original)
-          v.process!(:thumb) { |job| job.thumb!("48x48#") }
+          v.process!(:thumb) { |job| job.thumb!("72x72#") }
         end
 
         model.save
@@ -223,7 +223,7 @@ class Thing < ActiveRecord::Base
             # contract.save do |h|
               # cropping = "#{(h[:w]*r).to_i}x#{(h[:w]*r).to_i}+#{(h[:x]*r).to_i}+#{(h[:y]*r).to_i}"
               cropping = "#{(contract.w*r).to_i}x#{(contract.h*r).to_i}+#{(contract.x*r).to_i}+#{(contract.y*r).to_i}"
-              v.reprocess!(:thumb, Time.now.to_i) { |j| j.thumb!(cropping).thumb!("180x180#") }
+              v.reprocess!(:thumb, Time.now.to_i) { |j| j.thumb!(cropping).thumb!("72x72#") }
             # end
             #   file type is wrong
 
