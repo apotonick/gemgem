@@ -11,8 +11,8 @@
   -# TODO: the id should be around in edit mode only.
   = f.hidden_field :id, value: @form.model.id
 
-  %p
-    Do you know any authors?
+  %fieldset
+    %legend Do you know any authors?
     = f.fields_for :authors do |a|
       = a.input :email
       = a.hidden_field :id
