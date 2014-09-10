@@ -4,6 +4,9 @@ class ThingsController < ApplicationController
   respond_to :html, :json
 
   def index
+    # pagination?
+    # collection [..]
+    @things = Thing.all.order("'created_at' DESC")
   end
 
   def new

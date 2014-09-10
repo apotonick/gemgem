@@ -1,18 +1,14 @@
-GIT
-  remote: https://github.com/haml/haml
-  revision: 9a4a53b48d8d5b31b9e524d5a5b2e9b1387e4785
+PATH
+  remote: ../roar
   specs:
-    haml (4.1.0.beta.1)
-      tilt
+    roar (0.13.0)
+      representable (~> 2.0.0)
 
 PATH
-  remote: ../reform
+  remote: ../trailblazer
   specs:
-    reform (1.1.1)
-      activemodel
-      disposable (~> 0.0.5)
-      representable (~> 2.0.3)
-      uber (~> 0.0.8)
+    trailblazer (0.0.1)
+      actionpack
 
 PATH
   remote: ../representable
@@ -23,15 +19,9 @@ PATH
       uber (~> 0.0.7)
 
 PATH
-  remote: ../roar
-  specs:
-    roar (1.0.0)
-      representable (~> 2.0.0)
-
-PATH
   remote: ../roar-rails
   specs:
-    roar-rails (1.0.0)
+    roar-rails (0.1.6)
       actionpack
       railties (>= 3.0.0)
       roar (>= 0.11.13)
@@ -39,10 +29,20 @@ PATH
       uber (>= 0.0.5)
 
 PATH
-  remote: ../trailblazer
+  remote: ../reform
   specs:
-    trailblazer (0.0.1)
-      actionpack
+    reform (1.1.1)
+      activemodel
+      disposable (~> 0.0.5)
+      representable (~> 2.0.3)
+      uber (~> 0.0.8)
+
+GIT
+  remote: https://github.com/haml/haml
+  revision: 9a4a53b48d8d5b31b9e524d5a5b2e9b1387e4785
+  specs:
+    haml (4.1.0.beta.1)
+      tilt
 
 GEM
   remote: https://rubygems.org/
