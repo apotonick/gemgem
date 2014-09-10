@@ -52,6 +52,7 @@ gem 'roar', path: "../roar"
 # gem 'debugger', group: [:development, :test]
 
 gem 'foundation-rails'
+gem 'foundation-icons-sass-rails'
 gem 'haml-rails'
 gem 'haml', git: 'https://github.com/haml/haml'
 gem 'simple_form'

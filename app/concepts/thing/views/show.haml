@@ -1,4 +1,6 @@
 %li
   = link_to thing_path(id) do
-    = image_tag(model.image[:thumb].url, width: 48) if model.image.exists?
+    = avatar
     = name
+    - # comments, needs to be cache busted!
+    - #edit link (if it's yours, which requires current_user)

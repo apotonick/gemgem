@@ -1,7 +1,7 @@
 %h2 What do you want to talk about?
 
 = simple_form_for [@form] do |f|
-  = f.input :name, placeholder: "Name", label: false
+  = f.input :name, placeholder: "Name", label: false, :as => :string
   = f.input :image, as: :file
   - # this should appear in edit mode, only.
   - if @form.model.image.exists?
