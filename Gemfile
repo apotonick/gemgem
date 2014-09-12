@@ -37,6 +37,8 @@ gem 'trailblazer', path: "../trailblazer"
 gem 'paperdragon', "0.0.7" # path: "../paperdragon"
 gem 'roar', path: "../roar"
 
+gem 'capybara'
+
   # bundle exec rake doc:rails generates the API under doc/api.
 
 # Use ActiveModel has_secure_password
