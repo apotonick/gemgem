@@ -1,0 +1,8 @@
+%li.rating{class: weight}
+  = model.user.email
+  = model.comment
+
+  - if rating.deleted?
+    = link_to "Undo", undo_rating_path(rating.id), method: :post
+  - else
+    = link_to "Delete", rating_path(rating.id), method: :delete

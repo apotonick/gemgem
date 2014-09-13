@@ -1,25 +1,17 @@
-%h1
-  #{@thing.name}
-  = link_to "Edit", edit_thing_path(@thing)
+.header
+  = image_tag @thing.image[:thumb].url if @thing.image.exists?
 
-= image_tag @thing.image[:thumb].url if @thing.image.exists?
+  %h1
+    #{@thing.name}
+    = link_to "Edit", edit_thing_path(@thing)
 
-By
-- @thing.authors.each do |author|
-  = author.email
+  By
+  - @thing.authors.each do |author|
+    = author.email
 
 = concept("rating/cell/form", @form).call
 
 %ul
   - @thing.ratings.reverse.each do |rating|
     %li
-      = rating.id
-      = link_to rating.comment, thing_rating_path(@thing.id, rating.id)
-      #{rating.weight}
-      - if rating.deleted?
-        = link_to "Undo", undo_rating_path(rating.id), method: :post
-      - else
-        = link_to "Delete", rating_path(rating.id), method: :delete
-      - # TODO: the URL helpers are so clumsy, make de-nesting resources easier.
-
-      = rating.user.email if rating.user
+      = concept("rating/cell/row", rating).call

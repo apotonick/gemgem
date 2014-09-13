@@ -6,7 +6,7 @@
 
   - # DISCUSS: this is as close as possible to the API. we could "simplify" that by allowing thing_id: in UI forms.
   = f.fields_for :thing do |t|
-    = t.input :id
+    = t.input :id, as: :hidden
 
   = f.fields_for :user do |u|
     = u.input :email, placeholder: "Email", label: false

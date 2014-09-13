@@ -1,0 +1,18 @@
+// Place all the styles related to the Rating controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.header {
+  margin-bottom: 9px;
+
+  img { float: left; margin-right: 6px; }
+  h1 { margin: 0; }
+
+}
+
+ul {
+  list-style-type: none;
+
+}
+
+li.positive { background-color: green; padding: 10px; }

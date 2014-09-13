@@ -17,6 +17,25 @@ class Rating::Cell < Cell::Concept
     link_to model.thing.name, thing_path(model.thing.id) # FIXME: allow super.
   end
 
+  class Row < Cell::Concept
+    inherit_views Rating::Cell
+
+    def show
+      return unless model.user
+      # return _prefixes.inspect
+      # model.user.email.inspect
+
+      render :row
+    end
+
+  private
+    def weight
+      model.weight == 1 ? :positive : :negative
+    end
+
+    alias_method :rating, :model
+  end
+
 
   class Form < Cell::Concept
     inherit_views Rating::Cell
