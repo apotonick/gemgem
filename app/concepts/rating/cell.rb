@@ -25,8 +25,6 @@ class Rating::Cell < Cell::Concept
 
     def show
       return unless model.user
-      # return _prefixes.inspect
-      # model.user.email.inspect
 
       render :row
     end
