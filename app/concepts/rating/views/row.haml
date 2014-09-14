@@ -1,5 +1,8 @@
 %li.rating{class: weight}
-  = model.user.email
+  .header
+    = date
+    = model.user.email
+
   = model.comment
 
   - if rating.deleted?

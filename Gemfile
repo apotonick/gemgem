@@ -55,6 +55,8 @@ gem 'foundation-icons-sass-rails'
 gem 'haml-rails'
 gem 'haml', git: 'https://github.com/haml/haml'
 gem 'simple_form'
+gem 'rails-timeago'
+
 gem 'therubyracer', :platform=>:ruby
 
 group :development do

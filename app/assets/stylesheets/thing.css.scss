@@ -12,7 +12,8 @@
 
 ul {
   list-style-type: none;
-
+  margin-left: 0;
 }
 
-li.positive { background-color: green; padding: 10px; }
+li.positive { background-color: #61FAA9; padding: 10px; }
+li.negative { background-color: #DCDEDD; padding: 10px; }

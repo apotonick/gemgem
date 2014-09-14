@@ -16,5 +16,6 @@
 //= require_tree .
 //= require jquery.Jcrop
 //= require jquery-ui/autocomplete
+//= require rails-timeago
 
 $(function(){ $(document).foundation(); });

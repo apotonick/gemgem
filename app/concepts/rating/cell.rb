@@ -20,6 +20,9 @@ class Rating::Cell < Cell::Concept
   class Row < Cell::Concept
     inherit_views Rating::Cell
 
+    include ActionView::Helpers::DateHelper
+    include Rails::Timeago::Helper
+
     def show
       return unless model.user
       # return _prefixes.inspect
@@ -33,6 +36,10 @@ class Rating::Cell < Cell::Concept
       model.weight == 1 ? :positive : :negative
     end
 
+    def date
+      timeago_tag model.created_at, limit: 99.days.ago
+    end
+
     alias_method :rating, :model
   end
 
@@ -42,6 +49,7 @@ class Rating::Cell < Cell::Concept
 
     include ActionView::Helpers::FormHelper # TODO: fix in simple_form.
     include SimpleForm::ActionViewExtensions::FormHelper
+
     def dom_class(*)
       :rating
     end
