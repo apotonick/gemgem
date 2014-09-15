@@ -5,6 +5,7 @@ class RatingOperationTest < MiniTest::Spec
 
 
   # valid create
+  # TODO: this must require user!
   it do
     rating = Rating::Operation::Create[
       thing:   {id: thing.id},
@@ -27,6 +28,30 @@ class RatingOperationTest < MiniTest::Spec
     res.must_equal false
     operation.contract.errors.messages.must_equal(:thing=>["can't be blank"])
   end
+
+  # create only works once with unregistered (new) user.
+  it do
+    op = Rating::Operation::Create[
+      thing:   {id: thing.id},
+      comment: "Fantastic!",
+      weight:  1,
+      user:    {email: "gerd@wurst.com"}
+    ]
+
+    op.unconfirmed?.must_equal true
+
+    # second call is invalid!
+    res, op = Rating::Operation::Create.run(
+      thing:   {id: thing.id},
+      comment: "Absolutely amazing!",
+      weight:  1,
+      user:    {email: "gerd@wurst.com"}
+    )
+
+    res.must_equal false
+    op.contract.errors.to_s.must_equal ""
+  end
+  # TODO: test registered user (unconfirmed? must always be true).
 
   # delete
   it do
