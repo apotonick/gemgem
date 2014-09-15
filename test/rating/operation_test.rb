@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class RatingOperationTest < MiniTest::Spec
-  let (:thing) { Thing::Operation::Create[name: "Ruby"] }
+  let (:thing) { Thing::Operation::Create[name: "Ruby"].model }
 
 
   # valid create
@@ -18,14 +18,14 @@ class RatingOperationTest < MiniTest::Spec
 
   # invalid create
   it do
-    res, contract = Rating::Operation::Create.run(
+    res, operation = Rating::Operation::Create.run(
       # thing:   {id: thing.id},
       comment: "Fantastic!",
       weight:  1
     )
 
     res.must_equal false
-    contract.errors.messages.must_equal(:thing=>["can't be blank"])
+    operation.contract.errors.messages.must_equal(:thing=>["can't be blank"])
   end
 
   # delete

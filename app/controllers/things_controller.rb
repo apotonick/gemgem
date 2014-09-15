@@ -19,8 +19,9 @@ class ThingsController < ApplicationController
     operation = request.format == :json ? Thing::Operation::Create::JSON : Thing::Operation::Create
     _params    = request.format == :json ? params.merge(request_body: request.body.string) : params[:thing]
 
-    op = operation.new
-    _, @form = op.run(_params)
+    _, op = operation.run(_params)
+
+    @form = op.contract
 
     respond_with op
   end
@@ -62,12 +63,14 @@ class ThingsController < ApplicationController
   def form # TODO: this should happen in the cell-ajax.
     # DISCUSS: we could also think about hooking an Endpoint/Operation to a route that then renders the cell?
     # but, why? UI and API have different behaviour anyway.
-    @form = Rating::Operation::Create.run(params[:rating]) do |form|
+    op = Rating::Operation::Create.run(params[:rating]) do |op|
       flash[:notice] = "All good."
-      return redirect_to thing_path(form.model.thing)
+      return redirect_to thing_path(op.model.thing)
     end
 
-    @thing = @form.thing.model # HTML logic.
+    # this should be op.thing
+    @thing = op.contract.thing.model # HTML logic.
+    @form = op.contract
 
     render action: :show
   end

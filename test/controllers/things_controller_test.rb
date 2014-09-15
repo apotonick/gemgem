@@ -6,7 +6,7 @@ class ThingsControllerTest < ActionController::TestCase
 
   tests ThingsController
 
-  let (:thing) { Thing::Operation::Create[name: "Cells"] }
+  let (:thing) { Thing::Operation::Create[name: "Cells"].model }
 
   # JSON HAL tests.
   test "[json] POST /things" do
