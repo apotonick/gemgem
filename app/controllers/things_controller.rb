@@ -66,8 +66,9 @@ class ThingsController < ApplicationController
     # use Endpoint::Create::"Form" here directly.
     @thing = Thing.find(params[:id])
 
-    @form = Rating::Operation::Create.run(params[:rating]) do |c|
-     return redirect_to thing_path(@thing.id)
+    @form = Rating::Operation::Create.run(params[:rating]) do |form|
+      flash[:notice] = "All good."
+      return redirect_to thing_path(form.model.thing.id)
     end
 
     render action: :show

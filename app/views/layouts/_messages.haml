@@ -1,0 +1,6 @@
+- flashes = {:notice => 'success', :alert => 'standard', :error => 'alert', :secondary => 'secondary'}
+- flashes.each do |key, value|
+  - if flash[key]
+    .alert-box{:class => value, :data => { :alert => '' } }
+      = flash[key]
+      =# link_to '&times;'.html_safe, '#', :class => 'close'

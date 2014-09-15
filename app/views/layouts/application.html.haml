@@ -12,5 +12,7 @@
       .small-4.column
         = yield
       .small-2.column
+        = render 'layouts/messages'
+
         = link_to "New Thing", new_thing_path
         = link_to "Things...", things_path
