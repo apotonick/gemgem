@@ -62,14 +62,12 @@ class ThingsController < ApplicationController
   def form # TODO: this should happen in the cell-ajax.
     # DISCUSS: we could also think about hooking an Endpoint/Operation to a route that then renders the cell?
     # but, why? UI and API have different behaviour anyway.
-
-    # use Endpoint::Create::"Form" here directly.
-    @thing = Thing.find(params[:id])
-
     @form = Rating::Operation::Create.run(params[:rating]) do |form|
       flash[:notice] = "All good."
-      return redirect_to thing_path(form.model.thing.id)
+      return redirect_to thing_path(form.model.thing)
     end
+
+    @thing = @form.thing.model # HTML logic.
 
     render action: :show
   end
