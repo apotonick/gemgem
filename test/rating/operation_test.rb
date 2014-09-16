@@ -5,12 +5,12 @@ class RatingOperationTest < MiniTest::Spec
 
 
   # valid create
-  # TODO: this must require user!
   it do
     rating = Rating::Operation::Create[
       thing:   {id: thing.id},
       comment: "Fantastic!",
-      weight:  1
+      weight:  1,
+      user:    {email: "gerd@wurst.com"}
     ].model
 
     assert rating.id > 0
@@ -26,7 +26,7 @@ class RatingOperationTest < MiniTest::Spec
     )
 
     res.must_equal false
-    operation.contract.errors.messages.must_equal(:thing=>["can't be blank"])
+    operation.contract.errors.messages.must_equal(:thing=>["can't be blank"], :user=>["can't be blank"])
   end
 
   # create only works once with unregistered (new) user.
@@ -58,7 +58,8 @@ class RatingOperationTest < MiniTest::Spec
     rating = Rating::Operation::Create[
       thing:   {id: thing.id},
       comment: "Fantastic!",
-      weight:  1
+      weight:  1,
+      user:    {email: "gerd@wurst.com"}
     ].model
 
     Rating::Operation::Delete[id: rating.id].must_equal rating
@@ -71,7 +72,8 @@ class RatingOperationTest < MiniTest::Spec
     rating = Rating::Operation::Create[
       thing:   {id: thing.id},
       comment: "Fantastic!",
-      weight:  1
+      weight:  1,
+      user:    {email: "gerd@wurst.com"}
     ].model
 
     Rating::Operation::Delete[id: rating.id].must_equal rating

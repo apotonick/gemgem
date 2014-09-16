@@ -58,6 +58,7 @@ class Rating < ActiveRecord::Base
           validates :email, presence: true
           # validates :email, email: true
         end
+        validates :user, presence: true
       end
 
       def setup!(params)
@@ -67,8 +68,14 @@ class Rating < ActiveRecord::Base
 
       def process(params)
         validate(params, model) do |f|
+          @unconfirmed = !f.user.model.persisted?
           f.save
         end
+      end
+
+      # i hereby break the statelessness!
+      def unconfirmed?
+        @unconfirmed
       end
     end
 
