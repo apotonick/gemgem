@@ -51,13 +51,23 @@ class Rating < ActiveRecord::Base
         end
 
 
-        property :user, populate_if_empty: User do
+        property :user, populate_if_empty: User do # we could create the User in the Operation#process?
           # property :name
           property :email
 
           validates :email, presence: true
           # validates :email, email: true
-          validates_uniqueness_of :email # this assures the new user is new and not an existing one.
+          #validates_uniqueness_of :email # this assures the new user is new and not an existing one.
+
+          # this should definitely NOT sit in the model.
+          validate :confirmed_or_new_and_unique?
+
+          def confirmed_or_new_and_unique?
+            existing = User.find_by_email(email)
+            return if existing.nil?
+            return if existing and existing.password_digest
+            errors.add(:email, "User needs to be confirmed first.")
+          end
         end
         validates :user, presence: true
       end
@@ -68,8 +78,9 @@ class Rating < ActiveRecord::Base
       attr_reader :model
 
       def process(params)
+        # create user here?
         validate(params, model) do |f|
-          @unconfirmed = !f.user.model.persisted?
+          @unconfirmed = !f.user.model.persisted? # if we create the user here, we don't need this logic?
           f.save
         end
       end
