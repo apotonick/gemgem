@@ -52,11 +52,12 @@ class Rating < ActiveRecord::Base
 
 
         property :user, populate_if_empty: User do
-          property :name
+          # property :name
           property :email
 
           validates :email, presence: true
           # validates :email, email: true
+          validates_uniqueness_of :email # this assures the new user is new and not an existing one.
         end
         validates :user, presence: true
       end
