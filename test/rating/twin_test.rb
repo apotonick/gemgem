@@ -4,7 +4,8 @@ class RatingTwinTest < MiniTest::Spec
   let (:rating) { Rating::Operation::Create[
     thing:   {id: 1},
     comment: "Fantastic!",
-    weight:  1].model
+    weight:  1,
+    user:    {email: "gerd@wurst.de"}].model
   }
 
   let (:twin) { Rating::Twin.new(rating) }

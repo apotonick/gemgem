@@ -64,7 +64,7 @@ class ThingsController < ApplicationController
     # DISCUSS: we could also think about hooking an Endpoint/Operation to a route that then renders the cell?
     # but, why? UI and API have different behaviour anyway.
     op = Rating::Operation::Create.run(params[:rating]) do |op|
-      flash[:notice] = "All good."
+      flash[:notice] = op.unconfirmed? ? "Check your email and confirm your account!" : "All good."
       return redirect_to thing_path(op.model.thing)
     end
 

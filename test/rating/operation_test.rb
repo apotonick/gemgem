@@ -49,7 +49,7 @@ class RatingOperationTest < MiniTest::Spec
     )
 
     res.must_equal false
-    op.contract.errors.to_s.must_equal ""
+    op.contract.errors.to_s.must_equal "{:\"user.email\"=>[\"has already been taken\"]}"
   end
   # TODO: test registered user (unconfirmed? must always be true).
 
