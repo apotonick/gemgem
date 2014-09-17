@@ -81,9 +81,13 @@ class Rating < ActiveRecord::Base
         # create user here?
         validate(params, model) do |f|
           @unconfirmed = !f.user.model.persisted? # if we create the user here, we don't need this logic?
+          # should that go to the Twin?
           # @needs_confirmation_to_proceed
 
           f.save # save rating and user.
+
+          require 'monban_extensions'
+          Monban::ConfirmLater[id: f.model.id] # set confirmation_token.
           # send_confirmation_email(f) if @unconfirmed
           # notify!
         end

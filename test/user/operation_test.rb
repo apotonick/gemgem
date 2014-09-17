@@ -25,5 +25,18 @@ class UserOperationTest < MiniTest::Spec
       {value: "#{user3.id}", label: "apotonick@gmail.com"}
     ]
   end
+
+  # confirm account
+  it do
+    # op = Thing::Operation::Create[name: "Trb"]
+    # rating = Rating::Operation::Create[comment: "Interesting!", weight: 1, thing: {id: op.model.id}, user: {email: "nick@trb.org"}].model
+
+    require 'monban_extensions'
+    user1 = User::Operation::Create[email: "nick@trailblazerb.org"]
+    Monban::ConfirmLater[id: 1] # set User#confirmation_token. this is sent.
+    Monban::AllowConfirmation[confirmation_token: "afsdfasd"] # in before_filter, policy.
+    Monban::Confirm[id: 1, password: "abc"]
+    # Monban::SignIn[]
+  end
 end
 
