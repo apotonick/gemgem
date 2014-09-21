@@ -88,7 +88,6 @@ class Rating < ActiveRecord::Base
 
           # this is totally unconfirmed-only!
           # TODO: test this via OP#ran
-          require 'monban_extensions'
           Monban::ConfirmLater[id: f.model.user.id] # set confirmation_token.
           # send_confirmation_email(f) if @unconfirmed
           # notify!

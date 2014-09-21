@@ -31,7 +31,6 @@ class UserOperationTest < MiniTest::Spec
     # op = Thing::Operation::Create[name: "Trb"]
     # rating = Rating::Operation::Create[comment: "Interesting!", weight: 1, thing: {id: op.model.id}, user: {email: "nick@trb.org"}].model
 
-    require 'monban_extensions'
     user1 = User::Operation::Create[email: "nick@trailblazerb.org"]
     Monban::ConfirmLater[id: user1.id] # set User#confirmation_token. this is sent.
     user1.reload

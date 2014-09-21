@@ -22,7 +22,7 @@ Gemgem::Application.routes.draw do
 
     member do
       get :confirm
-      post :confirm_save
+      patch :confirm_save
     end
   end
 

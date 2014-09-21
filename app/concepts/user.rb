@@ -10,6 +10,8 @@ class User < ActiveRecord::Base
 
     class Confirm < Trailblazer::Operation
       class Contract < Reform::Form
+        model :user
+
         property :password, empty: true
         property :password_confirm, virtual: true, empty: true
 
@@ -21,8 +23,9 @@ class User < ActiveRecord::Base
       end
 
       def process(params)
-        validate(params, @model) do
-
+        validate(params[:user], @model) do
+          # note how i don't call f.save here.
+          Monban::Confirm[params]
         end
       end
     end
