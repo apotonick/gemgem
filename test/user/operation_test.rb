@@ -33,9 +33,17 @@ class UserOperationTest < MiniTest::Spec
 
     require 'monban_extensions'
     user1 = User::Operation::Create[email: "nick@trailblazerb.org"]
-    Monban::ConfirmLater[id: 1] # set User#confirmation_token. this is sent.
-    Monban::AllowConfirmation[confirmation_token: "afsdfasd"] # in before_filter, policy.
-    Monban::Confirm[id: 1, password: "abc"]
+    Monban::ConfirmLater[id: user1.id] # set User#confirmation_token. this is sent.
+    user1.reload
+    user1.confirmation_token.wont_equal nil
+
+    Monban::IsConfirmationAllowed[id: user1.id, confirmation_token: "afsdfa"].must_equal false # in before_filter, policy.
+    Monban::IsConfirmationAllowed[id: user1.id, confirmation_token: "abc123"].must_equal true
+
+    Monban::Confirm[id: user1.id, password: "abc"] # call this from console!
+    user1.reload
+    assert user1.password_digest.size > 10
+
     # Monban::SignIn[]
   end
 end

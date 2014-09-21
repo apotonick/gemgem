@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140916113545) do
+ActiveRecord::Schema.define(version: 20140921034342) do
 
   create_table "ratings", force: true do |t|
     t.text     "comment"
@@ -38,6 +38,7 @@ ActiveRecord::Schema.define(version: 20140916113545) do
     t.string "email"
     t.string "twitter"
     t.string "password_digest"
+    t.string "confirmation_token"
   end
 
 end
