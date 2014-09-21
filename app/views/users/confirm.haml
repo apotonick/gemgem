@@ -6,7 +6,8 @@
 
   = f.button :submit, "Confirm!", class: :expand
 
-%h3 Postings so far
+%h3 What you said...
 
 -# TODO: op.ratings..., access via Op.
+-# TODO: display with thing!
 = concept("rating/cell/row", @form.model.ratings.first).call if @form.model.ratings.first
