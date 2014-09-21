@@ -1,0 +1,12 @@
+%h1 #{@form.model.email}, confirm your account!
+
+= simple_form_for(@form, url: confirm_save_user_path(@form.model)) do |f|
+  = f.input :password, placeholder: "Password", label: false
+  = f.input :password_confirm, placeholder: "Password, again", label: false
+
+  = f.button :submit, "Confirm!", class: :expand
+
+%h3 Postings so far
+
+-# TODO: op.ratings..., access via Op.
+= concept("rating/cell/row", @form.model.ratings.first).call if @form.model.ratings.first

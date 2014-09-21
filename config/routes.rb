@@ -19,6 +19,11 @@ Gemgem::Application.routes.draw do
     collection do
       get :search
     end
+
+    member do
+      get :confirm
+      post :confirm_save
+    end
   end
 
 
