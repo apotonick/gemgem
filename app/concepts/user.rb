@@ -8,14 +8,16 @@ class User < ActiveRecord::Base
       end
     end
 
+    # should we check IsConfirmationAllowed? here?
     class Confirm < Trailblazer::Operation
       class Contract < Reform::Form
         model :user
 
         property :password, empty: true
-        property :password_confirm, virtual: true, empty: true
+        property :password_confirmation, empty: true
 
         validates :password, presence: true, confirmation: true
+        validates :password_confirmation, presence: true
       end
 
       def setup!(params) # TODO: man, abstract this into Operation::Model
@@ -23,9 +25,9 @@ class User < ActiveRecord::Base
       end
 
       def process(params)
-        validate(params[:user], @model) do
+        validate(params[:user], @model) do |f|
           # note how i don't call f.save here.
-          Monban::Confirm[params]
+          Monban::Confirm[id: params[:id], password: f.to_hash[:password]]
         end
       end
     end

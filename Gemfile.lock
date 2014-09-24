@@ -1,8 +1,8 @@
 PATH
   remote: ../roar
   specs:
-    roar (0.13.0)
-      representable (~> 2.1.0)
+    roar (1.0.0)
+      representable (>= 2.0.0, <= 2.1.0)
 
 PATH
   remote: ../trailblazer

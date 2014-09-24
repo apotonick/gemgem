@@ -26,24 +26,38 @@ class UserOperationTest < MiniTest::Spec
     ]
   end
 
+  let (:user) { User::Operation::Create[email: "nick@trailblazerb.org"] }
   # confirm account
   it do
     # op = Thing::Operation::Create[name: "Trb"]
     # rating = Rating::Operation::Create[comment: "Interesting!", weight: 1, thing: {id: op.model.id}, user: {email: "nick@trb.org"}].model
 
-    user1 = User::Operation::Create[email: "nick@trailblazerb.org"]
-    Monban::ConfirmLater[id: user1.id] # set User#confirmation_token. this is sent.
-    user1.reload
-    user1.confirmation_token.wont_equal nil
+    Monban::ConfirmLater[id: user.id] # set User#confirmation_token. this is sent.
+    user.reload
+    user.confirmation_token.wont_equal nil
 
-    Monban::IsConfirmationAllowed[id: user1.id, confirmation_token: "afsdfa"].must_equal false # in before_filter, policy.
-    Monban::IsConfirmationAllowed[id: user1.id, confirmation_token: "abc123"].must_equal true
+    Monban::IsConfirmationAllowed[id: user.id, confirmation_token: "afsdfa"].must_equal false # in before_filter, policy.
+    Monban::IsConfirmationAllowed[id: user.id, confirmation_token: "abc123"].must_equal true
 
-    Monban::Confirm[id: user1.id, password: "abc"] # call this from console!
-    user1.reload
-    assert user1.password_digest.size > 10
+    Monban::Confirm[id: user.id, password: "abc"] # call this from console!
+    user.reload
+    assert user.password_digest.size > 10
 
     # Monban::SignIn[]
+  end
+
+  # PUBLIC confirm, differing passwords. this happens after IsConfirmationAllowed?
+  it do
+    res, op = User::Operation::Confirm.run(id: user.id, user: {password: "abc", password_confirmation: "bbbbbbb"})
+    res.must_equal false
+    op.contract.errors.to_s.must_equal "{:password_confirmation=>[\"doesn't match Password\"]}"
+  end
+
+  # Confirm valid.
+  it do
+    op = User::Operation::Confirm[id: user.id, user: {password: "abc", password_confirmation: "abc"}]
+
+    assert User.find(user.id).password_digest.size > 10
   end
 end
 

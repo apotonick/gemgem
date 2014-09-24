@@ -2,7 +2,7 @@
 
 = simple_form_for(@form, url: confirm_save_user_path(@form.model)) do |f|
   = f.input :password, placeholder: "Password", label: false
-  = f.input :password_confirm, placeholder: "Password, again", label: false
+  = f.input :password_confirmation, placeholder: "Password, again", label: false
 
   = f.button :submit, "Confirm!", class: :expand
 

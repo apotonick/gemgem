@@ -22,7 +22,7 @@ class UsersController < ApplicationController
     end
 
     @form = op.contract
-    render action: :confirm
+    render action: :confirm # DISCUSS: rendering should work on Op?
     # raise op.contract.errors.inspect
   end
 
