@@ -1,0 +1,7 @@
+%h1 Come in, have a cookie!
+
+= simple_form_for(@form) do |f|
+  = f.input :email, placeholder: "Email", label: false
+  = f.input :password, placeholder: "Password", label: false
+
+  = f.button :submit, "Sign in!", class: :expand

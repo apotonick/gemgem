@@ -53,6 +53,12 @@ class RatingOperationTest < MiniTest::Spec
   end
   # TODO: test registered user (unconfirmed? must always be true).with and without user: {}
 
+  # signed in user
+  # valid create
+  it do
+
+  end
+
   # delete
   it do
     rating = Rating::Operation::Create[

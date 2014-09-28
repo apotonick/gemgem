@@ -1,6 +1,12 @@
 Gemgem::Application.routes.draw do
   root 'home#index'
 
+  resources :sessions do
+    collection do
+      get :signout
+    end
+  end
+
   resources :things do
     resources :ratings
     member do

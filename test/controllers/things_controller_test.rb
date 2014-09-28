@@ -5,19 +5,6 @@ class ThingsControllerTest < ActionController::TestCase
   # include Monban::Test::Helpers
   # Monban.test_mode!
 
-
-  module MonbanMockToBePushedIntoGem
-    def warden
-      @warden ||= begin
-        manager = Warden::Manager.new(nil) do |config|
-          config.merge! Monban.warden_config
-        end
-        # changed from @request to request.
-        request.env['warden'] = Warden::Proxy.new(request.env, manager)
-      end
-    end
-  end
-
   tests ThingsController
 
   setup do

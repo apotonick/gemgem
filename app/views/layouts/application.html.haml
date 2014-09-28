@@ -12,8 +12,13 @@
       .small-4.column
         = yield
       .small-3.column
+        - # TODO: test me.
         - if signed_in?
           Hi, #{current_user.email}
+          = link_to "Sign out", signout_sessions_path
+        - else
+          = link_to "Sign in", new_session_path
+
 
         = render 'layouts/messages'
 

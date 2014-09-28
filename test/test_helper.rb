@@ -28,3 +28,15 @@ class MiniTest::Spec
 
   end
 end
+
+module MonbanMockToBePushedIntoGem
+  def warden
+    @warden ||= begin
+      manager = Warden::Manager.new(nil) do |config|
+        config.merge! Monban.warden_config
+      end
+      # changed from @request to request.
+      request.env['warden'] = Warden::Proxy.new(request.env, manager)
+    end
+  end
+end
