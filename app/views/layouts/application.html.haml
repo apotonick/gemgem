@@ -11,8 +11,14 @@
 
       .small-4.column
         = yield
-      .small-2.column
+      .small-3.column
+        - if signed_in?
+          Hi, #{current_user.email}
+
         = render 'layouts/messages'
 
-        = link_to "New Thing", new_thing_path
-        = link_to "Things...", things_path
+        %ul
+          %li
+            = link_to "New Thing", new_thing_path
+          %li
+            = link_to "Things...", things_path

@@ -2,9 +2,27 @@ require 'test_helper'
 
 class ThingsControllerTest < ActionController::TestCase
   include Roar::Rails::TestCase
-  include Roar::Rails::TestCase
+  # include Monban::Test::Helpers
+  # Monban.test_mode!
+
+
+  module MonbanMockToBePushedIntoGem
+    def warden
+      @warden ||= begin
+        manager = Warden::Manager.new(nil) do |config|
+          config.merge! Monban.warden_config
+        end
+        # changed from @request to request.
+        request.env['warden'] = Warden::Proxy.new(request.env, manager)
+      end
+    end
+  end
 
   tests ThingsController
+
+  setup do
+    @controller.extend(MonbanMockToBePushedIntoGem)
+  end
 
   let (:thing) { Thing::Operation::Create[name: "Cells"].model }
 
@@ -49,6 +67,7 @@ class ThingsControllerTest < ActionController::TestCase
     assert_select "form"
   end
 
+  # not signed in.
   test "should get new" do
     get :new
     assert_response :success
