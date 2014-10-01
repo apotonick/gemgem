@@ -39,6 +39,7 @@ class Rating < ActiveRecord::Base
   module Operation
     class Create < Trailblazer::Operation
      class Contract < Reform::Form
+        include Reform::Form::ModelReflections
         include Form
 
         model :rating
