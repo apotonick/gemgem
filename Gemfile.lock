@@ -1,32 +1,9 @@
-PATH
-  remote: ../roar
+GIT
+  remote: https://github.com/haml/haml
+  revision: 9a4a53b48d8d5b31b9e524d5a5b2e9b1387e4785
   specs:
-    roar (1.0.0)
-      representable (>= 2.0.0, <= 2.1.0)
-
-PATH
-  remote: ../trailblazer
-  specs:
-    trailblazer (0.0.1)
-      actionpack
-
-PATH
-  remote: ../representable
-  specs:
-    representable (2.1.0)
-      multi_json
-      nokogiri
-      uber (~> 0.0.7)
-
-PATH
-  remote: ../roar-rails
-  specs:
-    roar-rails (0.1.6)
-      actionpack
-      railties (>= 3.0.0)
-      roar (>= 0.11.13)
-      test_xml (>= 0.1.6)
-      uber (>= 0.0.5)
+    haml (4.1.0.beta.1)
+      tilt
 
 PATH
   remote: ../cells
@@ -40,8 +17,8 @@ PATH
 PATH
   remote: ../disposable
   specs:
-    disposable (0.0.6)
-      representable (~> 2.1.0)
+    disposable (0.0.8)
+      representable (~> 2.0)
       uber
 
 PATH
@@ -49,16 +26,39 @@ PATH
   specs:
     reform (1.1.1)
       activemodel
-      disposable (~> 0.0.5)
-      representable (~> 2.1.0)
+      disposable (~> 0.0.8)
+      representable (>= 2.0.3, < 2.2.0)
       uber (~> 0.0.8)
 
-GIT
-  remote: https://github.com/haml/haml
-  revision: 9a4a53b48d8d5b31b9e524d5a5b2e9b1387e4785
+PATH
+  remote: ../representable
   specs:
-    haml (4.1.0.beta.1)
-      tilt
+    representable (2.1.0)
+      multi_json
+      nokogiri
+      uber (~> 0.0.7)
+
+PATH
+  remote: ../roar
+  specs:
+    roar (1.0.0)
+      representable (>= 2.0.0, <= 2.1.0)
+
+PATH
+  remote: ../roar-rails
+  specs:
+    roar-rails (1.0.0)
+      actionpack
+      railties (>= 3.0.0)
+      roar (>= 0.11.13)
+      test_xml (>= 0.1.6)
+      uber (>= 0.0.5)
+
+PATH
+  remote: ../trailblazer
+  specs:
+    trailblazer (0.0.1)
+      actionpack
 
 GEM
   remote: https://rubygems.org/
