@@ -71,6 +71,15 @@ class Rating < ActiveRecord::Base
           end
         end
         validates :user, presence: true
+
+
+        class SignedIn < self
+          # include Reform::Twin
+
+          # twin Twin
+          property :user
+          property :thing
+        end
       end
 
       def setup!(params)
@@ -79,6 +88,8 @@ class Rating < ActiveRecord::Base
       attr_reader :model
 
       def process(params)
+        return process_with_signed_in(params) if params[:current_user_id]
+
         # create user here?
         validate(params, model) do |f|
           @unconfirmed = !f.user.model.persisted? # if we create the user here, we don't need this logic?
@@ -98,6 +109,19 @@ class Rating < ActiveRecord::Base
       # i hereby break the statelessness!
       def unconfirmed?
         @unconfirmed
+      end
+
+    private
+      def process_with_signed_in(params)
+        # raise
+        @model = Rating.new(
+          user: User.find(params[:current_user_id]),
+          thing: Thing.find(params[:thing_id]),
+          ) # this could be done by the Twin that knows how to find objects by id.
+
+        validate(params, @model, Contract::SignedIn) do |f|
+          f.save
+        end
       end
     end
 
