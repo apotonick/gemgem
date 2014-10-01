@@ -77,7 +77,8 @@ class Rating < ActiveRecord::Base
           # include Reform::Twin
 
           # twin Twin
-          property :user
+          # representer_class.representable_attrs[:definitions].delete("user")
+          property :user, virtual: true # don't read user: field anymore, (but save it?????)
           property :thing
         end
       end

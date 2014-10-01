@@ -74,6 +74,26 @@ class RatingOperationTest < MiniTest::Spec
     rating.thing.must_equal thing
   end
 
+  # invalid run with user data that should not be changed.
+  it do
+    user = User::Operation::Create[email: "ryan@trb.org"]
+
+    op = Rating::Operation::Create[
+      comment: "Fantastic!",
+      weight:  1,
+      user: {id: -1},
+
+      # this should be another option, not the same hash.
+      thing_id:        thing.id,
+      current_user_id: user.id # current_user always comes from the controller.
+    ]
+
+    rating = op.model
+    rating.user.must_equal user
+    rating.comment.must_equal "Fantastic!"
+    rating.thing.must_equal thing
+  end
+
 
   # delete
   it do
