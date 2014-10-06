@@ -38,7 +38,7 @@ class Rating < ActiveRecord::Base
   # think of this as Operation::Update
   module Operation
     class Create < Trailblazer::Operation
-     class Contract < Reform::Form
+      class Contract < Reform::Form
         include Form
 
         model :rating
@@ -70,6 +70,13 @@ class Rating < ActiveRecord::Base
           end
         end
         validates :user, presence: true
+
+
+        class SignedIn < self
+          # property :user, always_deserialize: true, populate_if_empty: lambda { |hsh| current_user } # access option.
+
+          property :user
+        end
       end
 
       def setup!(params)
@@ -77,10 +84,28 @@ class Rating < ActiveRecord::Base
       end
       attr_reader :model
 
-      def process(params)
+      # class SignedInRating < Disposable::Twin
+      #   property :weight
+      #   property :comment
+      #   option   :user
+      #   property :thing
+      # end
+
+      def process(params) # or (params, env)
+        if params[:current_user]
+          current_user = User.find(params[:current_user]) # this is always present as it comes from the caller?
+          @model.user = current_user
+        end
+
+        contract     = current_user ? Contract::SignedIn : Contract
         # create user here?
-        validate(params, model) do |f|
+        #model = SignedInRating.new(@model, user: current_user)
+
+
+        validate(params[:rating], model, contract) do |f|
+
           @unconfirmed = !f.user.model.persisted? # if we create the user here, we don't need this logic?
+
           # should that go to the Twin?
           # @needs_confirmation_to_proceed
 
