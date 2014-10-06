@@ -39,6 +39,7 @@ class Rating < ActiveRecord::Base
   module Operation
     class Create < Trailblazer::Operation
       class Contract < Reform::Form
+        include Reform::Form::ModelReflections
         include Form
 
         model :rating
@@ -75,7 +76,11 @@ class Rating < ActiveRecord::Base
         class SignedIn < self
           # property :user, always_deserialize: true, populate_if_empty: lambda { |hsh| current_user } # access option.
 
-          property :user
+
+          # twin Twin
+          # representer_class.representable_attrs[:definitions].delete("user")
+          property :user, virtual: true # don't read user: field anymore, (but save it?????)
+          property :thing
         end
       end
 
@@ -122,6 +127,19 @@ class Rating < ActiveRecord::Base
       # i hereby break the statelessness!
       def unconfirmed?
         @unconfirmed
+      end
+
+    private
+      def process_with_signed_in(params)
+        # raise
+        @model = Rating.new(
+          user: User.find(params[:current_user_id]),
+          thing: Thing.find(params[:thing_id]),
+          ) # this could be done by the Twin that knows how to find objects by id.
+
+        validate(params, @model, Contract::SignedIn) do |f|
+          f.save
+        end
       end
     end
 

@@ -89,12 +89,19 @@ class RatingOperationTest < MiniTest::Spec
         thing:   {id: thing.id},
         comment: "Absolutely amazing!",
         weight:  1,
-        user:    {email: "gerd@wurst.com"}
+        user:    {id: -1} # TODO: SHOULD BE EXISTING, WRONG USER!
       }
     )
 
-    res.must_equal false
-    op.contract.errors.to_s.must_equal "{:\"user.email\"=>[\"User needs to be confirmed first.\"]}"
+    rating = op.model
+    rating.user.must_equal user
+    rating.comment.must_equal "Fantastic!"
+    rating.thing.must_equal thing
+
+    # res.must_equal false
+
+    # op.contract.errors.to_s.must_equal "{:\"user.email\"=>[\"User needs to be confirmed first.\"]}"
+
   end
 
   # delete
