@@ -2,10 +2,14 @@ require 'test_helper'
 
 class RatingTwinTest < MiniTest::Spec
   let (:rating) { Rating::Operation::Create[
-    thing:   {id: 1},
-    comment: "Fantastic!",
-    weight:  1,
-    user:    {email: "gerd@wurst.de"}].model
+    rating: {
+      comment: "Fantastic!",
+      weight:  1,
+      user:    {email: "gerd@wurst.de"},
+    },
+    id: 1
+    ].model
+
   }
 
   let (:twin) { Rating::Twin.new(rating) }

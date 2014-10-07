@@ -1,6 +1,7 @@
 module Session
   class Signin < Trailblazer::Operation
     class Contract < Reform::Form
+      include ModelReflections
       property :email,    empty: true
       property :password, empty: true
 

@@ -27,8 +27,8 @@ class Rating < ActiveRecord::Base
     property :weight
 
     # i want rateable to be an actual object so i can verify it is a valid rateable_id!
-    property :thing, populate_if_empty: lambda { |fragment, *| Thing.find(fragment[:id]) } do
-    end # TODO: mark as typed. parse_strategy: :find_by_id would actually do what happens in the controller now.
+    property :thing#, populate_if_empty: lambda { |fragment, *| Thing.find(fragment[:id]) } do
+    #end # TODO: mark as typed. parse_strategy: :find_by_id would actually do what happens in the controller now.
 
     validates :comment, length: { in: 6..160 }
     validates :thing, presence: true
@@ -98,18 +98,23 @@ class Rating < ActiveRecord::Base
 
       def process(params) # or (params, env)
         if params[:current_user]
-          current_user = User.find(params[:current_user]) # this is always present as it comes from the caller?
+          # demonstrates that we're not bound to hashs, only.
+          current_user = params[:current_user] # this is always present as it comes from the caller?
           @model.user = current_user
         end
+        # I don't want that as populate_if_empty bull.
+        @model.thing = Thing.find_by_id(params[:id])
 
         contract     = current_user ? Contract::SignedIn : Contract
         # create user here?
         #model = SignedInRating.new(@model, user: current_user)
 
 
-        validate(params[:rating], model, contract) do |f|
+        validate(params[:rating], @model, contract) do |f|
 
-          @unconfirmed = !f.user.model.persisted? # if we create the user here, we don't need this logic?
+          if !params[:current_user]
+            @unconfirmed = !f.user.model.persisted? # if we create the user here, we don't need this logic?
+          end
 
           # should that go to the Twin?
           # @needs_confirmation_to_proceed

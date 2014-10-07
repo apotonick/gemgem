@@ -8,11 +8,12 @@ class RatingOperationTest < MiniTest::Spec
   it do
     rating = Rating::Operation::Create[
       rating: {
-        thing:   {id: thing.id},
+        # thing:   {id: thing.id},
         comment: "Fantastic!",
         weight:  1,
         user:    {email: "gerd@wurst.com"}
-      }
+      },
+      id: thing.id
     ].model
 
     assert rating.id > 0
@@ -37,11 +38,12 @@ class RatingOperationTest < MiniTest::Spec
   it do
     op = Rating::Operation::Create[
       rating: {
-        thing:   {id: thing.id},
+        # thing:   {id: thing.id},
         comment: "Fantastic!",
         weight:  1,
         user:    {email: "gerd@wurst.com"}
-      }
+      },
+      id: thing.id
     ]
 
     op.unconfirmed?.must_equal true
@@ -49,11 +51,12 @@ class RatingOperationTest < MiniTest::Spec
     # second call is invalid!
     res, op = Rating::Operation::Create.run(
       rating: {
-        thing:   {id: thing.id},
+        # thing:   {id: thing.id},
         comment: "Absolutely amazing!",
         weight:  1,
         user:    {email: "gerd@wurst.com"}
-      }
+      },
+      id: thing.id
     )
 
     res.must_equal false
@@ -63,17 +66,18 @@ class RatingOperationTest < MiniTest::Spec
 
   # signed in
   # valid create
-  it do
+  it "xxxx" do
     ryan = User::Operation::Create[email: "ryan@trb.com"]
 
     op = Rating::Operation::Create[
       rating: {
-        thing:   {id: thing.id},
+        # thing:   {id: thing.id},
         comment: "Fantastic!",
         weight:  1
       },
+      id: thing.id,
 
-      current_user: ryan.id # this should be in another hash, as this is Op-specific. what if the above hash was JSON string?
+      current_user: ryan # this should be in another hash, as this is Op-specific. what if the above hash was JSON string?
     ]
 
     op.unconfirmed?.must_equal nil
@@ -84,18 +88,22 @@ class RatingOperationTest < MiniTest::Spec
   # signed in
   # invalid with user
   it do
+    ryan = User::Operation::Create[email: "ryan@trb.com"]
+
     res, op = Rating::Operation::Create.run(
       rating: {
-        thing:   {id: thing.id},
+        # thing:   {id: thing.id},
         comment: "Absolutely amazing!",
         weight:  1,
         user:    {id: -1} # TODO: SHOULD BE EXISTING, WRONG USER!
-      }
+      },
+      id: thing.id,
+      current_user: ryan
     )
 
     rating = op.model
-    rating.user.must_equal user
-    rating.comment.must_equal "Fantastic!"
+    rating.user.must_equal ryan
+    rating.comment.must_equal "Absolutely amazing!"
     rating.thing.must_equal thing
 
     # res.must_equal false
@@ -108,11 +116,12 @@ class RatingOperationTest < MiniTest::Spec
   it do
     rating = Rating::Operation::Create[
       rating: {
-        thing:   {id: thing.id},
+        # thing:   {id: thing.id},
         comment: "Fantastic!",
         weight:  1,
         user:    {email: "gerd@wurst.com"}
-      }
+      },
+      id: thing.id
     ].model
 
     Rating::Operation::Delete[id: rating.id].must_equal rating
@@ -124,11 +133,12 @@ class RatingOperationTest < MiniTest::Spec
   it do
     rating = Rating::Operation::Create[
       rating: {
-        thing:   {id: thing.id},
+        # thing:   {id: thing.id},
         comment: "Fantastic!",
         weight:  1,
         user:    {email: "gerd@wurst.com"}
-      }
+      },
+      id: thing.id
     ].model
 
     Rating::Operation::Delete[id: rating.id].must_equal rating
