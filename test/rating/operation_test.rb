@@ -87,7 +87,7 @@ class RatingOperationTest < MiniTest::Spec
 
   # signed in
   # invalid with user
-  it do
+  it "zzz" do
     ryan = User::Operation::Create[email: "ryan@trb.com"]
 
     res, op = Rating::Operation::Create.run(
@@ -95,11 +95,14 @@ class RatingOperationTest < MiniTest::Spec
         # thing:   {id: thing.id},
         comment: "Absolutely amazing!",
         weight:  1,
-        user:    {id: -1} # TODO: SHOULD BE EXISTING, WRONG USER!
+        user:    {id: -1}, # TODO: SHOULD BE EXISTING, WRONG USER!
+        thing: {id: "bullshit"}
       },
       id: thing.id,
       current_user: ryan
     )
+
+    op.contract.thing.must_equal ryan
 
     rating = op.model
     rating.user.must_equal ryan

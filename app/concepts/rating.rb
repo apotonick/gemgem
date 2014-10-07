@@ -27,7 +27,7 @@ class Rating < ActiveRecord::Base
     property :weight
 
     # i want rateable to be an actual object so i can verify it is a valid rateable_id!
-    property :thing#, populate_if_empty: lambda { |fragment, *| Thing.find(fragment[:id]) } do
+    property :thing, virtual: true #, populate_if_empty: lambda { |fragment, *| Thing.find(fragment[:id]) } do
     #end # TODO: mark as typed. parse_strategy: :find_by_id would actually do what happens in the controller now.
 
     validates :comment, length: { in: 6..160 }
@@ -51,6 +51,11 @@ class Rating < ActiveRecord::Base
           super or 1 # select Nice!
         end
 
+
+        # FIXME: we need something like "validate this, but don't write it in validate (and after, like virtual)"
+        def thing=(*)
+          # it should not be allowed!
+        end
 
         property :user, populate_if_empty: User do # we could create the User in the Operation#process?
           # property :name
@@ -80,7 +85,7 @@ class Rating < ActiveRecord::Base
           # twin Twin
           # representer_class.representable_attrs[:definitions].delete("user")
           property :user, virtual: true # don't read user: field anymore, (but save it?????)
-          property :thing
+          property :thing, virtual: true
         end
       end
 

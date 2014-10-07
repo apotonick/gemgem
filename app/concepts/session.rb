@@ -1,7 +1,6 @@
 module Session
   class Signin < Trailblazer::Operation
     class Contract < Reform::Form
-      include ModelReflections
       property :email,    empty: true
       property :password, empty: true
 
@@ -15,8 +14,6 @@ module Session
         nil
       end
       model :session
-
-      undef_method :column_for_attribute # TODO: allow un-ARed forms in Reform/Rails.
 
     private
       def password_ok?
