@@ -38,6 +38,11 @@ class Rating < ActiveRecord::Base
   # think of this as Operation::Update
   module Operation
     class Create < Trailblazer::Operation
+      extend Cell::Builder::ClassMethods
+      build do |params|
+        SignedIn if params[:current_user]
+      end
+
       class Contract < Reform::Form
         include Reform::Form::ModelReflections
         include Form
