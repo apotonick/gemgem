@@ -52,8 +52,9 @@ class Rating < ActiveRecord::Base
         end
 
 
-        # FIXME: we need something like "validate this, but don't write it in validate (and after, like virtual)"
+        # TODO: if this remains necessary, implement readonly: true in Reform.
         def thing=(*)
+          # property :thing, readonly: true
           # it should not be allowed!
         end
 
@@ -79,9 +80,6 @@ class Rating < ActiveRecord::Base
 
 
         class SignedIn < self
-          # property :user, always_deserialize: true, populate_if_empty: lambda { |hsh| current_user } # access option.
-
-
           # twin Twin
           # representer_class.representable_attrs[:definitions].delete("user")
           property :user, virtual: true # don't read user: field anymore, (but save it?????)
@@ -89,10 +87,8 @@ class Rating < ActiveRecord::Base
         end
       end
 
-      def setup!(params)
-        @model = Rating.new
-      end
-      attr_reader :model
+      include CRUD
+      model Rating
 
       # class SignedInRating < Disposable::Twin
       #   property :weight
@@ -105,18 +101,17 @@ class Rating < ActiveRecord::Base
         if params[:current_user]
           # demonstrates that we're not bound to hashs, only.
           current_user = params[:current_user] # this is always present as it comes from the caller?
-          @model.user = current_user
+          model.user = current_user
         end
         # I don't want that as populate_if_empty bull.
-        @model.thing = Thing.find_by_id(params[:id])
+        model.thing = Thing.find_by_id(params[:id])
 
         contract     = current_user ? Contract::SignedIn : Contract
         # create user here?
         #model = SignedInRating.new(@model, user: current_user)
 
 
-        validate(params[:rating], @model, contract) do |f|
-
+        validate(params[:rating], contract) do |f|
           if !params[:current_user]
             @unconfirmed = !f.user.model.persisted? # if we create the user here, we don't need this logic?
           end
@@ -137,19 +132,6 @@ class Rating < ActiveRecord::Base
       # i hereby break the statelessness!
       def unconfirmed?
         @unconfirmed
-      end
-
-    private
-      def process_with_signed_in(params)
-        # raise
-        @model = Rating.new(
-          user: User.find(params[:current_user_id]),
-          thing: Thing.find(params[:thing_id]),
-          ) # this could be done by the Twin that knows how to find objects by id.
-
-        validate(params, @model, Contract::SignedIn) do |f|
-          f.save
-        end
       end
     end
 
