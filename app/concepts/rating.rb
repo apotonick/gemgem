@@ -42,6 +42,9 @@ class Rating < ActiveRecord::Base
       build do |params|
         SignedIn if params[:current_user]
       end
+      def self.build_operation(params)
+        Cell::Builder.new(self).call(params)
+      end
 
       class Contract < Reform::Form
         include Reform::Form::ModelReflections
