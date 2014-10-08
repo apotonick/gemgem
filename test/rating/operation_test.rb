@@ -69,7 +69,7 @@ class RatingOperationTest < MiniTest::Spec
   it "xxxx" do
     ryan = User::Operation::Create[email: "ryan@trb.com"]
 
-    op = Rating::Operation::Create[
+    op = Rating::Operation::Create::SignedIn[
       rating: {
         # thing:   {id: thing.id},
         comment: "Fantastic!",
@@ -90,7 +90,7 @@ class RatingOperationTest < MiniTest::Spec
   it "zzz" do
     ryan = User::Operation::Create[email: "ryan@trb.com"]
 
-    res, op = Rating::Operation::Create.run(
+    res, op = Rating::Operation::Create::SignedIn.run(
       rating: {
         # thing:   {id: thing.id},
         comment: "Absolutely amazing!",

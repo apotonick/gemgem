@@ -77,51 +77,25 @@ class Rating < ActiveRecord::Base
           end
         end
         validates :user, presence: true
-
-
-        class SignedIn < self
-          # twin Twin
-          # representer_class.representable_attrs[:definitions].delete("user")
-          property :user, virtual: true # don't read user: field anymore, (but save it?????)
-          property :thing, virtual: true
-        end
       end
 
       include CRUD
       model Rating
 
-      # class SignedInRating < Disposable::Twin
-      #   property :weight
-      #   property :comment
-      #   option   :user
-      #   property :thing
-      # end
-
       def process(params) # or (params, env)
-        if params[:current_user]
-          # demonstrates that we're not bound to hashs, only.
-          current_user = params[:current_user] # this is always present as it comes from the caller?
-          model.user = current_user
-        end
         # I don't want that as populate_if_empty bull.
         model.thing = Thing.find_by_id(params[:id])
 
-        contract     = current_user ? Contract::SignedIn : Contract
-        # create user here?
         #model = SignedInRating.new(@model, user: current_user)
 
-
-        validate(params[:rating], contract) do |f|
-          if !params[:current_user]
+        validate(params[:rating]) do |f|
             @unconfirmed = !f.user.model.persisted? # if we create the user here, we don't need this logic?
-          end
 
           # should that go to the Twin?
           # @needs_confirmation_to_proceed
 
           f.save # save rating and user.
 
-          # this is totally unconfirmed-only!
           # TODO: test this via OP#ran
           Monban::ConfirmLater[id: f.model.user.id] # set confirmation_token.
           # send_confirmation_email(f) if @unconfirmed
@@ -132,6 +106,27 @@ class Rating < ActiveRecord::Base
       # i hereby break the statelessness!
       def unconfirmed?
         @unconfirmed
+      end
+
+
+      class SignedIn < self
+        class Contract < Contract
+          property :user,  virtual: true # don't read user: field anymore, (but save it?????)
+          property :thing, virtual: true # TODO: should be readonly: true
+
+          # FIXME: find out why this is not inherited?
+          # def confirmed_or_new_and_unique?; end # TODO: make it simple to remove validations.
+        end
+
+        def process(params)
+          # demonstrates that we're not bound to hashs, only.
+          model.user = params[:current_user] # this is always present as it comes from the caller?
+          model.thing = Thing.find_by_id(params[:id])
+
+          validate(params[:rating]) do |f|
+            f.save # save rating and user.
+          end
+        end
       end
     end
 
