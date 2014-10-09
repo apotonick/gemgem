@@ -139,7 +139,7 @@ class Rating < ActiveRecord::Base
       def setup!(params)
         thing  = Thing.find(params[:id])
         @model = Rating.new(thing_id: thing.id)
-        @model.build_user # DISCUSS: where does this go?
+        @model.build_user
       end
     end
 

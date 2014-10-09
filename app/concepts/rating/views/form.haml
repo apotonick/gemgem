@@ -3,17 +3,10 @@
   = f.input :comment, placeholder: "Your comment", label: false
   = f.collection_radio_buttons :weight, [[1, 'Nice!'] ,[0, 'Rubbish!']], :first, :last
 
-
-  = f.fields_for :user do |u|
-    = u.input :email, placeholder: "Your Email", label: false
+  - unless signed_in? # this demonstrates that, yes, we may use deciders.
+    = f.fields_for :user do |u|
+      = u.input :email, placeholder: "Your Email", label: false
 
   = f.button :submit, class: :expand
-
-  - # DISCUSS: this is as close as possible to the API. we could "simplify" that by allowing thing_id: in UI forms.
-  = f.fields_for :thing do |t|
-    = t.input :id, as: :hidden
-
-
-
 
 = model.errors.messages

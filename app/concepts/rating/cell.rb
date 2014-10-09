@@ -58,5 +58,10 @@ class Rating::Cell < Cell::Concept
     def show
       render :form
     end
+
+  private
+    def signed_in?
+      false
+    end
   end
 end
