@@ -1,6 +1,12 @@
 class User < ActiveRecord::Base
   has_many :ratings
 
+  include Paperdragon::Model
+  processable :image
+  serialize :image_meta_data
+
+  require_dependency 'user/update'
+
   module Operation
     class Create < Trailblazer::Operation
       def process(params)

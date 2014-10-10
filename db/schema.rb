@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140921034342) do
+ActiveRecord::Schema.define(version: 20141010093859) do
 
   create_table "ratings", force: true do |t|
     t.text     "comment"
@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(version: 20140921034342) do
     t.string "twitter"
     t.string "password_digest"
     t.string "confirmation_token"
+    t.text   "image_meta_data"
   end
 
 end

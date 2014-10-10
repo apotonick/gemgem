@@ -9,7 +9,8 @@
   - @thing.authors.each do |author|
     = author.email
 
-= concept("rating/cell/form", @form).call
+-# c/u should be passed via a Twin that is set up in the top Op/Comp.
+= concept("rating/cell/form", @form, current_user: current_user).call
 
 %ul
   - @thing.ratings.reverse.each do |rating|

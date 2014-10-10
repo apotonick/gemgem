@@ -27,6 +27,16 @@ class MiniTest::Spec
     User.delete_all
 
   end
+
+  def upload(name="vb.jpg")
+    tmp = Tempfile.new("bla")
+    tmp.write File.open("test/fixtures/#{name}").read
+
+    ActionDispatch::Http::UploadedFile.new(
+    :tempfile => tmp,
+    :filename => name,
+    :type     => "image/png")
+  end
 end
 
 module MonbanMockToBePushedIntoGem

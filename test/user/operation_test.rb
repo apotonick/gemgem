@@ -59,5 +59,14 @@ class UserOperationTest < MiniTest::Spec
 
     assert User.find(user.id).password_digest.size > 10
   end
+
+  # Edit
+  # Update
+  it "xx" do
+    User::Update[id: user.id, user: {image: upload}]
+
+    user.reload
+    user.image_meta_data.must_equal :original=>{:width=>1280, :height=>720, :uid=>"original-vb.jpg"}, :thumb=>{:width=>75, :height=>75, :uid=>"thumb-vb.jpg"}
+  end
 end
 
