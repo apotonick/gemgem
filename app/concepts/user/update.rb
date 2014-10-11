@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
       model User
 
       property :name
-      property :email
+      property :email, validates: {presence: true}
       property :image, file: true, virtual: true, sync: lambda { |image|
         model.image(file) do |v|
           v.process!(:original)

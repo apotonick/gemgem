@@ -23,12 +23,14 @@ class UsersController < ApplicationController
   end
 
   # full-on Op[]
-  def run(operation_class, params=self.params)
-    @operation = operation_class[params]
+  def run(operation_class, params=self.params, &block)
+    # only if format==:html!!!!!!!
+    res, @operation = operation_class.run(params)
+
     @form      = @operation.contract
     @model     = @operation.model
 
-    yield @operation
+    yield @operation if res
   end
   private :present, :run
 
@@ -43,14 +45,16 @@ class UsersController < ApplicationController
   end
 
   def update
+    # ideally,we only need html config here. if not, pass format into block?!
+    # json etc should be handled in responder per default (api behaviour).
     run User::Update do |op|
       # html only.
       flash[:notice] = "Updated."
 
-      # this is why i use cells:
-      # @form = op.contract
-      render action: :edit # DISCUSS: should that be done automatically IN #run?
+      return render action: :edit # DISCUSS: should that be done automatically IN #run?
     end
+
+    render action: :edit
   end
 
   # maybe that should be abstracted in a higher Operation?

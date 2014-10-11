@@ -9,3 +9,5 @@
     = image_tag @model.image[:thumb].url
 
   = f.button :submit, class: :expand
+
+  = @form.errors.to_s
