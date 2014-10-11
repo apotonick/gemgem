@@ -20,4 +20,13 @@ class UsersControllerTest < ActionController::TestCase
     # assert page.has_css? "#user_email"
     assert_select "#user_email[value='#{user.email}']"
   end
+
+  test "/users/1/update" do
+   # visit "/users/#{user.id}"
+   post :update, id: user.id, user: {name: "Ryan"}
+
+    assert_response :success
+    # assert page.has_css? "#user_email"
+    assert_select "#user_name[value='Ryan']"
+  end
 end

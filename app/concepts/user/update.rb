@@ -20,12 +20,14 @@ class User < ActiveRecord::Base
     def process(params)
       file = params[:user].delete(:image) if params[:user].is_a?(Hash) # FIXME: that sucks.
 
-      validate(params) do |f|
+      validate(params[:user]) do |f|
         # now, the image is validated, but not processed, yet!
 
-        model.image(file) do |v|
-          v.process!(:original)
-          v.process!(:thumb)   { |job| job.thumb!("75x75#") }
+        if file
+          model.image(file) do |v|
+            v.process!(:original)
+            v.process!(:thumb)   { |job| job.thumb!("75x75#") }
+          end
         end
 
         f.save
