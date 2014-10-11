@@ -45,6 +45,11 @@ class ThingsController < ApplicationController
 
   # TODO: test with and without image
   def show
+    # params[:current_user] = current_user if signed_in?
+    context = OpenStruct.new(current_user: current_user, id: params[:id]) # "Twin"
+    #, to be passed into everything underneath this (cell -> operation).
+
+
     op = Thing::Operation::Show.new
     _, @thing = op.run(params)
 
@@ -57,6 +62,7 @@ class ThingsController < ApplicationController
     # what if we had a Cell(contract/operation).show for html here? (to_html)
 
     # ok, who keeps signed-in user? op? twin?
+
 
     # this is UI, only, and could also be in a cell.
     @form = Rating::Operation::New.contract(params)

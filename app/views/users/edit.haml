@@ -1,0 +1,11 @@
+%h2 Edit Your Profile
+
+= simple_form_for [@form] do |f|
+  = f.input :name, placeholder: "Name", label: false, :as => :string
+  = f.input :email, placeholder: "Email", label: false, :as => :string
+  = f.input :image, as: :file
+  - # this should appear in edit mode, only.
+  - if @form.model.image.exists?
+    = image_tag @form.model.image[:thumb].url
+
+  = f.button :submit, class: :expand

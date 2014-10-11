@@ -62,7 +62,7 @@ class UserOperationTest < MiniTest::Spec
 
   # Edit
   # Update
-  it "xx" do
+  it "User::Update" do
     User::Update[id: user.id, user: {image: upload}]
 
     user.reload
