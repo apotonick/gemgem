@@ -15,12 +15,20 @@ class UsersController < ApplicationController
 
   # no #validate!
   def present(operation_class, params=self.params)
-    yield operation_class.new(:validate => false).run(params).last # FIXME: make that available via Operation.
+    @operation = operation_class.new(:validate => false).run(params).last # FIXME: make that available via Operation.
+    @form      = @operation.contract
+    @model     = @operation.model
+
+    yield @operation
   end
 
   # full-on Op[]
   def run(operation_class, params=self.params)
-    yield operation_class[params]
+    @operation = operation_class[params]
+    @form      = @operation.contract
+    @model     = @operation.model
+
+    yield @operation
   end
   private :present, :run
 
@@ -38,7 +46,10 @@ class UsersController < ApplicationController
     run User::Update do |op|
       # html only.
       flash[:notice] = "Updated."
-  render action: edit
+
+      # this is why i use cells:
+      # @form = op.contract
+      render action: :edit # DISCUSS: should that be done automatically IN #run?
     end
   end
 

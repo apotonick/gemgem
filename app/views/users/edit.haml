@@ -5,7 +5,7 @@
   = f.input :email, placeholder: "Email", label: false, :as => :string
   = f.input :image, as: :file
   - # this should appear in edit mode, only.
-  - if @form.model.image.exists?
-    = image_tag @form.model.image[:thumb].url
+  - if @model.image.exists?
+    = image_tag @model.image[:thumb].url
 
   = f.button :submit, class: :expand

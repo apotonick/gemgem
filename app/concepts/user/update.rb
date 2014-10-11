@@ -5,7 +5,11 @@ class User < ActiveRecord::Base
 
       property :name
       property :email
-      property :image, file: true
+      property :image, file: true, virtual: true, sync: lambda { |image|
+        model.image(file) do |v|
+          v.process!(:original)
+          v.process!(:thumb)   { |job| job.thumb!("75x75#") }
+        end } # :sync will be Twin job at some point.
 
       # TODO: validations for image.
     end
@@ -14,15 +18,17 @@ class User < ActiveRecord::Base
     model User, :update
 
     def process(params)
-      validate(params) do
-        file = params[:user][:image]
+      file = params[:user].delete(:image) if params[:user].is_a?(Hash) # FIXME: that sucks.
+
+      validate(params) do |f|
+        # now, the image is validated, but not processed, yet!
 
         model.image(file) do |v|
           v.process!(:original)
           v.process!(:thumb)   { |job| job.thumb!("75x75#") }
         end
 
-        model.save
+        f.save
       end
     end
   end
