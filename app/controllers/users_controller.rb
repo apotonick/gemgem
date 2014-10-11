@@ -33,12 +33,12 @@ class UsersController < ApplicationController
   private :present, :run
 
   def edit
-    # TODO: authorization
+    # TODO: authorization, is that me trying to update?
 
     present User::Update do |op| # this runs op."contract" but returns the op. Op#init ?
       # this is absolutely ok here - this is presentation logic only for HTML.
       # i could also use User::Edit but i don't need it presently.
-      @form = op.contract
+      # @form = op.contract
     end
   end
 
