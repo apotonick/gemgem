@@ -39,9 +39,9 @@ class UsersController < ApplicationController
     unless request.format == :html
       # FIXME: how do we know the "name" of the Operation body?
       # return respond_with User::Update::JSON.run(params.merge(user: request.body.string))
-      op = User::Update::JSON.run(params.merge(user: request.body.string))
-
-      return Else.new(op, op.invalid?)
+      res, op = User::Update::JSON.run(params.merge(user: request.body.string))
+      render :text => 'yo'
+      return Else.new(op, false)
     end
 
     # only if format==:html!!!!!!!

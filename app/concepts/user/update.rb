@@ -44,12 +44,11 @@ class User < ActiveRecord::Base
         end
       end
 
-       def process(params)
-         validate(params[:user]) do
-            model.save
-         end
-         puts "done with #proc"
-       end
+       # def process(params)
+       #   validate(params[:user]) do
+       #      model.save
+       #   end
+       # end
     end
   end
 end
