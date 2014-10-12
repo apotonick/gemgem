@@ -23,9 +23,25 @@ class UsersController < ApplicationController
   end
 
   # full-on Op[]
+  class Else
+    def initialize(op, run)
+      @op  = op
+      @run = run
+    end
+
+    def else
+      yield @op if @run
+    end
+  end
+
+  # Endpoint::Invocation
   def run(operation_class, params=self.params, &block)
     unless request.format == :html
-      return respond_with User::Update::JSON.run(params.merge(body: request.body.string))
+      # FIXME: how do we know the "name" of the Operation body?
+      # return respond_with User::Update::JSON.run(params.merge(user: request.body.string))
+      op = User::Update::JSON.run(params.merge(user: request.body.string))
+
+      return Else.new(op, op.invalid?)
     end
 
     # only if format==:html!!!!!!!
@@ -35,6 +51,8 @@ class UsersController < ApplicationController
     @model     = @operation.model
 
     yield @operation if res
+
+    Else.new(op, !res)
   end
   private :present, :run
 
@@ -54,11 +72,10 @@ class UsersController < ApplicationController
     run User::Update do |op|
       # html only.
       flash[:notice] = "Updated."
-
-      return render action: :edit # DISCUSS: should that be done automatically IN #run?
+      render action: :edit # DISCUSS: should that be done automatically IN #run?
+    end.else do
+      render action: :edit # invalid.
     end
-
-    render action: :edit # invalid.
   end
 
   # maybe that should be abstracted in a higher Operation?

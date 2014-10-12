@@ -1,6 +1,6 @@
 class SessionsController < ApplicationController
   def new
-    @form = Session::Signin.contract({})
+    @form = Session::Signin.present({})
   end
 
   # TODO: test me.

@@ -68,7 +68,7 @@ class Thing < ActiveRecord::Base
     end
 
     class Create < Trailblazer::Operation
-      class Contract < Reform::Form
+      contract do
         include Schema
         model :thing # needed for form_for to figure out path.
 
@@ -143,7 +143,7 @@ class Thing < ActiveRecord::Base
 
 
       class JSON < self
-        class Contract < Reform::Form
+        contract do
           include Schema
 
           collection :authors, inherit: true,

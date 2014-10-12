@@ -42,7 +42,7 @@ class Rating < ActiveRecord::Base
         SignedIn if params[:current_user]
       end
 
-      class Contract < Reform::Form
+      contract do
         include Reform::Form::ModelReflections
         include Form
 
@@ -114,7 +114,7 @@ class Rating < ActiveRecord::Base
 
 
       class SignedIn < self
-        class Contract < Contract
+        contract do
           property :user,  virtual: true # don't read user: field anymore, (but save it?????)
           property :thing, virtual: true # TODO: should be readonly: true
 

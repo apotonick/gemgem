@@ -6,7 +6,7 @@ class RatingCellTest < MiniTest::Spec
 
   it do
     thing = Thing::Operation::Create[name: "Apotomo"].model
-    form = Rating::Operation::New.contract(id: thing.id)
+    form = Rating::Operation::New.present(id: thing.id)
 
     html = Rating::Cell::Form.new(controller, form).show
     # puts html

@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
   class Update < Trailblazer::Operation
-    class Contract < Reform::Form
+    contract do
       model User
 
       property :name
@@ -36,7 +36,7 @@ class User < ActiveRecord::Base
 
 
     class JSON < self
-      class Contract < Contract
+      contract do
         representer_class.send(:include, Representable::JSON)
 
         def deserialize_method
@@ -44,9 +44,12 @@ class User < ActiveRecord::Base
         end
       end
 
-      # def process(params)
-      #   raise params.inspect
-      # end
+       def process(params)
+         validate(params[:user]) do
+            model.save
+         end
+         puts "done with #proc"
+       end
     end
   end
 end

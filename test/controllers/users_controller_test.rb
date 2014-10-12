@@ -33,6 +33,10 @@ class UsersControllerTest < ActionController::TestCase
 
   # POST update.json
   test "/users/1/update.json" do
-    post :update, {user: {name: "Ryan"}}.to_json, id: user.id, format: :json
+    post :update, {name: "Ryan"}.to_json, id: user.id, format: :json
+
+    # TODO: test respond_with
+    user.reload
+    user.name.must_equal "Ryan"
   end
 end

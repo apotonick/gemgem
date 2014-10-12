@@ -1,8 +1,8 @@
 require 'test_helper'
 
 class SessionOperationTest < MiniTest::Spec
-  # Signin#contract
-  it { Session::Signin.contract({}).must_be_kind_of Reform::Form }
+  # Signin#present
+  it { Session::Signin.present({}).must_be_kind_of Reform::Form }
 
   # Signin#run, user not existent.
   it do

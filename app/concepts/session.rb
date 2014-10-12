@@ -1,6 +1,6 @@
 module Session
   class Signin < Trailblazer::Operation
-    class Contract < Reform::Form
+    contract do
       property :email,    empty: true
       property :password, empty: true
 

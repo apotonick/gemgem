@@ -16,7 +16,7 @@ class User < ActiveRecord::Base
 
     # should we check IsConfirmationAllowed? here?
     class Confirm < Trailblazer::Operation
-      class Contract < Reform::Form
+      contract do
         model :user
 
         property :password, empty: true

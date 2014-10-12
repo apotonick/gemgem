@@ -10,7 +10,7 @@ class ThingsController < ApplicationController
   end
 
   def new
-    @form = Thing::Operation::Create.contract(params) # Thing::Endpoint::New or Operation::Form::New
+    @form = Thing::Operation::Create.present(params) # Thing::Endpoint::New or Operation::Form::New
   end
 
   def create
