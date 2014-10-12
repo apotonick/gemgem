@@ -21,6 +21,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_select "#user_email[value='#{user.email}']"
   end
 
+  # POST update
   test "/users/1/update" do
    # visit "/users/#{user.id}"
    post :update, id: user.id, user: {name: "Ryan"}
@@ -28,5 +29,10 @@ class UsersControllerTest < ActionController::TestCase
     assert_response :success
     # assert page.has_css? "#user_email"
     assert_select "#user_name[value='Ryan']"
+  end
+
+  # POST update.json
+  test "/users/1/update.json" do
+    post :update, {user: {name: "Ryan"}}.to_json, id: user.id, format: :json
   end
 end

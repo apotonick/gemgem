@@ -33,5 +33,20 @@ class User < ActiveRecord::Base
         f.save
       end
     end
+
+
+    class JSON < self
+      class Contract < Contract
+        representer_class.send(:include, Representable::JSON)
+
+        def deserialize_method
+          :from_json
+        end
+      end
+
+      # def process(params)
+      #   raise params.inspect
+      # end
+    end
   end
 end

@@ -24,6 +24,10 @@ class UsersController < ApplicationController
 
   # full-on Op[]
   def run(operation_class, params=self.params, &block)
+    unless request.format == :html
+      return respond_with User::Update::JSON.run(params.merge(body: request.body.string))
+    end
+
     # only if format==:html!!!!!!!
     res, @operation = operation_class.run(params)
 
@@ -54,7 +58,7 @@ class UsersController < ApplicationController
       return render action: :edit # DISCUSS: should that be done automatically IN #run?
     end
 
-    render action: :edit
+    render action: :edit # invalid.
   end
 
   # maybe that should be abstracted in a higher Operation?
