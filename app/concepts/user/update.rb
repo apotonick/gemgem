@@ -1,11 +1,12 @@
 class User < ActiveRecord::Base
   class Update < Trailblazer::Operation
     contract do
+      include Reform::Form::SkipUnchanged # TODO: DEFAULT in trailblazer.
       model User
 
       property :name
       property :email, validates: {presence: true}
-      property :image, file: true, virtual: true, sync: lambda { |image|
+      property :image, file: true, sync: lambda { |file, *|
         model.image(file) do |v|
           v.process!(:original)
           v.process!(:thumb)   { |job| job.thumb!("75x75#") }
@@ -18,37 +19,30 @@ class User < ActiveRecord::Base
     model User, :update
 
     def process(params)
-      file = params[:user].delete(:image) if params[:user].is_a?(Hash) # FIXME: that sucks.
+      # file = params[:user].delete(:image) if params[:user].is_a?(Hash) # FIXME: that sucks.
 
       validate(params[:user]) do |f|
         # now, the image is validated, but not processed, yet!
 
-        if file
-          model.image(file) do |v|
-            v.process!(:original)
-            v.process!(:thumb)   { |job| job.thumb!("75x75#") }
-          end
-        end
+        # we could also use save {}, explain in book!
 
-        f.save
+        # if file
+        #   model.image(file) do |v|
+        #     v.process!(:original)
+        #     v.process!(:thumb)   { |job| job.thumb!("75x75#") }
+        #   end
+        # end
+
+        f.save#(self, sync: {image: :upload!})
+        puts "+++++++++++++++ #{f.model.inspect}"
       end
     end
 
 
     class JSON < self
       contract do
-        representer_class.send(:include, Representable::JSON)
-
-        def deserialize_method
-          :from_json
-        end
+        include Reform::Form::JSON
       end
-
-       # def process(params)
-       #   validate(params[:user]) do
-       #      model.save
-       #   end
-       # end
     end
   end
 end
