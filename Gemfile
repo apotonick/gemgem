@@ -23,7 +23,7 @@ gem 'virtus'
 gem 'disposable' , path: "../disposable"
 # gem 'cells', "3.11.2" #, path: "../cells"
 gem 'cells', path: "../cells"
-gem 'roar-rails', path: '../roar-rails'
+# gem 'roar-rails', path: '../roar-rails'
 gem 'responders'
 gem 'representable', path: "../representable"
 gem 'trailblazer', path: "../trailblazer"

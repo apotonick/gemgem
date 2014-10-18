@@ -34,13 +34,17 @@ class UsersController < ApplicationController
     end
   end
 
+
   # Endpoint::Invocation
   def run(operation_class, params=self.params, &block)
     unless request.format == :html
       # FIXME: how do we know the "name" of the Operation body?
       # return respond_with User::Update::JSON.run(params.merge(user: request.body.string))
       res, op = User::Update::JSON.run(params.merge(user: request.body.string))
-      render :text => 'yo'
+
+
+
+      respond_with op
       return Else.new(op, false)
     end
 

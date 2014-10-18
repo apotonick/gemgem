@@ -38,5 +38,7 @@ class UsersControllerTest < ActionController::TestCase
     # TODO: test respond_with
     user.reload
     user.name.must_equal "Ryan"
+
+    response.body.must_equal ""
   end
 end

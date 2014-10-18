@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class ThingsControllerTest < ActionController::TestCase
-  include Roar::Rails::TestCase
+  # include Roar::Rails::TestCase
   # include Monban::Test::Helpers
   # Monban.test_mode!
 

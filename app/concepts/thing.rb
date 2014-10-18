@@ -27,9 +27,9 @@ class Thing < ActiveRecord::Base
 
   end
 
-
+  require 'roar/json/hal'
   module Representer
-    include Roar::Representer::JSON::HAL
+    include Roar::JSON::HAL
 
     module Validates
       def self.included(base)
