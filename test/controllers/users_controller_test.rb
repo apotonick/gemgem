@@ -39,6 +39,6 @@ class UsersControllerTest < ActionController::TestCase
     user.reload
     user.name.must_equal "Ryan"
 
-    response.body.must_equal ""
+    response.body.must_equal "{\"name\":\"Ryan\",\"email\":\"richy@trb.org\",\"links\":[{\"rel\":\"self\",\"href\":\"http://users/#{user.id}\"}]}"
   end
 end
