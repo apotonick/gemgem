@@ -49,24 +49,20 @@ class Thing < ActiveRecord::Base
 
     # TODO: image_url: (only in representer!)
 
+    def thing_path(model) # FIXME: make url helpers work here without roar-rails, we don't need it.
+      "/things/#{model.id}"
+    end
     link(:self) { thing_path(represented) }
   end
 
 
-  class Show < Trailblazer::Operation
-    def process(params)
-      @model = Thing.find(params[:id])
-    end
-
-    # the official way here would be to
-    # a) use roar-rails and just chuck @model to respond_with
-    # b) implement Show::JSON, which is a lot of work. can we re-use from Create::JSON?
-    def to_json(*)
-      Representer.prepare(@model).to_json
-    end
-  end
-
   class Create < Trailblazer::Operation
+    include CRUD
+    model Thing, :create
+
+    include Trailblazer::Operation::Representer
+    include Responder
+
     contract do
       include Schema
       model :thing # needed for form_for to figure out path.
@@ -111,34 +107,13 @@ class Thing < ActiveRecord::Base
       end
     end
 
-    def setup!(params)
-      @model = Thing.new
-    end
-    attr_reader :model
-
     def process(params)
-      # model = Thing.new
-
-      validate(params, model) do |f| # image must be validated here!
+      validate(params[:thing]) do |f| # image must be validated here!
         Upload.run(model, params[:image]) if params[:image] # make this chainable.
 
         f.save
       end
     end
-
-
-    # FIXME: this is to make it work with a responder
-    def self.model_name
-      ::ActiveModel::Name.new(self, nil, "thing")
-    end
-    def to_param
-      @model.to_param
-    end
-    def errors
-      return [] if @valid
-      [1]
-    end
-
 
 
     class JSON < self
@@ -152,30 +127,12 @@ class Thing < ActiveRecord::Base
             property :email
           end
 
-        self.representer_class.class_eval do
-          include Representable::JSON
-        end
-
-        def deserialize_method
-          :from_json
-        end
-
-
+        include Reform::Form::JSON
       end
 
-      def validate(params, *args)
-        super(params[:request_body], *args) # TODO: make string first arg here.
-      end
-
-
-      # FIXME: this is to make it work with a responder
-      def to_json(*) #
-        # Problem with representer_class is that nested objects are forms.
-
-        # Contract.representer_class.representable_attrs.get(:authors).merge!(prepare: nil)
-        # Contract.representer_class.prepare(@model).to_json
-
-        Representer.prepare(@model).to_json
+      self.representer_class = class Representer < Representable::Decorator
+        include Roar::JSON
+        include Schema
       end
     end
   end
@@ -184,6 +141,13 @@ class Thing < ActiveRecord::Base
   class Update < Create
     def setup!(params)
       @model = Thing.find(params[:id])
+    end
+  end
+
+  class Show < Create
+    def process(params)
+      @model = Thing.find(params[:id])
+      self
     end
   end
 

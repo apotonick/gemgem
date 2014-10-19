@@ -1,5 +1,6 @@
 class ThingsController < ApplicationController
   respond_to :html, :json
+  include Trailblazer::Operation::Controller
 
   def index
     # pagination?
@@ -12,16 +13,11 @@ class ThingsController < ApplicationController
   end
 
   def create
-    # TODO: this will get abstracted into Endpoint.
-    # if request.format == :html
-    operation = request.format == :json ? Thing::Create::JSON : Thing::Create
-    _params    = request.format == :json ? params.merge(request_body: request.body.string) : params[:thing]
-
-    _, op = operation.run(_params)
-
-    @form = op.contract
-
-    respond_with op
+    run Thing::Create do |op|
+      redirect_to op.model
+    end.else do |op|
+      render action: :new
+    end
   end
 
   def edit
@@ -43,27 +39,10 @@ class ThingsController < ApplicationController
 
   # TODO: test with and without image
   def show
-    # params[:current_user] = current_user if signed_in?
-    context = OpenStruct.new(current_user: current_user, id: params[:id]) # "Twin"
-    #, to be passed into everything underneath this (cell -> operation).
-
-
-    op = Thing::Show.new
-    _, @thing = op.run(params)
-
-
-    # TODO: let that do an Endpoint
-    if request.format == "application/json"
-      return respond_with op
+    present Thing::Show do
+      @form = Rating::New.present(params)
+      @thing = @model
     end
-
-    # what if we had a Cell(contract/operation).show for html here? (to_html)
-
-    # ok, who keeps signed-in user? op? twin?
-
-
-    # this is UI, only, and could also be in a cell.
-    @form = Rating::New.present(params)
   end
 
   def form # TODO: this should happen in the cell-ajax.

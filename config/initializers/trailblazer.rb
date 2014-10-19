@@ -1,6 +1,7 @@
 require 'trailblazer/operation'
 require 'trailblazer/operation/responder'
 require 'trailblazer/operation/representer'
+require 'trailblazer/operation/controller'
 require 'reform/form/json'
 
 require "roar/json"

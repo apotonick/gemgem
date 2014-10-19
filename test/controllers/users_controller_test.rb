@@ -27,7 +27,7 @@ class UsersControllerTest < ActionController::TestCase
 
   # SHOW.json, with ratings
   test "/users/1.json with ratings" do
-    thing = Thing::Create[name: "Monban"].model
+    thing = Thing::Create[thing: {name: "Monban"}].model
     rating = Rating::Create::SignedIn[rating: {comment: "Great!", weight: 1}, id: thing.id, current_user: user].model
 
     get :show, id: user.id, format: :json

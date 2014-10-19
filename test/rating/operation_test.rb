@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class RatingOperationTest < MiniTest::Spec
-  let (:thing) { Thing::Create[name: "Ruby"].model }
+  let (:thing) { Thing::Create[thing: {name: "Ruby"}].model }
 
 
   # valid create

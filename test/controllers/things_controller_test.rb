@@ -11,10 +11,15 @@ class ThingsControllerTest < ActionController::TestCase
     @controller.extend(MonbanMockToBePushedIntoGem)
   end
 
-  let (:thing) { Thing::Create[name: "Cells"].model }
+  let (:thing) { Thing::Create[thing: {name: "Cells"}].model }
 
   test "GET /things/1" do
     get :show, id: thing.id
+  end
+
+  test "GET /things/1.json" do
+    get :show, id: thing.id, format: :json
+    response.body.must_equal "{\"name\":\"Cells\",\"_embedded\":{\"authors\":[]},\"_links\":{\"self\":{\"href\":\"/things/#{thing.id}\"}}}"
   end
 
   # new
@@ -38,25 +43,19 @@ class ThingsControllerTest < ActionController::TestCase
   end
 
   test "POST /things.json with errors" do
-    post :create, {thing: {name: ""}}.to_json, format: :json
+    post :create, {name: ""}.to_json, format: :json
 
     assert_response 422 # :unprocessable
   end
 
-  test "GET /things/1.json" do
-    get :show, id: thing.id, format: :json
-    response.body.must_equal "{\"name\":\"Cells\",\"_embedded\":{\"authors\":[]},\"_links\":{\"self\":{\"href\":\"/things/#{thing.id}\"}}}"
-  end
-
-
   # form tests.
-  test "[form] POST /things" do
+  test "POST /things" do
     post :create, {thing: {name: "Trailblazer"}}
 
     assert_redirected_to "/things/#{Thing.last.id}"
   end
 
-  test "[form with errors] POST /things" do
+  test "POST /things with errors" do
     post :create, {thing: {name: ""}}
 
     assert_response :success

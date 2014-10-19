@@ -5,7 +5,7 @@ class RatingCellTest < MiniTest::Spec
   let (:controller) { ThingsController.new.tap { |c| c.request = ActionDispatch::Request.new({}) } }
 
   it do
-    thing = Thing::Create[name: "Apotomo"].model
+    thing = Thing::Create[thing: {name: "Apotomo"}].model
     form = Rating::New.present(id: thing.id)
 
     html = Rating::Cell::Form.new(controller, form).show
