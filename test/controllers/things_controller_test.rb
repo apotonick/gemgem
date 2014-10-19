@@ -17,7 +17,7 @@ class ThingsControllerTest < ActionController::TestCase
     get :show, id: thing.id
   end
 
-  test "GET /things/1.json" do
+  test "GET /things/1.json tttt" do
     get :show, id: thing.id, format: :json
     response.body.must_equal "{\"name\":\"Cells\",\"_embedded\":{\"authors\":[]},\"_links\":{\"self\":{\"href\":\"/things/#{thing.id}\"}}}"
   end

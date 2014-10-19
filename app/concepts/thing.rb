@@ -16,45 +16,11 @@ class Thing < ActiveRecord::Base
     include Reform::Form::Module
 
     property :name
-    validates :name, presence: true
 
     collection :authors, embedded: true do
       property :email
-      # validates :email, presence: true
-      # validate :email_ok?
-      validates_uniqueness_of :email
     end
-
   end
-
-  require 'roar/json/hal'
-  module Representer
-    include Roar::JSON::HAL
-
-    module Validates
-      def self.included(base)
-        base.extend(Validates)
-      end
-
-      def validates(*)
-      end
-      def validates_uniqueness_of(*)
-      end
-      # def validate(*)
-      # end
-    end
-    feature Validates
-
-    include Schema
-
-    # TODO: image_url: (only in representer!)
-
-    def thing_path(model) # FIXME: make url helpers work here without roar-rails, we don't need it.
-      "/things/#{model.id}"
-    end
-    link(:self) { thing_path(represented) }
-  end
-
 
   class Create < Trailblazer::Operation
     include CRUD
@@ -66,6 +32,8 @@ class Thing < ActiveRecord::Base
     contract do
       include Schema
       model :thing # needed for form_for to figure out path.
+
+      validates :name, presence: true
 
       collection :authors, inherit: true,
         # TODO: this is no API logic.
@@ -87,6 +55,8 @@ class Thing < ActiveRecord::Base
           end
 
           property :id, virtual: true, empty: true
+
+          validates_uniqueness_of :email
         end
 
       property :image, empty: true
@@ -131,8 +101,15 @@ class Thing < ActiveRecord::Base
       end
 
       self.representer_class = class Representer < Representable::Decorator
-        include Roar::JSON
+        include Roar::JSON::HAL
         include Schema
+
+        def thing_path(model) # FIXME: make url helpers work here without roar-rails, we don't need it.
+          "/things/#{model.id}"
+        end
+
+        link(:self) { thing_path(represented) }
+        self
       end
     end
   end
@@ -148,6 +125,10 @@ class Thing < ActiveRecord::Base
     def process(params)
       @model = Thing.find(params[:id])
       self
+    end
+
+    class JSON < self
+      self.representer_class =
     end
   end
 

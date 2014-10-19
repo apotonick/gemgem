@@ -6,3 +6,4 @@ require 'reform/form/json'
 
 require "roar/json"
 require "roar/hypermedia"
+require 'roar/json/hal'
