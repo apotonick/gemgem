@@ -26,13 +26,13 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   # SHOW.json, with ratings
-  test "/users/1.json" do
+  test "/users/1.json with ratings" do
     thing = Thing::Operation::Create[name: "Monban"].model
-    Rating::Operation::Create::SignedIn[rating: {comment: "Great!", weight: 1}, id: thing.id, current_user: user]
+    rating = Rating::Operation::Create::SignedIn[rating: {comment: "Great!", weight: 1}, id: thing.id, current_user: user].model
 
     get :show, id: user.id, format: :json
 
-    response.body.must_equal "{\"email\":\"richy@trb.org\",\"links\":[{\"rel\":\"self\",\"href\":\"http://users/#{user.id}\"}],\"ratings\":[{\"comment\":\"Great!\",\"links\":[{\"rel\":\"self\",\"href\":\"http://ratings/172\"}]}]}"
+    response.body.must_equal "{\"email\":\"richy@trb.org\",\"links\":[{\"rel\":\"self\",\"href\":\"http://users/#{user.id}\"}],\"ratings\":[{\"comment\":\"Great!\",\"links\":[{\"rel\":\"self\",\"href\":\"http://ratings/#{rating.id}\"}]}]}"
   end
 
 
