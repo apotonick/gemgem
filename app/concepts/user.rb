@@ -55,6 +55,12 @@ class User < ActiveRecord::Base
       # TODO: provide by CRUD.
       self
     end
+
+    class JSON < self
+      include Representer
+      include Responder
+      self.representer_class = Update::JSON.representer_class
+    end
   end
 
 

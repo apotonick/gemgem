@@ -18,6 +18,23 @@ class UsersControllerTest < ActionController::TestCase
     response.body.must_match /trb.org/
   end
 
+  # SHOW.json, no ratings
+  test "/users/1.json" do
+    get :show, id: user.id, format: :json
+
+    response.body.must_equal "{\"email\":\"richy@trb.org\",\"links\":[{\"rel\":\"self\",\"href\":\"http://users/#{user.id}\"}]}"
+  end
+
+  # SHOW.json, with ratings
+  test "/users/1.json" do
+    thing = Thing::Operation::Create[name: "Monban"].model
+    Rating::Operation::Create::SignedIn[rating: {comment: "Great!", weight: 1}, id: thing.id, current_user: user]
+
+    get :show, id: user.id, format: :json
+
+    response.body.must_equal "{\"email\":\"richy@trb.org\",\"links\":[{\"rel\":\"self\",\"href\":\"http://users/#{user.id}\"}],\"ratings\":[{\"comment\":\"Great!\"}]}"
+  end
+
 
   # EDIT
   test "/users/1/edit" do

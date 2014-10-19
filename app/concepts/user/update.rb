@@ -1,12 +1,22 @@
 class User < ActiveRecord::Base
   class Update < Trailblazer::Operation
-    contract do
-      include Reform::Form::SkipUnchanged # TODO: DEFAULT in trailblazer.
-      model User
+    module Schema
+      include Reform::Form::Module
 
       property :name
       property :email, validates: {presence: true}
       property :image, file: true, virtual: true
+    end
+
+
+    contract do
+      include Reform::Form::SkipUnchanged # TODO: DEFAULT in trailblazer.
+      model User
+
+      # property :name
+      # property :email, validates: {presence: true}
+      # property :image, file: true, virtual: true
+      include Schema
 
       # TODO: validations for image.
     end
@@ -43,10 +53,18 @@ class User < ActiveRecord::Base
         include Reform::Form::JSON
       end
 
-      representer do
-        include Roar::Hypermedia
+      self.representer_class = class Representer < Representable::Decorator
         include Roar::JSON
+        include Roar::Hypermedia
+
+        include Schema
+
         link(:self) { "http://users/#{represented.id}" }
+
+        # this is read-only for JSON, i don't want this in forms.
+        collection :ratings, render_empty: false do
+          property :comment
+        end
 
         def image
           return unless represented.image.exists?
@@ -54,6 +72,7 @@ class User < ActiveRecord::Base
         end
 
         property :image, exec_context: :decorator
+        self
       end
     end
   end

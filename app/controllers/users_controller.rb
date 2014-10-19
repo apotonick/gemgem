@@ -20,6 +20,15 @@ class UsersController < ApplicationController
   # no #validate!
   # TODO: test without block, e.g. for #show
   def present(operation_class, params=self.params)
+    unless request.format == :html
+      # FIXME: how do we know the "name" of the Operation body?
+      # return respond_with User::Update::JSON.run(params.merge(user: request.body.string))
+      res, op = User::Show::JSON.run(params.merge(user: request.body.string))
+
+      return respond_with(op)
+    end
+
+
     @operation = operation_class.new(:validate => false).run(params).last # FIXME: make that available via Operation.
     @form      = @operation.contract
     @model     = @operation.model
