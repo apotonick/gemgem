@@ -32,7 +32,7 @@ class UsersControllerTest < ActionController::TestCase
 
     get :show, id: user.id, format: :json
 
-    response.body.must_equal "{\"email\":\"richy@trb.org\",\"links\":[{\"rel\":\"self\",\"href\":\"http://users/#{user.id}\"}],\"ratings\":[{\"comment\":\"Great!\"}]}"
+    response.body.must_equal "{\"email\":\"richy@trb.org\",\"links\":[{\"rel\":\"self\",\"href\":\"http://users/#{user.id}\"}],\"ratings\":[{\"comment\":\"Great!\",\"links\":[{\"rel\":\"self\",\"href\":\"http://ratings/172\"}]}]}"
   end
 
 

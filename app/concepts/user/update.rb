@@ -54,8 +54,8 @@ class User < ActiveRecord::Base
       end
 
       self.representer_class = class Representer < Representable::Decorator
-        include Roar::JSON
-        include Roar::Hypermedia
+        feature Roar::JSON
+        feature Roar::Hypermedia
 
         include Schema
 
@@ -64,6 +64,7 @@ class User < ActiveRecord::Base
         # this is read-only for JSON, i don't want this in forms.
         collection :ratings, render_empty: false do
           property :comment
+          link(:self) { "http://ratings/#{represented.id}" }
         end
 
         def image
