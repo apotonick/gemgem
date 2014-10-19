@@ -11,29 +11,39 @@ class ThingsControllerTest < ActionController::TestCase
     @controller.extend(MonbanMockToBePushedIntoGem)
   end
 
-  let (:thing) { Thing::Operation::Create[name: "Cells"].model }
+  let (:thing) { Thing::Create[name: "Cells"].model }
+
+  test "GET /things/1" do
+    get :show, id: thing.id
+  end
+
+  # new
+  test "GET /things/new" do
+    get :new
+  end
 
   # JSON HAL tests.
-  test "[json] POST /things" do
+  test "POST /things.json" do
     post :create, {name: "Trailblazer"}.to_json, format: :json
     thing = Thing.last # TODO: any better of finding this?
 
     response.body.must_equal "{\"name\":\"Trailblazer\",\"_embedded\":{\"authors\":[]},\"_links\":{\"self\":{\"href\":\"/things/#{thing.id}\"}}}"
   end
-  test "[json] POST /things with authors" do
+
+  test "POST /things.json with authors" do
     post :create, {name: "Trailblazer", authors: [{email: "nick@gmail.com"}]}.to_json, format: :json
     thing = Thing.last # TODO: any better of finding this?
 
     response.body.must_equal "{\"name\":\"Trailblazer\",\"_embedded\":{\"authors\":[{\"email\":\"nick@gmail.com\"}]},\"_links\":{\"self\":{\"href\":\"/things/#{thing.id}\"}}}"
   end
 
-  test "[json with errors] POST /things" do
+  test "POST /things.json with errors" do
     post :create, {thing: {name: ""}}.to_json, format: :json
 
     assert_response 422 # :unprocessable
   end
 
-  test "[json] GET /things/1" do
+  test "GET /things/1.json" do
     get :show, id: thing.id, format: :json
     response.body.must_equal "{\"name\":\"Cells\",\"_embedded\":{\"authors\":[]},\"_links\":{\"self\":{\"href\":\"/things/#{thing.id}\"}}}"
   end
@@ -90,7 +100,7 @@ end
 # class ThingColonColonDomainlayerthatneedsANameTest < MiniTest::Spec
 #   subject { Thing::Twin.new }
 
-#   # Thing::Operation::Update::Hash # should we alias Update to Operation?
+#   # Thing::Update::Hash # should we alias Update to Operation?
 
 #   before { @res = Thing::Operation::Hash.new(subject).
 #     # extend(Trailblazer::Operation::Flow). # TODO: do that per default.

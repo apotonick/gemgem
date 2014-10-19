@@ -9,7 +9,7 @@ class UsersControllerTest < ActionController::TestCase
   #   get :sign_in
   # end
 
-  let (:user) { User::Operation::Create[{email: "richy@trb.org"}] }
+  let (:user) { User::Create[{email: "richy@trb.org"}] }
 
   # SHOW
   test "/users/1" do
@@ -27,8 +27,8 @@ class UsersControllerTest < ActionController::TestCase
 
   # SHOW.json, with ratings
   test "/users/1.json with ratings" do
-    thing = Thing::Operation::Create[name: "Monban"].model
-    rating = Rating::Operation::Create::SignedIn[rating: {comment: "Great!", weight: 1}, id: thing.id, current_user: user].model
+    thing = Thing::Create[name: "Monban"].model
+    rating = Rating::Create::SignedIn[rating: {comment: "Great!", weight: 1}, id: thing.id, current_user: user].model
 
     get :show, id: user.id, format: :json
 

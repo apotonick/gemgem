@@ -13,8 +13,8 @@ class SessionOperationTest < MiniTest::Spec
 
   # Signin#run, valid
   it do
-    user= User::Operation::Create[email: "ryan@trb.com"]
-    User::Operation::Confirm[id: user.id, user: {password: "the right", password_confirmation: "the right"}] # TODO: allow that in one step.
+    user= User::Create[email: "ryan@trb.com"]
+    User::Confirm[id: user.id, user: {password: "the right", password_confirmation: "the right"}] # TODO: allow that in one step.
 
     res, op = Session::Signin.run({email: "ryan@trb.com", password: "the right"})
     res.must_equal true

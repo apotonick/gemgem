@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class RatingTwinTest < MiniTest::Spec
-  let (:rating) { Rating::Operation::Create[
+  let (:rating) { Rating::Create[
     rating: {
       comment: "Fantastic!",
       weight:  1,
@@ -18,7 +18,7 @@ class RatingTwinTest < MiniTest::Spec
   it { twin.deleted?.must_equal false }
 
   it {
-    Rating::Operation::Delete[id: rating.id]
+    Rating::Delete[id: rating.id]
     rating.reload
     Rating::Twin.new(rating).deleted?.must_equal true
   }

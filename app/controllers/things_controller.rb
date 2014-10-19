@@ -1,6 +1,4 @@
 class ThingsController < ApplicationController
-  #include Roar::Rails::ControllerAdditions
-  #represents :json, :entity => Thing::Representer
   respond_to :html, :json
 
   def index
@@ -10,13 +8,13 @@ class ThingsController < ApplicationController
   end
 
   def new
-    @form = Thing::Operation::Create.present(params) # Thing::Endpoint::New or Operation::Form::New
+    present Thing::Create
   end
 
   def create
     # TODO: this will get abstracted into Endpoint.
     # if request.format == :html
-    operation = request.format == :json ? Thing::Operation::Create::JSON : Thing::Operation::Create
+    operation = request.format == :json ? Thing::Create::JSON : Thing::Create
     _params    = request.format == :json ? params.merge(request_body: request.body.string) : params[:thing]
 
     _, op = operation.run(_params)
@@ -27,14 +25,14 @@ class ThingsController < ApplicationController
   end
 
   def edit
-    @form = Thing::Operation::Update.contract(params)
-    @crop = Thing::Operation::Crop.contract(params)
+    @form = Thing::Update.contract(params)
+    @crop = Thing::Crop.contract(params)
 
     render action: :new
   end
 
   def update
-    @form = Thing::Operation::Update.run(params[:thing]) do |form|
+    @form = Thing::Update.run(params[:thing]) do |form|
         return redirect_to thing_path(form.model.id)
       end
 
@@ -50,7 +48,7 @@ class ThingsController < ApplicationController
     #, to be passed into everything underneath this (cell -> operation).
 
 
-    op = Thing::Operation::Show.new
+    op = Thing::Show.new
     _, @thing = op.run(params)
 
 
@@ -65,13 +63,13 @@ class ThingsController < ApplicationController
 
 
     # this is UI, only, and could also be in a cell.
-    @form = Rating::Operation::New.contract(params)
+    @form = Rating::New.present(params)
   end
 
   def form # TODO: this should happen in the cell-ajax.
     # DISCUSS: we could also think about hooking an Endpoint/Operation to a route that then renders the cell?
     # but, why? UI and API have different behaviour anyway.
-    op = Rating::Operation::Create.run(params) do |op|
+    op = Rating::Create.run(params) do |op|
       flash[:notice] = op.unconfirmed? ? "Check your email and confirm your account!" : "All good."
       return redirect_to thing_path(op.model.thing)
     end
@@ -84,6 +82,6 @@ class ThingsController < ApplicationController
   end
 
   def crop
-    redirect_to thing_path(Thing::Operation::Crop[params[:thing]])
+    redirect_to thing_path(Thing::Crop[params[:thing]])
   end
 end

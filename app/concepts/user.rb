@@ -7,42 +7,40 @@ class User < ActiveRecord::Base
 
   require_dependency 'user/update'
 
-  module Operation
-    class Create < Trailblazer::Operation
-      def process(params)
-        User.create(params)
-      end
+  class Create < Trailblazer::Operation
+    def process(params)
+      User.create(params)
+    end
+  end
+
+  # should we check IsConfirmationAllowed? here?
+  class Confirm < Trailblazer::Operation
+    contract do
+      model :user
+
+      property :password, empty: true
+      property :password_confirmation, empty: true
+
+      validates :password, presence: true, confirmation: true
+      validates :password_confirmation, presence: true
     end
 
-    # should we check IsConfirmationAllowed? here?
-    class Confirm < Trailblazer::Operation
-      contract do
-        model :user
-
-        property :password, empty: true
-        property :password_confirmation, empty: true
-
-        validates :password, presence: true, confirmation: true
-        validates :password_confirmation, presence: true
-      end
-
-      def setup!(params) # TODO: man, abstract this into Operation::Model
-        @model = User.find(params[:id])
-      end
-
-      def process(params)
-        validate(params[:user], @model) do |f|
-          # note how i don't call f.save here.
-          Monban::Confirm[id: params[:id], password: f.to_hash[:password]]
-        end
-      end
+    def setup!(params) # TODO: man, abstract this into Operation::Model
+      @model = User.find(params[:id])
     end
 
-    class Search < Trailblazer::Operation
-      def process(params)
-        User.where("email LIKE ?", "%#{params[:term]}%").collect do |usr|
-          {value: "#{usr.id}", label: usr.email}
-        end
+    def process(params)
+      validate(params[:user], @model) do |f|
+        # note how i don't call f.save here.
+        Monban::Confirm[id: params[:id], password: f.to_hash[:password]]
+      end
+    end
+  end
+
+  class Search < Trailblazer::Operation
+    def process(params)
+      User.where("email LIKE ?", "%#{params[:term]}%").collect do |usr|
+        {value: "#{usr.id}", label: usr.email}
       end
     end
   end
