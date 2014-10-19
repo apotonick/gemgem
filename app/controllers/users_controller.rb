@@ -6,6 +6,10 @@ class UsersController < ApplicationController
     # render json: [{"label"=>"mylabel","value"=>"myvalue"}]
   end
 
+  def show
+    present User::Show
+  end
+
   class Endpoint
     def to_html # better: call(:html) as this handles parse+render
       "ficken"
@@ -14,12 +18,13 @@ class UsersController < ApplicationController
   end
 
   # no #validate!
+  # TODO: test without block, e.g. for #show
   def present(operation_class, params=self.params)
     @operation = operation_class.new(:validate => false).run(params).last # FIXME: make that available via Operation.
     @form      = @operation.contract
     @model     = @operation.model
 
-    yield @operation
+    yield @operation if block_given?
   end
 
   # full-on Op[]

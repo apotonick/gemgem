@@ -1,5 +1,3 @@
-#
-
 require 'trailblazer/operation'
 require 'trailblazer/operation/responder'
 require 'trailblazer/operation/representer'

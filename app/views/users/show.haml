@@ -1,1 +1,5 @@
-hello
+%h1 #{@model.email}
+
+%ul
+  - @model.ratings.each do |rating|
+    %li #{rating.inspect}

@@ -9,9 +9,17 @@ class UsersControllerTest < ActionController::TestCase
   #   get :sign_in
   # end
 
-  # EDIT
   let (:user) { User::Operation::Create[{email: "richy@trb.org"}] }
 
+  # SHOW
+  test "/users/1" do
+    get :show, id: user.id
+
+    response.body.must_match /trb.org/
+  end
+
+
+  # EDIT
   test "/users/1/edit" do
    # visit "/users/#{user.id}"
    get :edit, id: user.id

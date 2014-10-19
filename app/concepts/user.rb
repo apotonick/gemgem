@@ -47,6 +47,16 @@ class User < ActiveRecord::Base
     end
   end
 
+  class Show < Trailblazer::Operation
+    include CRUD
+    model User, :update
+
+    def process(*)
+      # TODO: provide by CRUD.
+      self
+    end
+  end
+
 
   class Twin < Disposable::Twin
     def avatar
