@@ -128,7 +128,7 @@ class Thing < ActiveRecord::Base
     end
 
     class JSON < self
-      self.representer_class =
+      self.representer_class = Create::JSON.representer_class
     end
   end
 
