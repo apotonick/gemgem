@@ -61,14 +61,8 @@ class Thing < ActiveRecord::Base
 
       property :image, empty: true
 
-      def image=(file)
-        super Dragonfly.app.new_job(file)
-      end
-
-      # TODO: test for no image, pdf, png.
-      extend Dragonfly::Model::Validations
-      validates_property :format, of: :image, in: ['jpeg', 'png', 'gif']
-
+      validates :image, file_size: {less_than: 2.megabytes},
+        file_content_type: {allow: ['image/jpeg', 'image/png', 'image/gif']}
 
       # presentation method
       def authors
@@ -79,7 +73,13 @@ class Thing < ActiveRecord::Base
 
     def process(params)
       validate(params[:thing]) do |f| # image must be validated here!
-        Upload.run(model, params[:image]) if params[:image] # make this chainable.
+
+        if file = params[:thing][:image]
+          model.image(file) do |v|
+            v.process!(:original)
+            v.process!(:thumb) { |job| job.thumb!("72x72#") }
+          end
+        end
 
         f.save
       end
@@ -132,17 +132,6 @@ class Thing < ActiveRecord::Base
     end
   end
 
-
-  class Upload < Trailblazer::Operation
-    def process(model, file)
-      model.image(file) do |v|
-        v.process!(:original)
-        v.process!(:thumb) { |job| job.thumb!("72x72#") }
-      end
-
-      model.save
-    end
-  end
 
   require "reform/form/coercion"
   class Crop < Trailblazer::Operation

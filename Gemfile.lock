@@ -110,6 +110,8 @@ GEM
     equalizer (0.0.9)
     erubis (2.7.0)
     execjs (2.2.1)
+    file_validators (1.1.0)
+      activemodel (>= 3.0)
     foundation-icons-sass-rails (3.0.0)
       railties (>= 3.1.1)
       sass-rails (>= 3.1.1)
@@ -242,6 +244,7 @@ DEPENDENCIES
   cells!
   database_cleaner
   disposable!
+  file_validators
   foundation-icons-sass-rails
   foundation-rails
   haml!

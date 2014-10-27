@@ -5,8 +5,6 @@ class ThingsControllerTest < ActionController::TestCase
   # include Monban::Test::Helpers
   # Monban.test_mode!
 
-  tests ThingsController
-
   setup do
     @controller.extend(MonbanMockToBePushedIntoGem)
   end

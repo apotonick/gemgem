@@ -34,6 +34,8 @@ gem 'roar', path: "../roar"
 gem 'capybara'
 gem 'monban'
 
+gem 'file_validators'
+
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
